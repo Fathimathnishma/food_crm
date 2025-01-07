@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/general/di/injection.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
-   //await configureDependancy();
+   await configureDependancy();
   runApp(const MyApp());
 }
 
