@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "958235490323",
+    "project_id": "food-crm",
+    "storage_bucket": "food-crm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:958235490323:android:c3a2bbb2d6b4c710c4a7e6",
+        "android_client_info": {
+          "package_name": "com.example.food_crm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9o_WWTpbAkucw4uf0ma-qDA9ACfRAb1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
