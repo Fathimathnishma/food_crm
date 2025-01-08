@@ -5,6 +5,7 @@ import 'package:food_crm/features/users/presentation/provider/user_provider.dart
 import 'package:food_crm/general/di/injection.dart';
 import 'package:provider/provider.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependancy();
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
          home: SplashScreen(),
       ),
+
     );
   }
 }
