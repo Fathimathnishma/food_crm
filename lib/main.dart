@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/home/presentation/view/home_page.dart';
 import 'package:food_crm/general/di/injection.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await configureDependancy();
+  await configureDependancy();
   runApp(const MyApp());
 }
 
@@ -15,14 +16,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    height=MediaQuery.of(context).size.height;
-    width=MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
 
-
-      return const MaterialApp(
-        debugShowCheckedModeBanner: false,
-       // home: SplashScreen(),
-      
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
     );
   }
 }

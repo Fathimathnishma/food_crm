@@ -1,0 +1,271 @@
+import 'package:flutter/material.dart';
+import 'package:food_crm/features/home/presentation/view/widgets/custom_elevated_button_widget.dart';
+import 'package:food_crm/features/home/presentation/view/widgets/view_button_widet.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0XFF060606),
+      appBar: AppBar(
+        backgroundColor: const Color(0XFF060606),
+        leading: Image.asset('assets/images/total-x-logo.png'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 24,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 96,
+                  width: 144,
+                  decoration: BoxDecoration(
+                    color: const Color(0XFFE4E4E4),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello',
+                          style:
+                              TextStyle(fontSize: 20, color: Color(0XFF000000)),
+                        ),
+                        Text(
+                          'Admin',
+                          style:
+                              TextStyle(fontSize: 32, color: Color(0XFF000000)),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 96,
+                  width: 220,
+                  decoration: BoxDecoration(
+                    color: const Color(0XFFE4E4E4),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tue 23',
+                          style:
+                              TextStyle(fontSize: 20, color: Color(0XFF000000)),
+                        ),
+                        Text(
+                          '12:30 PM',
+                          style:
+                              TextStyle(fontSize: 32, color: Color(0XFF000000)),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 38,
+            ),
+            Container(
+              height: 99,
+              width: MediaQuery.sizeOf(context).width,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0XFFE4E4E4),
+                  ),
+                  borderRadius: BorderRadius.circular(16)),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Today',
+                          style:
+                              TextStyle(fontSize: 14, color: Color(0XFFFFFFFF)),
+                        ),
+                        Text(
+                          '₹290',
+                          style:
+                              TextStyle(fontSize: 34, color: Color(0XFFFFFFFF)),
+                        ),
+                      ],
+                    ),
+                    CustomElevatedButton(
+                      text: 'MAke A Order',
+                      onPressed: () {},
+                      backgroundColor: const Color(0XFFFFF200),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 42,
+            ),
+            Stack(
+              children: [
+                SizedBox(
+                  height: 153,
+                  width: 380,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ViewButtonWidget(text: 'View', onPressed: () {}),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 53.76,
+                        width: MediaQuery.sizeOf(context).width,
+                        decoration: BoxDecoration(
+                            color: const Color(0XFFFFF200),
+                            borderRadius: BorderRadius.circular(16)),
+                      )
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 10,
+                  child: Container(
+                    height: 100.93,
+                    width: 264.35,
+                    decoration: BoxDecoration(
+                        color: const Color(0XFF131318),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0XFFFFF200))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundColor: const Color(0XFFFFFFFF),
+                            child: Image.asset('assets/images/money.png'),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Total Amount',
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0XFFFFFFFF)),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                '₹4500.00',
+                                style: TextStyle(
+                                    fontSize: 24, color: Color(0XFFFFFFFF)),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Stack(
+              children: [
+                SizedBox(
+                  height: 153,
+                  width: 380,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      ViewButtonWidget(text: 'View', onPressed: () {}),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        height: 53.76,
+                        width: MediaQuery.sizeOf(context).width,
+                        decoration: BoxDecoration(
+                            color: const Color(0XFFFFF200),
+                            borderRadius: BorderRadius.circular(16)),
+                      )
+                    ],
+                  ),
+                ),
+                Positioned(
+                  left: 10,
+                  child: Container(
+                    height: 100.93,
+                    width: 264.35,
+                    decoration: BoxDecoration(
+                        color: const Color(0XFF131318),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0XFFFFF200))),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 40,
+                            backgroundColor: const Color(0XFFFFFFFF),
+                            child: Image.asset('assets/images/person.png'),
+                          ),
+                          const SizedBox(
+                            width: 16,
+                          ),
+                          const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Total Members',
+                                style: TextStyle(
+                                    fontSize: 14, color: Color(0XFFFFFFFF)),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                '6',
+                                style: TextStyle(
+                                    fontSize: 24, color: Color(0XFFFFFFFF)),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
