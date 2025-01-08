@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/splash/presentation/view/splash_screen.dart';
+import 'package:food_crm/features/users/data/i_auth_facade.dart';
+import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/general/di/injection.dart';
+import 'package:provider/provider.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await configureDependancy();
+  await configureDependancy();
   runApp(const MyApp());
 }
 
@@ -15,14 +19,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    height=MediaQuery.of(context).size.height;
-    width=MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
 
-
-      return const MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(sl<IUserFacade>()),
+        )
+      ],
+      child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-       // home: SplashScreen(),
-      
+         home: SplashScreen(),
+      ),
     );
   }
 }
