@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/order/presentation/view/order_sreen.dart';
+import 'package:food_crm/features/home/presentation/view/home_page.dart';
+import 'package:food_crm/features/order/presentation/view/today_order_history_sreen.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 import 'package:food_crm/main.dart';
 
@@ -16,9 +17,9 @@ class _SplashScreenState extends State<SplashScreen> {
    void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const OrderSreen()), 
+        MaterialPageRoute(builder: (context) => const HomePage()), 
       );
     });
   }
@@ -39,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         image: AssetImage("assets/images/total-x-logo.png"))),
               ),
               SizedBox(height: height*0.02,),
-              const Text("FOOD MANAGEMENT APP",style:TextStyle(fontSize: 15,color: ClrConstant.whiteColor) ,)
+              const Text("FOOD MANAGEMENT APP",style:TextStyle(fontSize: 15,color: ClrConstant.greyColor) ,)
             ],
           ),
         ),

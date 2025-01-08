@@ -13,6 +13,10 @@ import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../features/items/data/i_items_facade.dart' as _i81;
+import '../../features/items/repo/i_items_impli.dart' as _i118;
+import '../../features/users/data/i_auth_facade.dart' as _i413;
+import '../../features/users/repo/i_auth_impli.dart' as _i108;
 import 'injectable_module.dart' as _i109;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -35,6 +39,11 @@ Future<_i174.GetIt> init(
       () => firebaseInjectableModule.firebaseFirestore);
   gh.lazySingleton<_i59.FirebaseAuth>(
       () => firebaseInjectableModule.firebaseAuth);
+  gh.lazySingleton<_i81.IItemsFacade>(() => _i118.IItemsImpli());
+  gh.lazySingleton<_i413.IUserFacade>(() => _i108.IUserImpli(
+        gh<_i974.FirebaseFirestore>(),
+        gh<_i59.FirebaseAuth>(),
+      ));
   return getIt;
 }
 
