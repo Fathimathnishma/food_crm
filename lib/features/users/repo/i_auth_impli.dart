@@ -16,21 +16,31 @@ class IUserImpli implements IUserFacade {
   IUserImpli(this.firestore, this.fireauth);
 
   @override
-  Future<Either<MainFailures, String>> addUser(
-      {required UserModel usermodel}) async {
-    try {
-      final id = firestore.collection(Collection.users).doc().id;
-
-
-      final userRef = firestore.collection(Collection.users).doc(id);
-      final user = usermodel.copyWith(id: id);
-      await userRef.set(user.toMap());
-      return right("User added");
-    } catch (e) {
-      log("Error while adding user: $e");
-      return left(MainFailures.serverFailures(errormsg: e.toString()));
-    }
+  Future<Either<MainFailures, String>> addUser({required UserModel usermodel}) async {
+  try {
+    final id = firestore.collection(Collection.users).doc().id;
+    
+    final generalRef = firestore.collection(Collection.general).doc(Collection.general);
+    
+    final userRef = firestore.collection(Collection.users).doc(id);
+    
+    final user = usermodel.copyWith(id: id);
+    
+    final batch = firestore.batch();
+    
+    batch.set(userRef, user.toMap());
+    
+    batch.update(generalRef, {"count": FieldValue.increment(1)});
+    
+    await batch.commit();
+    
+    return right("User added");
+  } catch (e) {
+    log("Error while adding user: $e");
+    return left(MainFailures.serverFailures(errormsg: e.toString()));
   }
+}
+
 
   @override
   Future<Either<MainFailures, List<UserModel>>> fetchUser() async {
@@ -63,6 +73,20 @@ class IUserImpli implements IUserFacade {
       return right(unit);
     } catch (e) {
       log("Error while deleting user: $e");
+      return left(MainFailures.serverFailures(errormsg: e.toString()));
+    }
+  }
+  
+  @override
+  Future<Either<MainFailures, num>> fetchGeneral() async {
+   try {
+      final generalSnapshot =
+          await firestore.collection("general").doc("general").get();
+      final generalData = generalSnapshot.data();
+      final count = generalData?["count"] ?? 0;
+      return right(count);
+    } catch (e) {
+      log("Batch commit failed: $e");
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }

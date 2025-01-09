@@ -9,6 +9,9 @@ Future<Either<MainFailures,String>> addUser({required UserModel usermodel}){
 Future<Either<MainFailures,List<UserModel>>> fetchUser(){
     throw UnimplementedError("no implementation");
   }
+Future<Either<MainFailures,num>> fetchGeneral(){
+    throw UnimplementedError("no implementation");
+  }
 Future<Either<MainFailures,Unit>> removeUser({required String userId}){
     throw UnimplementedError("no implementation");
   }
