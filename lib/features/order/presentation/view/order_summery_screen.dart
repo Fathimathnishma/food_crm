@@ -1,5 +1,8 @@
+import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_card.dart';
+import 'package:food_crm/features/order/presentation/view/widgets/total_amot_widget.dart';
+import 'package:food_crm/features/order/presentation/view/widgets/user_row_widget.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 
 class OrderSummeryScreen extends StatefulWidget {
@@ -9,101 +12,129 @@ class OrderSummeryScreen extends StatefulWidget {
   State<OrderSummeryScreen> createState() => _OrderSummeryScreenState();
 }
 
-class _OrderSummeryScreenState extends State<OrderSummeryScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 3, vsync: this);
-  }
-
+class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ClrConstant.blackColor,
-      appBar: AppBar(
         backgroundColor: ClrConstant.blackColor,
-        title: const Text(
-          'Make An Order',
-          style: TextStyle(fontSize: 18, color: ClrConstant.whiteColor),
+        appBar: AppBar(
+          backgroundColor: ClrConstant.blackColor,
+          title: const Text(
+            'Make An Order',
+            style: TextStyle(fontSize: 18, color: ClrConstant.whiteColor),
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'People',
-                style: TextStyle(fontSize: 16, color: ClrConstant.whiteColor),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const OrderCard(
-              itemName: 'Chapathi',
-              quantity: '20000',
-              rate: '200',
-              listCount: 2,
-            ),
-            const SizedBox(height: 24),
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Order Summary',
-                style: TextStyle(fontSize: 16, color: ClrConstant.whiteColor),
-              ),
-            ),
-            const SizedBox(height: 24),
-            const SizedBox(height: 24),
-            TabBar(
-              labelColor: ClrConstant.blackColor,
-              unselectedLabelColor: ClrConstant.greyColor,
-              controller: _tabController,
-              indicatorColor: ClrConstant.whiteColor,
-              tabs: [
-                Container(
-                    height: 68,
-                    width: 116,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: const Color(0XFFE4E4E4)),
-                    child: const Column(
-                      children: [Tab(text: 'Chappathi'), Text('100')],
-                    )),
-                Container(
-                    height: 68,
-                    width: 116,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: ClrConstant.greyColor)),
-                    child: const Column(
-                      children: [Tab(text: 'Curry'), Text('100')],
-                    )),
-                Container(
-                    height: 68,
-                    width: 116,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: const Color(0XFF088CFF)),
-                    child: const Tab(text: 'Total')),
+        body: DefaultTabController(
+          length: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Order Summery',
+                    style:
+                        TextStyle(fontSize: 16, color: ClrConstant.whiteColor),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const OrderCard(
+                  itemName: 'Chapathi',
+                  quantity: '2',
+                  rate: '200',
+                  listCount: 5,
+                ),
+                const SizedBox(height: 24),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'People',
+                    style:
+                        TextStyle(fontSize: 16, color: ClrConstant.whiteColor),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ButtonsTabBar(
+                  height: 58,
+                  width: 124,
+                  center: false,
+                  physics: const NeverScrollableScrollPhysics(),
+                  backgroundColor: Colors.red,
+                  unselectedBackgroundColor: Colors.grey[300],
+                  unselectedLabelStyle: const TextStyle(color: Colors.black),
+                  labelStyle: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  tabs: const [
+                    Tab(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Chappathi', style: TextStyle(fontSize: 14)),
+                          SizedBox(height: 5),
+                          Text('100', style: TextStyle(fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Curry', style: TextStyle(fontSize: 14)),
+                          SizedBox(height: 5),
+                          Text('50', style: TextStyle(fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                    Tab(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Total', style: TextStyle(fontSize: 14)),
+                          SizedBox(height: 5),
+                          Text('150', style: TextStyle(fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const Expanded(
+                  child: TabBarView(
+                    children: [
+                      UserRowWidget(
+                          count: 5,
+                          initial: 'js',
+                          name: 'Jaseel',
+                          qty: 2,
+                          amount: 100),
+                      UserRowWidget(
+                          count: 5,
+                          initial: 'js',
+                          name: 'Jaseel',
+                          qty: 0.5,
+                          amount: 50),
+                      Text('Total Mount',
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                    ],
+                  ),
+                ),
               ],
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: const [
-                  Center(child: Text('Chappathi Content')),
-                  Center(child: Text('Curry Content')),
-                  Center(child: Text('Total Content')),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
-    );
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TotalAmountContainer(
+            amount: '₹500.00',
+            title: 'Total',
+            buttonText: 'Save',
+            onTap: () {},
+          ),
+        ));
   }
 }
