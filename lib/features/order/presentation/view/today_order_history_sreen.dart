@@ -47,6 +47,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
             size: 40,
           ),
         ),
+
         body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [

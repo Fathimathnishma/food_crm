@@ -6,4 +6,10 @@ abstract class IUserFacade {
 Future<Either<MainFailures,String>> addUser({required UserModel usermodel}){
     throw UnimplementedError("no implementation");
   }
+Future<Either<MainFailures,List<UserModel>>> fetchUser(){
+    throw UnimplementedError("no implementation");
+  }
+Future<Either<MainFailures,Unit>> removeUser({required String userId}){
+    throw UnimplementedError("no implementation");
+  }
 }
