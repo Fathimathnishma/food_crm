@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 16,
+                      horizontal: 13,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Container(
                   height: 96,
-                  width: 220,
+                  width: 170,
                   decoration: BoxDecoration(
                     color: const Color(0XFFE4E4E4),
                     borderRadius: BorderRadius.circular(16),
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
               height: 38,
             ),
             Container(
-              height: 99,
+              height: 105,
               width: MediaQuery.sizeOf(context).width,
               decoration: BoxDecoration(
                   border: Border.all(
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     CustomElevatedButton(
-                      text: 'MAke A Order',
+                      text: 'Make A Order',
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => const TodayOrderHistoryScreen(),));
                       },
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizedBox(
                   height: 153,
-                  width: 380,
+                  width: 370,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                   left: 10,
                   child: Container(
                     height: 100.93,
-                    width: 264.35,
+                    width: 234,
                     decoration: BoxDecoration(
                         color: const Color(0XFF131318),
                         borderRadius: BorderRadius.circular(16),

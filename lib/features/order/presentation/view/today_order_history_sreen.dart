@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/order/presentation/view/make_an_order_screen.dart';
 import 'package:food_crm/features/order/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_Card.dart';
 import 'package:food_crm/general/utils/color_const.dart';
@@ -27,7 +28,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(onPressed: () {
-        
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const MakeAnOrderScreen(),));
         },
         backgroundColor: ClrConstant.primaryColor,
         child: const Icon(Icons.add,size: 40,),),

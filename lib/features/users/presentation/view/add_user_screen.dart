@@ -42,23 +42,20 @@ class _AddUserScreenState extends State<AddUserScreen> {
                 SizedBox(
                   child: Column(
                     children: [
-                      SizedBox(
-                        width: 340,
-                        child: TextFormField(
-                          controller: stateAdduser.nameController,
-                          decoration: const InputDecoration(
-                              label: Text("Name"),
-                              focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: ClrConstant.greyColor)),
-                              labelStyle:
-                                  TextStyle(color: ClrConstant.whiteColor),
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15)))),
-                          cursorColor: ClrConstant.whiteColor,
-                          style: const TextStyle(color: ClrConstant.whiteColor),
-                        ),
+                      TextFormField(
+                        controller: stateAdduser.nameController,
+                        decoration: const InputDecoration(
+                            label: Text("Name"),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: ClrConstant.greyColor)),
+                            labelStyle:
+                                TextStyle(color: ClrConstant.whiteColor),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)))),
+                        cursorColor: ClrConstant.whiteColor,
+                        style: const TextStyle(color: ClrConstant.whiteColor),
                       ),
                       const SizedBox(
                         height: 37,
@@ -79,6 +76,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                                     BorderRadius.all(Radius.circular(15)))),
                         keyboardType: TextInputType.number,
                         cursorColor: ClrConstant.whiteColor,
+                        maxLength: 10,
                         style: const TextStyle(color: ClrConstant.whiteColor),
                       ),
                     ],
@@ -87,7 +85,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                 Column(
                   children: [
                     AddButtonWidget(
-                        onTap: () {
+                        onTap: () async {
                           stateAdduser.addUser();
                           Navigator.push(
                               context,
