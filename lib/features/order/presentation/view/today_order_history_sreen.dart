@@ -9,7 +9,8 @@ class TodayOrderHistoryScreen extends StatefulWidget {
   const TodayOrderHistoryScreen({super.key});
 
   @override
-  State<TodayOrderHistoryScreen> createState() => _TodayOrderHistoryScreenState();
+  State<TodayOrderHistoryScreen> createState() =>
+      _TodayOrderHistoryScreenState();
 }
 
 class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
@@ -19,19 +20,34 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
         backgroundColor: ClrConstant.blackColor,
         appBar: AppBar(
           backgroundColor: ClrConstant.blackColor,
-          leading: InkWell( onTap:() {
-            Navigator.pop(context);
-          }, child:  const Icon(Icons.arrow_back_ios_new,color: ClrConstant.whiteColor,)),        
-            title: const Text(
+          leading: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: ClrConstant.whiteColor,
+              )),
+          title: const Text(
             "Today Orders",
             style: TextStyle(color: ClrConstant.whiteColor),
           ),
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const MakeAnOrderScreen(),));
-        },
-        backgroundColor: ClrConstant.primaryColor,
-        child: const Icon(Icons.add,size: 40,),),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MakeAnOrderScreen(),
+                ));
+          },
+          backgroundColor: ClrConstant.primaryColor,
+          child: const Icon(
+            Icons.add,
+            size: 40,
+          ),
+        ),
+
         body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [
@@ -62,11 +78,15 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                           Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderHistorySreen(),)); 
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OrderHistorySreen(),
+                              ));
                         },
                         child: Container(
-                          height: 30,
-                          width: 30,
+                            height: 30,
+                            width: 30,
                             decoration: BoxDecoration(
                                 color: ClrConstant.whiteColor,
                                 borderRadius: BorderRadius.circular(6)),
@@ -83,11 +103,15 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                   itemCount: 2,
                   itemBuilder: (context, index) {
                     return const OrderCard(
-                        itemName: "chappathi", quantity: "1", rate: "6", listCount: 2,);
+                      itemName: "chappathi",
+                      quantity: "1",
+                      rate: "6",
+                      listCount: 2,
+                    );
                   },
                   separatorBuilder: (context, index) {
                     return const SizedBox(
-                      height:16,
+                      height: 16,
                     );
                   },
                 ),

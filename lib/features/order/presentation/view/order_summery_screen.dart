@@ -1,5 +1,6 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/order/presentation/view/today_order_history_sreen.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/total_amot_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/user_row_widget.dart';
@@ -18,6 +19,10 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
     return Scaffold(
         backgroundColor: ClrConstant.blackColor,
         appBar: AppBar(
+          leading: const Icon(
+            Icons.arrow_back_ios_new,
+            color: ClrConstant.greyColor,
+          ),
           backgroundColor: ClrConstant.blackColor,
           title: const Text(
             'Make An Order',
@@ -133,7 +138,13 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
             amount: '₹500.00',
             title: 'Total',
             buttonText: 'Save',
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TodayOrderHistoryScreen(),
+                  ));
+            },
           ),
         ));
   }
