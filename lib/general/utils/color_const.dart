@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+
 class ClrConstant{
   static const Color primaryColor= Color(0xFFFFF200);
   static const Color blackColor= Color(0xFF0A0A0A);

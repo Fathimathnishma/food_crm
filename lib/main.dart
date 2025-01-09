@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/order/presentation/view/make_an_order_screen.dart';
 import 'package:food_crm/features/splash/presentation/view/splash_screen.dart';
 import 'package:food_crm/features/users/data/i_auth_facade.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/general/di/injection.dart';
 import 'package:provider/provider.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,9 +31,8 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-         home: SplashScreen(),
+        home: SplashScreen(),
       ),
-
     );
   }
 }

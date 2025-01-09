@@ -14,91 +14,100 @@ class _OrderHistorySreenState extends State<OrderHistorySreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ClrConstant.blackColor,
-        appBar: AppBar(
-          leading: InkWell( onTap:() {
+      backgroundColor: ClrConstant.blackColor,
+      appBar: AppBar(
+        leading: InkWell(
+          onTap: () {
             Navigator.pop(context);
-          }, child:  const Icon(Icons.arrow_back_ios_new,color: ClrConstant.whiteColor,)),
-          backgroundColor: ClrConstant.blackColor,
-          title: const Text(
-            "History ",
-            style: TextStyle(color: ClrConstant.whiteColor),
-          ),
-          
+          },
+          child: const Icon(Icons.arrow_back_ios_new, color: ClrConstant.whiteColor),
         ),
-        body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(children: [
-                const Row(
-                  children: [
-                    Text("Showing Results : All",style: TextStyle(fontSize: 16,color: ClrConstant.whiteColor),),
-                  ],
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: 2,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        SizedBox(
-                          height: height * 0.1,
-                          child: const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      "23 March",
-                                      style: TextStyle(
-                                          color: ClrConstant.whiteColor,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w300),
+        backgroundColor: ClrConstant.blackColor,
+        title: const Text(
+          "History ",
+          style: TextStyle(color: ClrConstant.whiteColor),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const Row(
+                children: [
+                  Text(
+                    "Showing Results : All",
+                    style: TextStyle(fontSize: 16, color: ClrConstant.whiteColor),
+                  ),
+                ],
+              ),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(), 
+                itemCount: 2,
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 16);
+                },
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: height * 0.1,
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "23 March",
+                                    style: TextStyle(
+                                      color: ClrConstant.whiteColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300,
                                     ),
-                                    Text(
-                                      "₹290.50",
-                                      style: TextStyle(
-                                          color: ClrConstant.whiteColor,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    "₹290.50",
+                                    style: TextStyle(
+                                      color: ClrConstant.whiteColor,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                  ],
-                                ),
-                               
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        ListView.separated(
-                          itemCount: 2,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                           return const OrderCard(
+                      ),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(), 
+                        itemCount: 2,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 16);
+                        },
+                        itemBuilder: (context, index) {
+                          return const OrderCard(
                             itemName: "chappathi",
                             quantity: "10",
                             rate: "6",
+                            total: "890",
                             listCount: 2,
-                          ); 
-                          }, separatorBuilder: (context, index) {
-                            return const SizedBox(height: 16,);
-                          },
-                           
-                        )
-                      ],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 16,
-                    );
-                  },
-                )
-              ]),
-            )
-          )
-        );
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
