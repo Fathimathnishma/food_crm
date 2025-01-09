@@ -6,7 +6,7 @@ import 'package:food_crm/general/utils/color_const.dart';
 class OrderItemDeleteRowWidget extends StatelessWidget {
   final String itemName;
   final int quantity;
-  final double ratePerItem;
+  final int ratePerItem;
   final VoidCallback onDelete;
 
   const OrderItemDeleteRowWidget({

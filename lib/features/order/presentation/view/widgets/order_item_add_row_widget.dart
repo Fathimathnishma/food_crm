@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/order/presentation/provider/order_provider.dart';
 import 'package:food_crm/general/utils/color_const.dart';
+import 'package:provider/provider.dart';
 
 class OrderItemAddRowWidget extends StatelessWidget {
-  final TextEditingController itemController;
-  final TextEditingController qtyController;
-  final TextEditingController priceController;
+
   final VoidCallback onAdd;
 
   const OrderItemAddRowWidget(
       {super.key,
       required this.onAdd,
-      required this.itemController,
-      required this.qtyController,
-      required this.priceController});
+      });
 
   @override
   Widget build(BuildContext context) {
+    final orderProvider = Provider.of<OrderProvider>(context);
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              controller: itemController,
+              controller: orderProvider.itemController,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -45,7 +44,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
           SizedBox(
             width: 50,
             child: TextField(
-              controller: qtyController,
+              controller: orderProvider.quantityController,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: ClrConstant.whiteColor,
@@ -60,7 +59,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
           SizedBox(
             width: 80,
             child: TextField(
-              controller: priceController,
+              controller: orderProvider.priceController,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: ClrConstant.whiteColor,
