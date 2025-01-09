@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 
-class OrderAddButtonWidget extends StatelessWidget {
+class AddButtonWidget extends StatelessWidget {
   final String buttontext;
   final VoidCallback onTap;
-  const OrderAddButtonWidget(
+  const AddButtonWidget(
       {super.key, required this.onTap, required this.buttontext});
 
   @override

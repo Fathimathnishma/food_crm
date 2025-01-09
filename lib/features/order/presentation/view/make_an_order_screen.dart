@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/order/presentation/view/order_summery_screen.dart';
-import 'package:food_crm/features/order/presentation/view/widgets/order_add_button_widget.dart';
+import 'package:food_crm/general/widgets/add_button_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_item_add_row_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_item_delete_row_widget.dart';
 import 'package:food_crm/general/utils/color_const.dart';
@@ -42,7 +42,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
           )
         ],
       ),
-      floatingActionButton: OrderAddButtonWidget(
+      floatingActionButton: AddButtonWidget(
           onTap: () {
             Navigator.push(
                 context,
