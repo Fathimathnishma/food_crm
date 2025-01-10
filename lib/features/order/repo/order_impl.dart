@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:food_crm/features/order/data/model/i_order_facade.dart';
 import 'package:food_crm/features/order/data/model/order_model.dart';
+import 'package:food_crm/features/order/data/model/service_order_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
+import 'package:food_crm/general/utils/collection_const.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IOrderFacade)
@@ -12,20 +14,19 @@ class OrderImpl implements IOrderFacade {
 
   bool noMoreData = false;
   DocumentSnapshot? lastDocument;
+ 
 
   @override
-  Future<Either<MainFailures, OrderModel>> addOrders(
-      {required OrderModel orderModel}) async {
+  Future<Either<MainFailures, String>> addOrderList(
+      {required ServiceOrderModel ordermodel}) async {
     try {
-      final orderRef = firebaseFirestore.collection('order');
-
+      final orderRef = firebaseFirestore.collection(Collection.orderList);
       final id = orderRef.doc().id;
-
-      final order = orderModel.copyWith(id: id);
+      final order = ordermodel.copyWith(id: id);
 
       await orderRef.doc(id).set(order.toMap());
 
-      return right(order);
+      return right("order added");
     } catch (e) {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
@@ -35,7 +36,7 @@ class OrderImpl implements IOrderFacade {
   Future<Either<MainFailures, List<OrderModel>>> fetchOrders() async {
     try {
       Query query = firebaseFirestore
-          .collection('order')
+          .collection(Collection.orderList)
           .orderBy('createdAt', descending: true);
 
       if (lastDocument != null) {
@@ -64,7 +65,7 @@ class OrderImpl implements IOrderFacade {
   @override
   Future<Either<MainFailures, Unit>> deleteOrder({required String orderId}) async{
      try {
-       final orderRef = firebaseFirestore.collection('order').doc(orderId);
+       final orderRef = firebaseFirestore.collection(Collection.orderList).doc(orderId);
 
        await orderRef.delete();
 
@@ -74,4 +75,25 @@ class OrderImpl implements IOrderFacade {
        return left(MainFailures.serverFailures(errormsg: e.toString()));
      }
   }
+  
+  @override
+  Future<Either<MainFailures, String>> addOrders({required OrderModel ordermodel}) async {
+       try {
+      final orderRef = firebaseFirestore.collection(Collection.order);
+
+      final id = orderRef.doc().id;
+
+      final order = ordermodel.copyWith(id: id);
+
+      await orderRef.doc(id).set(order.toMap());
+
+      return right("");
+    } catch (e) {
+      return left(MainFailures.serverFailures(errormsg: e.toString()));
+      }
+
+  }
+  
+
+
 }

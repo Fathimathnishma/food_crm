@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderModel {
-  String? id;
+ String? id; 
   String item;
   num quantity;
   num price;
@@ -17,21 +17,9 @@ class OrderModel {
     required this.createdAt,
   });
 
-  OrderModel copyWith({
-    String? id,
-    String? item,
-    num? quantity,
-    num? price,
-    Timestamp? createdAt,
-  }) {
-    return OrderModel(
-      id: id ?? this.id,
-      item: item ?? this.item,
-      quantity: quantity ?? this.quantity,
-      price: price ?? this.price,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
+   
+
+  
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -55,6 +43,21 @@ class OrderModel {
 
   String toJson() => json.encode(toMap());
 
-  factory OrderModel.fromJson(String source) =>
-      OrderModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory OrderModel.fromJson(String source) => OrderModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  OrderModel copyWith({
+    String? id,
+    String? item,
+    num? quantity,
+    num? price,
+    Timestamp? createdAt,
+  }) {
+    return OrderModel(
+      id: id ?? this.id,
+      item: item ?? this.item,
+      quantity: quantity ?? this.quantity,
+      price: price ?? this.price,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 }

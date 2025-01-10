@@ -21,7 +21,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
     final orderProvider = Provider.of<OrderProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      orderProvider.fetchOrders();
+      orderProvider.clearData(); 
     });
   }
 
@@ -42,47 +42,56 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
         children: [
           Consumer<OrderProvider>(
             builder: (context, orderPro, child) {
-              if (orderPro.isLoading && orderPro.orderList.isEmpty) {
+              if (orderPro.isLoading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              } else if (orderPro.orderList.isEmpty) {
+              } else if (orderPro.localorder.isEmpty) {
                 return const Center(
-                  child: Text('No orders available'),
+                  child: Text(
+                    'No orders available',
+                    style: TextStyle(color: ClrConstant.whiteColor),
+                  ),
                 );
               } else {
                 return ListView.builder(
-                    itemCount: orderPro.orderList.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      final order = orderPro.orderList[index];
-                      return OrderItemDeleteRowWidget(
-                          itemName: order.item,
-                          quantity: order.quantity.toInt(),
-                          ratePerItem: order.price.toInt(),
-                          onDelete: () {
-                            orderPro.deleteOrder(orderId: order.id!);
-                          });
-                    });
+                  shrinkWrap: true,
+                  itemCount: orderPro.localorder.length,
+                  itemBuilder: (context, index) {
+                    final order = orderPro.localorder[index];
+                    return OrderItemDeleteRowWidget(
+                      itemName: order.item,
+                      quantity: order.quantity.toInt(),
+                      ratePerItem: order.price.toInt(),
+                      onDelete: () {
+                        orderProvider.removeOrderByIndex(index);
+
+                      },
+                    );
+                  },
+                );
               }
             },
           ),
           OrderItemAddRowWidget(
             onAdd: () {
-              orderProvider.addOrder();
+              orderProvider.add(); 
             },
           ),
         ],
       ),
       floatingActionButton: AddButtonWidget(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const OrderSummeryScreen(),
-                ));
-          },
-          buttontext: 'generate'),
+        onTap: () async {
+          await orderProvider.addOrders(); 
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OrderSummeryScreen(),
+            ),
+          );
+        },
+        buttontext: 'Generate',
+      ),
     );
   }
 }

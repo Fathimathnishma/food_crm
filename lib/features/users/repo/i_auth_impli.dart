@@ -16,37 +16,34 @@ class IUserImpli implements IUserFacade {
   IUserImpli(this.firestore, this.fireauth);
 
   @override
-  Future<Either<MainFailures, String>> addUser({required UserModel usermodel}) async {
-  try {
-    final id = firestore.collection(Collection.users).doc().id;
-    
-    final generalRef = firestore.collection(Collection.general).doc(Collection.general);
-    
-    final userRef = firestore.collection(Collection.users).doc(id);
-    
-    final user = usermodel.copyWith(id: id);
-    
-    final batch = firestore.batch();
-    
-    batch.set(userRef, user.toMap());
-    
-    batch.update(generalRef, {"count": FieldValue.increment(1)});
-    
-    await batch.commit();
-    
-    return right("User added");
-  } catch (e) {
-    log("Error while adding user: $e");
-    return left(MainFailures.serverFailures(errormsg: e.toString()));
-  }
-}
+  Future<Either<MainFailures, String>> addUser(
+      {required UserModel usermodel}) async {
+    try {
+      final id = firestore.collection(Collection.users).doc().id;
 
+      final generalRef =
+          firestore.collection(Collection.general).doc(Collection.general);
+      final userRef = firestore.collection(Collection.users).doc(id);
+      final user = usermodel.copyWith(id: id);
+      final batch = firestore.batch();
+      batch.set(userRef, user.toMap());
+      batch.update(generalRef, {"count": FieldValue.increment(1)});
+
+      await batch.commit();
+
+      return right("User added");
+    } catch (e) {
+      log("Error while adding user: $e");
+      return left(MainFailures.serverFailures(errormsg: e.toString()));
+    }
+  }
 
   @override
   Future<Either<MainFailures, List<UserModel>>> fetchUser() async {
     log("fetching");
     try {
-      final userRef = firestore.collection(Collection.users).orderBy("createdAt");
+      final userRef =
+          firestore.collection(Collection.users).orderBy("createdAt");
       Query query = userRef.limit(10);
       if (lastDoc != null) {
         query = query.startAfterDocument(lastDoc!);
@@ -76,10 +73,10 @@ class IUserImpli implements IUserFacade {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
-  
+
   @override
   Future<Either<MainFailures, num>> fetchGeneral() async {
-   try {
+    try {
       final generalSnapshot =
           await firestore.collection("general").doc("general").get();
       final generalData = generalSnapshot.data();

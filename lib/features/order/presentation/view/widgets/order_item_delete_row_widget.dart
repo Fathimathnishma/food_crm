@@ -58,7 +58,7 @@ class OrderItemDeleteRowWidget extends StatelessWidget {
           ),
           CircleAvatar(
             backgroundColor: Colors.red,
-            radius: 15,
+            radius: 12,
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: const Icon(
