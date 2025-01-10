@@ -5,6 +5,7 @@ import 'package:food_crm/general/widgets/add_button_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_item_add_row_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_item_delete_row_widget.dart';
 import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 class MakeAnOrderScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       orderProvider.fetchOrders();
+      orderProvider.clearOrderList();
     });
   }
 
@@ -61,7 +63,18 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
                           quantity: order.quantity.toInt(),
                           ratePerItem: order.price.toInt(),
                           onDelete: () {
-                            orderPro.deleteOrder(orderId: order.id!);
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialogWidget(
+                                    label1: 'Delete order',
+                                    label2: 'Delete',
+                                    onLabel2Tap: () async {
+                                      await orderPro.deleteOrder(
+                                          orderId: order.id!);
+                                    });
+                              },
+                            );
                           });
                     });
               }

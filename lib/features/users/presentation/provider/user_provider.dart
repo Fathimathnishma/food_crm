@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/users/data/i_auth_facade.dart';
@@ -16,18 +17,10 @@ class UserProvider extends ChangeNotifier {
   List<UserModel> users = [];
 
   Future<void> addUser() async {
-    if (!isPhoneNumberValid()) {
-      CustomFluttertoast.showToast("Failed to add user. Fix errors.");
-      return;
-    }
+   
     final cleanPhoneNumber =
         numberController.text.replaceAll(RegExp(r'[^\d]'), '');
     final formattedPhoneNumber = '+91$cleanPhoneNumber';
-
-    if (formattedPhoneNumber.isEmpty) {
-      return CustomFluttertoast.showToast(
-          "Invalid phone number format. Please try again.");
-    }
 
     final userModel = UserModel(
       phoneNumber: formattedPhoneNumber,
@@ -44,8 +37,7 @@ class UserProvider extends ChangeNotifier {
       },
       (success) {
         CustomFluttertoast.showToast("User added successfully");
-        nameController.clear();
-        numberController.clear();
+        clearController();
         notifyListeners();
       },
     );
@@ -61,22 +53,6 @@ class UserProvider extends ChangeNotifier {
 
     return firstLetter + lastLetter;
   }
-
-  bool isPhoneNumberValid() {
-    if (numberController.text.trim().isEmpty) {
-      CustomFluttertoast.showToast("Phone number cannot be empty");
-      return false;
-    }
-
-    if (!RegExp(r"^[0-9]{10}$").hasMatch(numberController.text.trim())) {
-      CustomFluttertoast.showToast(
-          "Please enter a valid 10-digit phone number");
-      return false;
-    }
-
-    return true;
-  }
-
   Future<void> fetchUser() async {
     clearData();
     isLoading = true;
@@ -99,18 +75,23 @@ class UserProvider extends ChangeNotifier {
   Future<void> removeUser({required String userId}) async {
     final result = await iUserFacade.removeUser(userId: userId);
     result.fold(
-      (l) {
-        l.toString();
+      (failure) {
+        failure.errormsg;
       },
-      (r) {
-        r;
+      (success) {
+        log('Delete User');
         users.removeWhere((user) => user.id == userId);
         notifyListeners();
       },
     );
   }
 
-  clearData() {
+  void clearData() {
     users = [];
+  }
+
+  void clearController() {
+    nameController.clear();
+    numberController.clear();
   }
 }

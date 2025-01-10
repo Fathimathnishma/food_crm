@@ -32,7 +32,9 @@ class OrderProvider with ChangeNotifier {
         log(failure.errormsg);
       },
       (success) {
+        addLocally(success);
         log('Order added succesfully');
+        notifyListeners();
       },
     );
   }
@@ -69,5 +71,20 @@ class OrderProvider with ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  void clearOrderList() {
+    orderList = [];
+    notifyListeners();
+  }
+
+  void addLocally(OrderModel orderModel) {
+    orderList.insert(0, orderModel);
+  }
+
+  Future<void> initData()async{
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      fetchOrders();
+    });
   }
 }

@@ -1,8 +1,4 @@
-
-
-
 import 'package:flutter/material.dart';
-
 class UserRowWidget extends StatelessWidget {
   final String initial;
   final String name;

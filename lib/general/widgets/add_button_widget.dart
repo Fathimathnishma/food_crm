@@ -13,7 +13,7 @@ class AddButtonWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 44,
-        width: 386,
+        width: 366,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             color: ClrConstant.primaryColor),

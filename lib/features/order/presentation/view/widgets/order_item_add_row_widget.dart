@@ -4,13 +4,12 @@ import 'package:food_crm/general/utils/color_const.dart';
 import 'package:provider/provider.dart';
 
 class OrderItemAddRowWidget extends StatelessWidget {
-
   final VoidCallback onAdd;
 
-  const OrderItemAddRowWidget(
-      {super.key,
-      required this.onAdd,
-      });
+  const OrderItemAddRowWidget({
+    super.key,
+    required this.onAdd,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +40,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(width: 8), 
           SizedBox(
             width: 50,
             child: TextField(
@@ -56,6 +56,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
               keyboardType: TextInputType.number,
             ),
           ),
+          const SizedBox(width: 8), 
           SizedBox(
             width: 80,
             child: TextField(
@@ -72,6 +73,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
                   const TextInputType.numberWithOptions(decimal: true),
             ),
           ),
+          const SizedBox(width: 8), 
           CircleAvatar(
             backgroundColor: const Color(0XFF1FAF38),
             radius: 15,

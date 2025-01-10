@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:food_crm/features/order/data/model/i_order_facade.dart';
 import 'package:food_crm/features/order/data/model/order_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
+import 'package:food_crm/general/utils/collection_const.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IOrderFacade)
@@ -17,7 +18,7 @@ class OrderImpl implements IOrderFacade {
   Future<Either<MainFailures, OrderModel>> addOrders(
       {required OrderModel orderModel}) async {
     try {
-      final orderRef = firebaseFirestore.collection('order');
+      final orderRef = firebaseFirestore.collection(Collection.order);
 
       final id = orderRef.doc().id;
 
@@ -60,18 +61,18 @@ class OrderImpl implements IOrderFacade {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
-  
+
   @override
-  Future<Either<MainFailures, Unit>> deleteOrder({required String orderId}) async{
-     try {
-       final orderRef = firebaseFirestore.collection('order').doc(orderId);
+  Future<Either<MainFailures, Unit>> deleteOrder(
+      {required String orderId}) async {
+    try {
+      final orderRef = firebaseFirestore.collection('order').doc(orderId);
 
-       await orderRef.delete();
+      await orderRef.delete();
 
-       return right(unit);
-
-     } catch (e) {
-       return left(MainFailures.serverFailures(errormsg: e.toString()));
-     }
+      return right(unit);
+    } catch (e) {
+      return left(MainFailures.serverFailures(errormsg: e.toString()));
+    }
   }
 }
