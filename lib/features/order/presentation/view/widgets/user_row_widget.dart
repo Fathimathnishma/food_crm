@@ -23,7 +23,7 @@ class UserRowWidget extends StatelessWidget {
       builder: (context, stateUderAdd, child) {
         return ListTile(
           leading: SizedBox(
-            width: 80,
+            width: 90,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -70,17 +70,14 @@ class UserRowWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 17, color: ClrConstant.whiteColor),
           ),
           trailing: SizedBox(
+            width: 80,
             child: Row(
               children: [
-                Container(
-                  width: 24,
-                  alignment: Alignment.center,
-                  child: Text(
-                    qty.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      decoration: TextDecoration.underline,
-                    ),
+                Text(
+                  qty.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
                 const SizedBox(width: 16),

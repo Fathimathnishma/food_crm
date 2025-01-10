@@ -13,7 +13,6 @@ import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-
 import '../../features/order/data/model/i_order_facade.dart' as _i333;
 import '../../features/order/repo/order_impl.dart' as _i825;
 import '../../features/users/data/i_auth_facade.dart' as _i413;
