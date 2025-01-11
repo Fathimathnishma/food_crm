@@ -3,8 +3,8 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
 import 'package:food_crm/features/order/presentation/view/today_order_history_sreen.dart';
-import 'package:food_crm/features/order/presentation/view/widgets/total_amot_widget.dart';
-import 'package:food_crm/features/order/presentation/view/widgets/user_row_widget.dart';
+import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
+import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 import 'package:food_crm/main.dart';
 import 'package:provider/provider.dart';
@@ -42,10 +42,10 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
         ),
         body: Consumer<ItemProvider>(builder: (context, stateAddItem, child) {
           final orderList = stateAddItem.localitemOrder;
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DefaultTabController(
-              length: stateAddItem.localitemOrder.length + 1,
+          return DefaultTabController(
+            length: stateAddItem.localitemOrder.length + 1,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   const Align(
@@ -191,65 +191,60 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
                     child: TabBarView(
                       children: [
                         for (var item in orderList)
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: ListView.builder(
-                                    key: PageStorageKey('tab_${orderList.indexOf(item)}'),
-                                    itemCount: item.users.length,
-                                    shrinkWrap: true,
-                                    itemBuilder:
-                                        (BuildContext context, int userIndex) {
-                                      final user = item.users[userIndex];
-                                      return UserRowWidget(
-                                        name: user.name,
-                                        qty: item.quantity,
-                                        amount: item.splitAmount,
-                                        index: userIndex,
-                                        tabIndex: orderList.indexOf(item),
-                                        onDelete: (int tabIndex, int userIndex) {
-                                          setState(() {
-                                            orderList[tabIndex]
-                                                .users
-                                                .removeAt(userIndex);
-                                          });
-                                        },
-                                        controller:
-                                            (int tabIndex, int userIndex) {
-                                          orderList[tabIndex]
-                                              .users[userIndex]
-                                              .qtyController;
-                                        },
-                                      );
-                                    },
+                          Column(
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: item.users.length,
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int userIndex) {
+                                    final user = item.users[userIndex];
+                                    return UserRowWidget(
+                                      name: user.name,
+                                      qty: item.quantity,
+                                      amount: item.splitAmount,
+                                      index: userIndex,
+                                      tabIndex: orderList.indexOf(item),
+                                      onDelete: (int tabIndex, int userIndex) {
+                                        orderList[tabIndex]
+                                            .users
+                                            .removeAt(userIndex);
+                                      },
+                                      controller:
+                                          (int tabIndex, int userIndex) {
+                                        orderList[tabIndex]
+                                            .users[userIndex]
+                                            .qtyController;
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                              ListTile(
+                                trailing: SizedBox(
+                                  width: 100,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Qty:${item.quantity}',
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: ClrConstant.whiteColor),
+                                      ),
+                                      Text(
+                                        '₹${item.rate}',
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: ClrConstant.whiteColor),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                ListTile(
-                                  trailing: SizedBox(
-                                    width: 100,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Qty:${item.quantity}',
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: ClrConstant.whiteColor),
-                                        ),
-                                        Text(
-                                          '₹${item.rate}',
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: ClrConstant.whiteColor),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         const Text('Total Mount',
                             style:

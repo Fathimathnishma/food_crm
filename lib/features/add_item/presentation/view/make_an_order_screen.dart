@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
-import 'package:food_crm/features/order/presentation/view/order_summery_screen.dart';
+import 'package:food_crm/features/order_summery/prsentation/view/order_summery_screen.dart';
 import 'package:food_crm/general/widgets/add_button_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_item_add_row_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_item_delete_row_widget.dart';
@@ -20,7 +20,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
     super.initState();
     final itemProvider = Provider.of<ItemProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       itemProvider.fetchUser();
+      itemProvider.fetchUser();
     });
   }
 
@@ -59,8 +59,9 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
                       quantity: order.quantity.toInt(),
                       ratePerItem: order.price.toInt(),
                       onDelete: () {
-                        stateItemAdd.removeOrderByIndex( index,);
-
+                        stateItemAdd.removeOrderByIndex(
+                          index,
+                        );
                       },
                     );
                   },
@@ -80,7 +81,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>  const OrderSummeryScreen(),
+              builder: (context) => const OrderSummeryScreen(),
             ),
           );
         },

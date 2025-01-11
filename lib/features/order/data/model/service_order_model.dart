@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ServiceOrderModel {
   String? id;
   Timestamp createdAt;
-  List<Map<String, dynamic>> orders;
+  List<Map<String, dynamic>> orders; 
   ServiceOrderModel({
     this.id,
     required this.createdAt,

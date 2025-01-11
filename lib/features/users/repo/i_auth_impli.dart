@@ -42,8 +42,10 @@ class IUserImpli implements IUserFacade {
   Future<Either<MainFailures, List<UserModel>>> fetchUser() async {
     log("fetching");
     try {
-      final userRef =
-          firestore.collection(Collection.users).orderBy("createdAt");
+      final userRef = firestore
+          .collection(Collection.users)
+          .orderBy("createdAt", descending: true);
+
       Query query = userRef.limit(10);
       if (lastDoc != null) {
         query = query.startAfterDocument(lastDoc!);
@@ -64,9 +66,8 @@ class IUserImpli implements IUserFacade {
       {required String userId}) async {
     try {
       final userDoc = firestore.collection(Collection.users).doc(userId);
-      if (userDoc != null) {
-        await userDoc.delete();
-      }
+      await userDoc.delete();
+
       return right(unit);
     } catch (e) {
       log("Error while deleting user: $e");

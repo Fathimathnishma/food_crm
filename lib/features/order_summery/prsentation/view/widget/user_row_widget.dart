@@ -8,21 +8,22 @@ class UserRowWidget extends StatelessWidget {
   final String name;
   final num qty;
   final num amount;
-  final int index; // Index to identify the user
+  final int index;
   final int tabIndex;
-  // final TextEditingController controller;
-  final Function(int,int) controller; // The tab index to know which tab the user belongs to
-   final Function(int, int) onDelete; // Callback function to handle delete (with tabIndex)
+  final Function(int, int)
+      controller; 
+  final Function(int, int)
+      onDelete; 
 
   const UserRowWidget({
     super.key,
     required this.name,
     required this.qty,
     required this.amount,
-    required this.index, // The index of the user in the list
-    required this.tabIndex, // The tab index to know which tab
-     required this.onDelete, 
-     required this.controller, // The callback function to delete the user
+    required this.index, 
+    required this.tabIndex, 
+    required this.onDelete,
+    required this.controller, 
   });
 
   @override
@@ -42,11 +43,11 @@ class UserRowWidget extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialogWidget(
-                          label1: 'Delete User', // Show confirmation dialog
+                          label1: 'Delete User', 
                           label2: 'Delete',
-                          onLabel2Tap: () {
-                             onDelete(tabIndex, index); 
-                            Navigator.pop(context); // Close the dialog
+                          onLabel2Tap: () async {
+                            onDelete(tabIndex, index);
+                            Navigator.pop(context); 
                           },
                         );
                       },
@@ -65,7 +66,8 @@ class UserRowWidget extends StatelessWidget {
                   radius: 22,
                   backgroundColor: ClrConstant.whiteColor,
                   child: Text(
-                    stateUserAdd.getInitials(name), // Display the initials of the name
+                    stateUserAdd
+                        .getInitials(name), // Display the initials of the name
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -76,7 +78,7 @@ class UserRowWidget extends StatelessWidget {
             ),
           ),
           title: Text(
-            name, 
+            name,
             style: const TextStyle(fontSize: 17, color: ClrConstant.whiteColor),
           ),
           trailing: SizedBox(
@@ -87,17 +89,19 @@ class UserRowWidget extends StatelessWidget {
                 SizedBox(
                   width: 33,
                   child: TextFormField(
-                   controller:controller(tabIndex, index) ,
-                   decoration: const InputDecoration(
-                    hintText:"qty",
-                    hintStyle: TextStyle(color: ClrConstant.whiteColor,fontSize: 13)
-                   ),
-                   style:const TextStyle(color: Colors.white), 
+
+                    keyboardType: TextInputType.number,
+                    controller: controller(tabIndex, index),
+                    decoration: const InputDecoration(
+                        hintText: "qty",
+                        hintStyle: TextStyle(color: ClrConstant.whiteColor)),
+                    style: const TextStyle(color: Colors.white),
+
                   ),
                 ),
                 
                 Text(
-                  '₹${amount.toStringAsFixed(2)}', 
+                  '₹${amount.toStringAsFixed(2)}',
                   style: const TextStyle(color: Colors.white),
                 ),
               ],

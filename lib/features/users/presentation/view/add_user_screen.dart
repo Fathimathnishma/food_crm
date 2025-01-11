@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/features/users/presentation/view/user_screen.dart';
 import 'package:food_crm/general/utils/color_const.dart';
@@ -13,6 +14,8 @@ class AddUserScreen extends StatefulWidget {
 }
 
 class _AddUserScreenState extends State<AddUserScreen> {
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,13 +23,14 @@ class _AddUserScreenState extends State<AddUserScreen> {
       appBar: AppBar(
         backgroundColor: ClrConstant.blackColor,
         leading: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: ClrConstant.whiteColor,
-            )),
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Icon(
+            Icons.arrow_back_ios_new,
+            color: ClrConstant.whiteColor,
+          ),
+        ),
         title: const Text(
           "Add New People",
           style: TextStyle(color: ClrConstant.whiteColor),
@@ -36,70 +40,103 @@ class _AddUserScreenState extends State<AddUserScreen> {
         builder: (context, stateAdduser, child) {
           return Padding(
             padding: const EdgeInsets.all(9.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: stateAdduser.nameController,
-                        decoration: const InputDecoration(
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: stateAdduser.nameController,
+                          decoration: const InputDecoration(
                             label: Text("Name"),
                             focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: ClrConstant.greyColor)),
+                              borderSide:
+                                  BorderSide(color: ClrConstant.greyColor),
+                            ),
                             labelStyle:
                                 TextStyle(color: ClrConstant.whiteColor),
                             border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)))),
-                        cursorColor: ClrConstant.whiteColor,
-                        style: const TextStyle(color: ClrConstant.whiteColor),
-                      ),
-                      const SizedBox(
-                        height: 37,
-                      ),
-                      TextFormField(
-                        controller: stateAdduser.numberController,
-                        decoration: const InputDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                          ),
+                          cursorColor: ClrConstant.whiteColor,
+                          style: const TextStyle(color: ClrConstant.whiteColor),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Name cannot be empty, please enter a name.';
+                            }
+                            if (value.length < 3) {
+                              return 'Name must be at least 3 letters long.';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 37),
+                        TextFormField(
+                          controller: stateAdduser.numberController,
+                          decoration: const InputDecoration(
                             label: Text("Phone Numbers"),
                             hintText: "Phone Number",
                             focusColor: ClrConstant.whiteColor,
                             labelStyle:
                                 TextStyle(color: ClrConstant.whiteColor),
                             focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: ClrConstant.greyColor)),
+                              borderSide:
+                                  BorderSide(color: ClrConstant.greyColor),
+                            ),
                             border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15)))),
-                        keyboardType: TextInputType.number,
-                        cursorColor: ClrConstant.whiteColor,
-                        maxLength: 10,
-                        style: const TextStyle(color: ClrConstant.whiteColor),
-                      ),
-                    ],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          cursorColor: ClrConstant.whiteColor,
+                          maxLength: 10,
+                          style: const TextStyle(color: ClrConstant.whiteColor),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Number cannot be empty.';
+                            }
+                            if (value.length != 10) {
+                              return 'Mobile number must be 10 digits.';
+                            }
+                            if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
+                              return 'Mobile number must contain digits only.';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Column(
-                  children: [
-                    AddButtonWidget(
+                  Column(
+                    children: [
+                      AddButtonWidget(
                         onTap: () async {
-                          stateAdduser.addUser();
-                          Navigator.push(
+                          if (formKey.currentState?.validate() == true) {
+                            stateAdduser.addUser();
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const UserScreen(),
-                              ));
+                              ),
+                            );
+                          }
                         },
-                        buttontext: "Save"),
-                    const SizedBox(
-                      height: 40,
-                    )
-                  ],
-                ),
-              ],
+                        buttontext: "Save",
+                      ),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },

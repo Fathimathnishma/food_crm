@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           '12:30 PM',
                           style:
-                              TextStyle(fontSize: 32, color: Color(0XFF000000)),
+                              TextStyle(fontSize: 30, color: Color(0XFF000000)),
                         )
                       ],
                     ),
@@ -121,7 +121,12 @@ class _HomePageState extends State<HomePage> {
                     CustomElevatedButton(
                       text: 'Make A Order',
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const TodayOrderHistoryScreen(),));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const TodayOrderHistoryScreen(),
+                            ));
                       },
                       backgroundColor: const Color(0XFFFFF200),
                     )
@@ -140,6 +145,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                     
                       ViewButtonWidget(text: 'View', onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) =>  const UsersPaymentScreen(),));
                       }),
@@ -170,7 +176,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         children: [
                           CircleAvatar(
-                            radius: 40,
+                            radius: 31,
                             backgroundColor: const Color(0XFFFFFFFF),
                             child: Image.asset('assets/images/money.png'),
                           ),
@@ -210,9 +216,15 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      ViewButtonWidget(text: 'View', onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const UserScreen(),));
-                      }),
+                      ViewButtonWidget(
+                          text: 'View',
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const UserScreen(),
+                                ));
+                          }),
                       const SizedBox(
                         height: 20,
                       ),
@@ -230,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                   left: 10,
                   child: Container(
                     height: 100.93,
-                    width: 264.35,
+                    width: 234.35,
                     decoration: BoxDecoration(
                         color: const Color(0XFF131318),
                         borderRadius: BorderRadius.circular(16),
@@ -240,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         children: [
                           CircleAvatar(
-                            radius: 40,
+                            radius: 31,
                             backgroundColor: const Color(0XFFFFFFFF),
                             child: Image.asset('assets/images/person.png'),
                           ),

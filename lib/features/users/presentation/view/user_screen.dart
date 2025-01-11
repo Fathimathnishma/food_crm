@@ -33,7 +33,11 @@ class _UserScreenState extends State<UserScreen> {
         backgroundColor: ClrConstant.blackColor,
         leading: InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage(),));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ));
             },
             child: const Icon(
               Icons.arrow_back_ios_new,
@@ -89,27 +93,20 @@ class _UserScreenState extends State<UserScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialogWidget(
-                              label1: 'delete user',
-                              label2: 'delete',
-                              onLabel2Tap: () {
-                                stateAdduser.removeUser(userId: data.id!);
-                                Navigator.pop(context);
-                              },
-                            );
+                        showCustomDialog(
+                          context,
+                          'delete user',
+                          'delete',
+                          () async {
+                            await stateAdduser.removeUser(userId: data.id!);
                           },
                         );
                       },
-                      child: const Icon(
-                        Icons.delete_outline,
-                        color: Colors.red,
-                        size: 30,
-                      ),
+                      child: Image.asset('assets/images/trash.png'),
                     ),
-                    const SizedBox(width: 3,),
+                    const SizedBox(
+                      width: 3,
+                    ),
                     CircleAvatar(
                       radius: 23,
                       backgroundColor: ClrConstant.whiteColor,
