@@ -5,25 +5,33 @@ import 'package:food_crm/general/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 class UserRowWidget extends StatelessWidget {
- 
   final String name;
   final num qty;
   final num amount;
+  final int index; // Index to identify the user
+  final int tabIndex;
+  // final TextEditingController controller;
+  final Function(int,int) controller; // The tab index to know which tab the user belongs to
+   final Function(int, int) onDelete; // Callback function to handle delete (with tabIndex)
+
   const UserRowWidget({
     super.key,
     required this.name,
     required this.qty,
     required this.amount,
-    
+    required this.index, // The index of the user in the list
+    required this.tabIndex, // The tab index to know which tab
+     required this.onDelete, 
+     required this.controller, // The callback function to delete the user
   });
 
   @override
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
-      builder: (context, stateUderAdd, child) {
+      builder: (context, stateUserAdd, child) {
         return ListTile(
           leading: SizedBox(
-            width: 90,
+            width: 80,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -33,10 +41,11 @@ class UserRowWidget extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialogWidget(
-                          label1: 'delete user',
-                          label2: 'delete',
+                          label1: 'Delete User', // Show confirmation dialog
+                          label2: 'Delete',
                           onLabel2Tap: () {
-                            Navigator.pop(context);
+                             onDelete(tabIndex, index); 
+                            Navigator.pop(context); // Close the dialog
                           },
                         );
                       },
@@ -52,10 +61,10 @@ class UserRowWidget extends StatelessWidget {
                   width: 3,
                 ),
                 CircleAvatar(
-                  radius: 23,
+                  radius: 22,
                   backgroundColor: ClrConstant.whiteColor,
                   child: Text(
-                    stateUderAdd.getInitials(name),
+                    stateUserAdd.getInitials(name), // Display the initials of the name
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -66,23 +75,27 @@ class UserRowWidget extends StatelessWidget {
             ),
           ),
           title: Text(
-            name,
+            name, 
             style: const TextStyle(fontSize: 17, color: ClrConstant.whiteColor),
           ),
           trailing: SizedBox(
-            width: 80,
+            width: MediaQuery.of(context).size.width * 0.2,
             child: Row(
               children: [
-                Text(
-                  qty.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    decoration: TextDecoration.underline,
+                SizedBox(
+                  width: 40,
+                  child: TextFormField(
+                   controller:controller(tabIndex, index) ,
+                   decoration: const InputDecoration(
+                    hintText:"qty",
+                    hintStyle: TextStyle(color: ClrConstant.whiteColor)
+                   ),
+                   style:const TextStyle(color: Colors.white), 
                   ),
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  '₹${amount.toStringAsFixed(2)}',
+                  '₹${amount.toStringAsFixed(2)}', 
                   style: const TextStyle(color: Colors.white),
                 ),
               ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/item/presentation/provider/item_provider.dart';
+import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +44,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
           SizedBox(
             width: 50,
             child: TextField(
-              controller: itemProvider.quantityController,
+              controller: itemProvider.totalQuantityController,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: ClrConstant.whiteColor,

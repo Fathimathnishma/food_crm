@@ -5,7 +5,7 @@ import 'package:food_crm/features/order/data/model/i_order_facade.dart';
 
 class OrderProvider with ChangeNotifier {
   final IOrderFacade iOrderFacade;
-  OrderProvider({required this.iOrderFacade});
+  OrderProvider( this.iOrderFacade);
 
   
   bool isLoading = false;

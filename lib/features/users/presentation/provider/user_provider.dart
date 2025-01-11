@@ -11,9 +11,12 @@ class UserProvider extends ChangeNotifier {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController numberController = TextEditingController();
+
+
   final phoneValidation = RegExp(r"^[0-9]{10}$");
   bool isLoading = false;
   List<UserModel> users = [];
+ 
 
   Future<void> addUser() async {
     if (!isPhoneNumberValid()) {
@@ -43,6 +46,7 @@ class UserProvider extends ChangeNotifier {
             "Failed to add user");
       },
       (success) {
+       
         CustomFluttertoast.showToast("User added successfully");
         nameController.clear();
         numberController.clear();

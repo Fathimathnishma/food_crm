@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/Amount/presention/view/total_amount_screen.dart';
 import 'package:food_crm/features/home/presentation/view/widgets/custom_elevated_button_widget.dart';
 import 'package:food_crm/features/home/presentation/view/widgets/view_button_widet.dart';
 import 'package:food_crm/features/order/presentation/view/today_order_history_sreen.dart';
+import 'package:food_crm/features/user_payment/presention/view/users_payment_screen.dart';
 import 'package:food_crm/features/users/presentation/view/user_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       ViewButtonWidget(text: 'View', onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const TotalAmountScreen(),));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  const UsersPaymentScreen(),));
                       }),
                       const SizedBox(
                         height: 20,
