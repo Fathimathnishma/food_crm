@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/item/presentation/provider/item_provider.dart';
+import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
 import 'package:food_crm/features/order/presentation/view/today_order_history_sreen.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/total_amot_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/user_row_widget.dart';
-import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 import 'package:food_crm/main.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +20,8 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
   @override
   void initState() {
     super.initState();
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        userProvider.fetchUser();
-      },
+      (_) {},
     );
   }
 
@@ -45,9 +41,9 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
           ),
         ),
         body: Consumer<ItemProvider>(builder: (context, stateAddItem, child) {
-          final orderList = stateAddItem.localorder;
+          final orderList = stateAddItem.localitemOrder;
           return DefaultTabController(
-            length: stateAddItem.localorder.length + 1,
+            length: stateAddItem.localitemOrder.length + 1,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -97,12 +93,12 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
                           ),
                         ),
                         ListView.builder(
-                          itemCount: stateAddItem.localorder.length,
+                          itemCount: stateAddItem.localitemOrder.length,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
-                            final data = stateAddItem.localorder[index];
-                            log(stateAddItem.localorder.length.toString());
+                            final data = stateAddItem.localitemOrder[index];
+                            log(stateAddItem.localitemOrder.length.toString());
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
@@ -177,44 +173,85 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen> {
                             ],
                           ),
                         ),
-                      const Tab(
+                      Tab(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Total', style: TextStyle(fontSize: 14)),
-                            SizedBox(height: 5),
-                            Text('150', style: TextStyle(fontSize: 12)),
+                            const Text('Total', style: TextStyle(fontSize: 14)),
+                            const SizedBox(height: 5),
+                            Text(stateAddItem.total.toString(),
+                                style: const TextStyle(fontSize: 12)),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  Consumer<UserProvider>(
-                    builder: (context, stateAddUser, child) => Expanded(
-                      child: TabBarView(
-                        children: [
-                          for (var order in orderList)
-                            ListView.builder(
-                              itemCount: stateAddUser.users.length,
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) {
-                                final dataUser = stateAddUser.users[index];
-                                // final data = stateAddOrder.localorder[index];
-                                return UserRowWidget(
-                                  name: dataUser.name,
-                                  qty: order.quantity,
-                                  amount: order.price,
-                                );
-                              },
-                            ),
-                          const Text('Total Mount',
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.white)),
-                        ],
-                      ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        for (var item in orderList)
+                          Column(
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: item.users.length,
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int userIndex) {
+                                    final user = item.users[userIndex];
+                                    return UserRowWidget(
+                                      name: user.name,
+                                      qty: item.quantity,
+                                      amount: item.splitAmount,
+                                      index: userIndex,
+                                      tabIndex: orderList.indexOf(item),
+                                      onDelete: (int tabIndex, int userIndex) {
+                                        orderList[tabIndex]
+                                            .users
+                                            .removeAt(userIndex);
+                                      },
+                                      controller:
+                                          (int tabIndex, int userIndex) {
+                                        orderList[tabIndex]
+                                            .users[userIndex]
+                                            .qtyController;
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                              ListTile(
+                                trailing: SizedBox(
+                                  width: 100,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Qty:${item.quantity}',
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: ClrConstant.whiteColor),
+                                      ),
+                                      Text(
+                                        '₹${item.rate}',
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            color: ClrConstant.whiteColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        const Text('Total Mount',
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.white)),
+                      ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

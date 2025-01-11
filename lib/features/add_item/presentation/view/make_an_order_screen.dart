@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/item/presentation/provider/item_provider.dart';
+import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
 import 'package:food_crm/features/order/presentation/view/order_summery_screen.dart';
 import 'package:food_crm/general/widgets/add_button_widget.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_item_add_row_widget.dart';
@@ -18,9 +18,9 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
   @override
   void initState() {
     super.initState();
-    // final itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    final itemProvider = Provider.of<ItemProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      
+      itemProvider.fetchUser();
     });
   }
 
@@ -41,7 +41,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
         children: [
           Consumer<ItemProvider>(
             builder: (context, stateItemAdd, child) {
-              if (stateItemAdd.localorder.isEmpty) {
+              if (stateItemAdd.localitemOrder.isEmpty) {
                 return const Center(
                   child: Text(
                     'No orders available',
@@ -51,16 +51,17 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
               } else {
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: stateItemAdd.localorder.length,
+                  itemCount: stateItemAdd.localitemOrder.length,
                   itemBuilder: (context, index) {
-                    final order = stateItemAdd.localorder[index];
+                    final order = stateItemAdd.localitemOrder[index];
                     return OrderItemDeleteRowWidget(
                       itemName: order.item,
                       quantity: order.quantity.toInt(),
                       ratePerItem: order.price.toInt(),
                       onDelete: () {
-                        stateItemAdd.removeOrderByIndex( index,);
-
+                        stateItemAdd.removeOrderByIndex(
+                          index,
+                        );
                       },
                     );
                   },
@@ -80,7 +81,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>  const OrderSummeryScreen(),
+              builder: (context) => const OrderSummeryScreen(),
             ),
           );
         },

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/amount/presention/view/user_total_amount.dart';
 import 'package:food_crm/features/users/presentation/view/add_user_screen.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 
-class TotalAmountScreen extends StatefulWidget {
-  const TotalAmountScreen({super.key});
+class UsersPaymentScreen extends StatefulWidget {
+  const UsersPaymentScreen({super.key});
 
   @override
-  State<TotalAmountScreen> createState() => _TotalAmountScreenState();
+  State<UsersPaymentScreen> createState() => _UsersPaymentScreenState();
 }
 
-class _TotalAmountScreenState extends State<TotalAmountScreen> {
+class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +35,7 @@ class _TotalAmountScreenState extends State<TotalAmountScreen> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const UserTotalAmount(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>  const UsersPaymentScreen(),));
               },
               child: const ListTile(
                 trailing: Column(

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/amount/presention/view/widgets/amount_bottomsheet.dart';
-import 'package:food_crm/features/amount/presention/view/widgets/total_card.dart';
+import 'package:food_crm/features/user_payment/presention/view/widgets/amount_bottomsheet.dart';
+import 'package:food_crm/features/user_payment/presention/view/widgets/total_card.dart';
 import 'package:food_crm/features/users/presentation/view/add_user_screen.dart';
 import 'package:food_crm/general/utils/color_const.dart';
 
-class UserTotalAmount extends StatefulWidget {
-  const UserTotalAmount({super.key});
+class UserpaymentHistory extends StatefulWidget {
+  const UserpaymentHistory({super.key});
 
   @override
-  State<UserTotalAmount> createState() => _UserTotalAmountState();
+  State<UserpaymentHistory> createState() => _UserpaymentHistoryState();
 }
 
-class _UserTotalAmountState extends State<UserTotalAmount> {
+class _UserpaymentHistoryState extends State<UserpaymentHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +48,7 @@ class _UserTotalAmountState extends State<UserTotalAmount> {
                          itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const UserTotalAmount(),));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
                   },
                   child: InkWell(
                     onTap: () {
