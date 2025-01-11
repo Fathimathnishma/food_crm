@@ -30,6 +30,7 @@ class UserRowWidget extends StatelessWidget {
     return Consumer<UserProvider>(
       builder: (context, stateUserAdd, child) {
         return ListTile(
+          contentPadding: EdgeInsets.zero,
           leading: SizedBox(
             width: 80,
             child: Row(
@@ -58,7 +59,7 @@ class UserRowWidget extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  width: 3,
+                  width: 2,
                 ),
                 CircleAvatar(
                   radius: 22,
@@ -79,21 +80,22 @@ class UserRowWidget extends StatelessWidget {
             style: const TextStyle(fontSize: 17, color: ClrConstant.whiteColor),
           ),
           trailing: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.27,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 40,
+                  width: 33,
                   child: TextFormField(
                    controller:controller(tabIndex, index) ,
                    decoration: const InputDecoration(
                     hintText:"qty",
-                    hintStyle: TextStyle(color: ClrConstant.whiteColor)
+                    hintStyle: TextStyle(color: ClrConstant.whiteColor,fontSize: 13)
                    ),
                    style:const TextStyle(color: Colors.white), 
                   ),
                 ),
-                const SizedBox(width: 16),
+                
                 Text(
                   '₹${amount.toStringAsFixed(2)}', 
                   style: const TextStyle(color: Colors.white),

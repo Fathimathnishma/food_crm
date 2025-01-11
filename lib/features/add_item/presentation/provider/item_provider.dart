@@ -98,9 +98,6 @@ Future<void> fetchUser() async {
 
  void clearData() {
     localitemOrder = [];
-    for (var user in users) {
-      user.qtyController.clear();
-    }
     notifyListeners();
   }
 
