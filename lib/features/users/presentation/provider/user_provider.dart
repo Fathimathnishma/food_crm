@@ -33,7 +33,7 @@ class UserProvider extends ChangeNotifier {
     result.fold(
       (failure) {
         CustomFluttertoast.showToast(
-            "Failed to add user: ${failure.toString()}");
+            "Failed to add user");
       },
       (success) {
         CustomFluttertoast.showToast("User added successfully");

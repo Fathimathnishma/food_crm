@@ -1,35 +1,35 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class OrderModel {
-  String? id;
+class ItemModel {
+ String? id; 
   String item;
   num quantity;
   num price;
-  Timestamp createdAt;
-  OrderModel({
+  num rate;
+  ItemModel({
     this.id,
     required this.item,
     required this.quantity,
     required this.price,
-    required this.createdAt,
+    required  this.rate,
   });
+  
 
-  OrderModel copyWith({
+  ItemModel copyWith({
     String? id,
     String? item,
     num? quantity,
     num? price,
-    Timestamp? createdAt,
+    num? rate,
   }) {
-    return OrderModel(
+    return ItemModel(
       id: id ?? this.id,
       item: item ?? this.item,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
-      createdAt: createdAt ?? this.createdAt,
+      rate: rate ?? this.rate,
     );
   }
 
@@ -39,22 +39,21 @@ class OrderModel {
       'item': item,
       'quantity': quantity,
       'price': price,
-      'createdAt': createdAt,
+      'rate': rate,
     };
   }
 
-  factory OrderModel.fromMap(Map<String, dynamic> map) {
-    return OrderModel(
+  factory ItemModel.fromMap(Map<String, dynamic> map) {
+    return ItemModel(
       id: map['id'] != null ? map['id'] as String : null,
       item: map['item'] as String,
       quantity: map['quantity'] as num,
       price: map['price'] as num,
-      createdAt: map['createdAt'] as Timestamp,
+      rate:  map['rate'] as num ,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory OrderModel.fromJson(String source) =>
-      OrderModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ItemModel.fromJson(String source) => ItemModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

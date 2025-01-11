@@ -1,78 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
+import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/widgets/alert_dialog.dart';
+import 'package:provider/provider.dart';
+
 class UserRowWidget extends StatelessWidget {
-  final String initial;
   final String name;
   final num qty;
-  final double amount;
-  final int count;
+  final num amount;
   const UserRowWidget({
     super.key,
-    required this.initial,
     required this.name,
     required this.qty,
     required this.amount,
-    required this.count,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(
-          height: 10,
-        ),
-        itemCount: count,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          return Row(
-            children: [
-              Image.asset('assets/images/trash.png'),
-              const SizedBox(width: 12),
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  initial,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+    return Consumer<UserProvider>(
+      builder: (context, stateUderAdd, child) {
+        return ListTile(
+          leading: SizedBox(
+            width: 90,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialogWidget(
+                          label1: 'delete user',
+                          label2: 'delete',
+                          onLabel2Tap: () async {},
+                        );
+                      },
+                    );
+                  },
+                  child: const Icon(
+                    Icons.delete_outline,
+                    color: Colors.red,
+                    size: 30,
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  name,
-                  style: const TextStyle(color: Colors.white),
+                const SizedBox(
+                  width: 3,
                 ),
-              ),
-              Container(
-                width: 24,
-                alignment: Alignment.center,
-                child: Text(
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: ClrConstant.whiteColor,
+                  child: Text(
+                    stateUderAdd.getInitials(name),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          title: Text(
+            name,
+            style: const TextStyle(fontSize: 17, color: ClrConstant.whiteColor),
+          ),
+          trailing: SizedBox(
+            width: 80,
+            child: Row(
+              children: [
+                Text(
                   qty.toString(),
                   style: const TextStyle(
                     color: Colors.white,
                     decoration: TextDecoration.underline,
                   ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Text(
-                '₹${amount.toStringAsFixed(2)}',
-                style: const TextStyle(color: Colors.white),
-              ),
-            ],
-          );
-        },
-      ),
+                const SizedBox(width: 16),
+                Text(
+                  '₹${amount.toStringAsFixed(2)}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

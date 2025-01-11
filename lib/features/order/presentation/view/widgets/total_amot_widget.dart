@@ -18,7 +18,7 @@ class TotalAmountContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 81,
+      height: 87,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
