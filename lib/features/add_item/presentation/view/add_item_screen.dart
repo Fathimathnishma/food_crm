@@ -35,8 +35,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
   Widget build(BuildContext context) {
     return Consumer<AddItemProvider>(builder: (context, itemProvider, _) {
       return Scaffold(
+        
         backgroundColor: AppColors.blackColor,
         appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
           backgroundColor: AppColors.blackColor,
           title: const Text(
             'Make An Order',
