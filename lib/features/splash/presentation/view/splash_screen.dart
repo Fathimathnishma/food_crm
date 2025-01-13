@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/presentation/view/home_page.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/main.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ClrConstant.blackColor,
+      backgroundColor: AppColors.blackColor,
       body: Center(
         child: SizedBox(
           height: height*0.11,
@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         image: AssetImage("assets/images/total-x-logo.png"))),
               ),
               SizedBox(height: height*0.02,),
-              const Text("FOOD MANAGEMENT APP",style:TextStyle(fontSize: 15,color: ClrConstant.greyColor) ,)
+              const Text("FOOD MANAGEMENT APP",style:TextStyle(fontSize: 15,color: AppColors.greyColor) ,)
             ],
           ),
         ),

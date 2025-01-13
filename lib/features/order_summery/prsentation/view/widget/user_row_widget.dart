@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/general/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +64,7 @@ class UserRowWidget extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: 22,
-                  backgroundColor: ClrConstant.whiteColor,
+                  backgroundColor: AppColors.whiteColor,
                   child: Text(
                     stateUserAdd
                         .getInitials(name), // Display the initials of the name
@@ -79,7 +79,7 @@ class UserRowWidget extends StatelessWidget {
           ),
           title: Text(
             name,
-            style: const TextStyle(fontSize: 17, color: ClrConstant.whiteColor),
+            style: const TextStyle(fontSize: 17, color: AppColors.whiteColor),
           ),
           trailing: SizedBox(
             width: MediaQuery.of(context).size.width * 0.27,
@@ -94,7 +94,7 @@ class UserRowWidget extends StatelessWidget {
                     controller: controller(tabIndex, index),
                     decoration: const InputDecoration(
                         hintText: "qty",
-                        hintStyle: TextStyle(color: ClrConstant.whiteColor)),
+                        hintStyle: TextStyle(color: AppColors.whiteColor)),
                     style: const TextStyle(color: Colors.white),
 
                   ),

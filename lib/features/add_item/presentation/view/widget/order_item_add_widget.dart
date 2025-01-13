@@ -1,26 +1,32 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
-import 'package:food_crm/general/utils/color_const.dart';
-import 'package:provider/provider.dart';
 
-class OrderItemAddRowWidget extends StatelessWidget {
+import 'package:food_crm/features/add_item/data/model/item_model.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
+
+class OrderItemAddWidget extends StatelessWidget {
+  final ItemUploadingModel itemModel;
+  final bool isAdd;
   final VoidCallback onAdd;
+  final VoidCallback onRemove;
 
-  const OrderItemAddRowWidget({
+  const OrderItemAddWidget({
     super.key,
+    required this.itemModel,
+    required this.isAdd,
     required this.onAdd,
+    required this.onRemove,
   });
 
   @override
   Widget build(BuildContext context) {
-    final itemProvider = Provider.of<ItemProvider>(context);
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              controller: itemProvider.itemController,
+              controller: itemModel.name,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -44,10 +50,10 @@ class OrderItemAddRowWidget extends StatelessWidget {
           SizedBox(
             width: 50,
             child: TextField(
-              controller: itemProvider.totalQuantityController,
+              controller: itemModel.quantity,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: ClrConstant.whiteColor,
+                color: AppColors.whiteColor,
                 fontSize: 16,
               ),
               decoration: const InputDecoration(
@@ -60,37 +66,49 @@ class OrderItemAddRowWidget extends StatelessWidget {
           SizedBox(
             width: 80,
             child: TextField(
-              controller: itemProvider.priceController,
+              controller: itemModel.price,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: ClrConstant.whiteColor,
+                color: AppColors.whiteColor,
                 fontSize: 16,
               ),
               decoration: const InputDecoration(
                 hintText: 'Rate per one',
               ),
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: TextInputType.number,
             ),
           ),
           const SizedBox(width: 8),
-          CircleAvatar(
-            backgroundColor: const Color(0XFF1FAF38),
-            radius: 15,
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(
-                Icons.add,
-                color: ClrConstant.whiteColor,
-                size: 24,
+          if (isAdd)
+            CircleAvatar(
+              backgroundColor: const Color(0XFF1FAF38),
+              radius: 15,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.add,
+                  color: AppColors.whiteColor,
+                  size: 24,
+                ),
+                onPressed: onAdd,
               ),
-              onPressed: onAdd,
-            ),
-          ),
+            )
+          else
+            CircleAvatar(
+              backgroundColor: Colors.red,
+              radius: 15,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.close,
+                  color: AppColors.whiteColor,
+                  size: 24,
+                ),
+                onPressed: onRemove,
+              ),
+            )
         ],
       ),
     );
   }
 }
-
-

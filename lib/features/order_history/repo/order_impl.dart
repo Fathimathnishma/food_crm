@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:food_crm/features/order/data/model/i_order_facade.dart';
-import 'package:food_crm/features/order/data/model/service_order_model.dart';
+import 'package:food_crm/features/order_history/data/model/i_order_facade.dart';
+import 'package:food_crm/features/order_history/data/model/service_order_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
-import 'package:food_crm/general/utils/collection_const.dart';
+import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IOrderFacade)

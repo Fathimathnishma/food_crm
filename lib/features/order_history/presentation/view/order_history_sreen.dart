@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/order/presentation/view/widgets/order_Card.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/main.dart';
 
 class OrderHistorySreen extends StatefulWidget {
@@ -14,18 +14,18 @@ class _OrderHistorySreenState extends State<OrderHistorySreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ClrConstant.blackColor,
+      backgroundColor: AppColors.blackColor,
       appBar: AppBar(
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(Icons.arrow_back_ios_new, color: ClrConstant.whiteColor),
+          child: const Icon(Icons.arrow_back_ios_new, color: AppColors.whiteColor),
         ),
-        backgroundColor: ClrConstant.blackColor,
+        backgroundColor: AppColors.blackColor,
         title: const Text(
           "History ",
-          style: TextStyle(color: ClrConstant.whiteColor),
+          style: TextStyle(color: AppColors.whiteColor),
         ),
       ),
       body: SingleChildScrollView(
@@ -37,7 +37,7 @@ class _OrderHistorySreenState extends State<OrderHistorySreen> {
                 children: [
                   Text(
                     "Showing Results : All",
-                    style: TextStyle(fontSize: 16, color: ClrConstant.whiteColor),
+                    style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
                   ),
                 ],
               ),
@@ -64,7 +64,7 @@ class _OrderHistorySreenState extends State<OrderHistorySreen> {
                                   Text(
                                     "23 March",
                                     style: TextStyle(
-                                      color: ClrConstant.whiteColor,
+                                      color: AppColors.whiteColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w300,
                                     ),
@@ -72,7 +72,7 @@ class _OrderHistorySreenState extends State<OrderHistorySreen> {
                                   Text(
                                     "₹290.50",
                                     style: TextStyle(
-                                      color: ClrConstant.whiteColor,
+                                      color: AppColors.whiteColor,
                                       fontSize: 24,
                                       fontWeight: FontWeight.w500,
                                     ),

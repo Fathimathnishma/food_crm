@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/main.dart';
 
 class OrderCard extends StatelessWidget {
@@ -23,7 +23,7 @@ class OrderCard extends StatelessWidget {
     return Container(
       width: width * 1,
       decoration: BoxDecoration(
-        color: ClrConstant.greyColor,
+        color: AppColors.greyColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

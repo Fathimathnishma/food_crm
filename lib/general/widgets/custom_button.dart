@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 
-class AddButtonWidget extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final String buttontext;
   final VoidCallback onTap;
-  const AddButtonWidget(
+  const CustomButton(
       {super.key, required this.onTap, required this.buttontext});
 
   @override
@@ -13,14 +13,14 @@ class AddButtonWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 44,
-        width: 366,
+        width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: ClrConstant.primaryColor),
+            color: AppColors.primaryColor),
         child: Center(
           child: Text(
             buttontext,
-            style: const TextStyle(fontSize: 16, color: ClrConstant.blackColor),
+            style: const TextStyle(fontSize: 16, color: AppColors.blackColor),
           ),
         ),
       ),

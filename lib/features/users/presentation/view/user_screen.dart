@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/presentation/view/home_page.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/features/users/presentation/view/add_user_screen.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/general/widgets/alert_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -28,9 +28,9 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ClrConstant.blackColor,
+      backgroundColor: AppColors.blackColor,
       appBar: AppBar(
-        backgroundColor: ClrConstant.blackColor,
+        backgroundColor: AppColors.blackColor,
         leading: InkWell(
             onTap: () {
               Navigator.push(
@@ -41,11 +41,11 @@ class _UserScreenState extends State<UserScreen> {
             },
             child: const Icon(
               Icons.arrow_back_ios_new,
-              color: ClrConstant.whiteColor,
+              color: AppColors.whiteColor,
             )),
         title: const Text(
           "Peoples",
-          style: TextStyle(color: ClrConstant.whiteColor),
+          style: TextStyle(color: AppColors.whiteColor),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -56,7 +56,7 @@ class _UserScreenState extends State<UserScreen> {
                 builder: (context) => const AddUserScreen(),
               ));
         },
-        backgroundColor: ClrConstant.primaryColor,
+        backgroundColor: AppColors.primaryColor,
         child: const Icon(
           Icons.add,
           size: 40,
@@ -66,7 +66,7 @@ class _UserScreenState extends State<UserScreen> {
         if (stateAdduser.isLoading) {
           return const Center(
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(ClrConstant.whiteColor),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.whiteColor),
             ),
           );
         }
@@ -75,7 +75,7 @@ class _UserScreenState extends State<UserScreen> {
           return const Center(
             child: Text(
               "No People",
-              style: TextStyle(color: ClrConstant.whiteColor, fontSize: 18),
+              style: TextStyle(color: AppColors.whiteColor, fontSize: 18),
             ),
           );
         }
@@ -109,7 +109,7 @@ class _UserScreenState extends State<UserScreen> {
                     ),
                     CircleAvatar(
                       radius: 23,
-                      backgroundColor: ClrConstant.whiteColor,
+                      backgroundColor: AppColors.whiteColor,
                       child: Text(
                         stateAdduser.getInitials(data.name),
                         style: const TextStyle(
@@ -124,11 +124,11 @@ class _UserScreenState extends State<UserScreen> {
               title: Text(
                 data.name,
                 style: const TextStyle(
-                    fontSize: 17, color: ClrConstant.whiteColor),
+                    fontSize: 17, color: AppColors.whiteColor),
               ),
               subtitle: Text(
                 data.phoneNumber,
-                style: const TextStyle(color: ClrConstant.greyColor),
+                style: const TextStyle(color: AppColors.greyColor),
               ),
             );
           },

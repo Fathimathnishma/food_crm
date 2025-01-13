@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/add_item/presentation/view/make_an_order_screen.dart';
-import 'package:food_crm/features/order/presentation/view/order_history_sreen.dart';
-import 'package:food_crm/features/order/presentation/view/widgets/order_Card.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dart';
+import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
+import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/main.dart';
 
 class TodayOrderHistoryScreen extends StatefulWidget {
@@ -17,20 +17,20 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ClrConstant.blackColor,
+        backgroundColor: AppColors.blackColor,
         appBar: AppBar(
-          backgroundColor: ClrConstant.blackColor,
+          backgroundColor: AppColors.blackColor,
           leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios_new,
-                color: ClrConstant.whiteColor,
+                color: AppColors.whiteColor,
               )),
           title: const Text(
             "Today Orders",
-            style: TextStyle(color: ClrConstant.whiteColor),
+            style: TextStyle(color: AppColors.whiteColor),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -38,16 +38,15 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MakeAnOrderScreen(),
+                  builder: (context) => const AddItemScreen(),
                 ));
           },
-          backgroundColor: ClrConstant.primaryColor,
+          backgroundColor: AppColors.primaryColor,
           child: const Icon(
             Icons.add,
             size: 40,
           ),
         ),
-
         body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [
@@ -63,14 +62,14 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                           Text(
                             "23 March",
                             style: TextStyle(
-                                color: ClrConstant.whiteColor,
+                                color: AppColors.whiteColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300),
                           ),
                           Text(
                             "₹290.50",
                             style: TextStyle(
-                                color: ClrConstant.whiteColor,
+                                color: AppColors.whiteColor,
                                 fontSize: 24,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -88,7 +87,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                             height: 30,
                             width: 30,
                             decoration: BoxDecoration(
-                                color: ClrConstant.whiteColor,
+                                color: AppColors.whiteColor,
                                 borderRadius: BorderRadius.circular(6)),
                             child: const Icon(
                               Icons.calendar_month_sharp,
