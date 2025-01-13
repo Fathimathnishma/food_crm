@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => UserProvider(sl<IUserFacade>()),
         ),
-        ChangeNotifierProvider(create: (_) =>ItemProvider(sl<IItemFacade>()),),
+        ChangeNotifierProvider(create: (_) =>ItemProvider( )),
         ChangeNotifierProvider(
             create: (_) => OrderProvider( sl<IOrderFacade>()))
       ],

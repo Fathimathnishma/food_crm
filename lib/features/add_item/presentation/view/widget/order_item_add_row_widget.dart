@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
+import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/general/utils/color_const.dart';
-import 'package:provider/provider.dart';
 
 class OrderItemAddRowWidget extends StatelessWidget {
+  final AddItemModel addItem;
   final VoidCallback onAdd;
+  final VoidCallback onDelete;
+  final bool isAdd;
 
-  const OrderItemAddRowWidget({
-    super.key,
-    required this.onAdd,
-  });
+  const OrderItemAddRowWidget(
+      {super.key,
+      required this.onAdd,
+      required this.addItem,
+      required this.onDelete,
+      required this.isAdd});
 
   @override
   Widget build(BuildContext context) {
-    final itemProvider = Provider.of<ItemProvider>(context);
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              controller: itemProvider.itemController,
+              controller: addItem.name,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -44,7 +47,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
           SizedBox(
             width: 50,
             child: TextField(
-              controller: itemProvider.totalQuantityController,
+              controller: addItem.quantity,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: ClrConstant.whiteColor,
@@ -60,7 +63,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
           SizedBox(
             width: 80,
             child: TextField(
-              controller: itemProvider.priceController,
+              controller: addItem.price,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: ClrConstant.whiteColor,
@@ -75,16 +78,16 @@ class OrderItemAddRowWidget extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           CircleAvatar(
-            backgroundColor: const Color(0XFF1FAF38),
+            backgroundColor:isAdd?  const Color(0XFF1FAF38) :Colors.red,
             radius: 15,
             child: IconButton(
               padding: EdgeInsets.zero,
-              icon: const Icon(
-                Icons.add,
+              icon:  Icon(
+               isAdd?Icons.add : Icons.close,
                 color: ClrConstant.whiteColor,
                 size: 24,
               ),
-              onPressed: onAdd,
+              onPressed:isAdd  ?onAdd : onDelete
             ),
           ),
         ],
@@ -92,5 +95,3 @@ class OrderItemAddRowWidget extends StatelessWidget {
     );
   }
 }
-
-

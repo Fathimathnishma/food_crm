@@ -7,6 +7,7 @@ class ServiceOrderModel {
   String? id;
   Timestamp createdAt;
   List<Map<String, dynamic>> orders; 
+  
   ServiceOrderModel({
     this.id,
     required this.createdAt,

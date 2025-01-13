@@ -10,20 +10,18 @@ class UserRowWidget extends StatelessWidget {
   final num amount;
   final int index;
   final int tabIndex;
-  final Function(int, int)
-      controller; 
-  final Function(int, int)
-      onDelete; 
+  final Function(int, int) controller;
+  final Function(int, int) onDelete;
 
   const UserRowWidget({
     super.key,
     required this.name,
     required this.qty,
     required this.amount,
-    required this.index, 
-    required this.tabIndex, 
+    required this.index,
+    required this.tabIndex,
     required this.onDelete,
-    required this.controller, 
+    required this.controller,
   });
 
   @override
@@ -43,11 +41,10 @@ class UserRowWidget extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialogWidget(
-                          label1: 'Delete User', 
+                          label1: 'Delete User',
                           label2: 'Delete',
                           onLabel2Tap: () async {
                             onDelete(tabIndex, index);
-                            Navigator.pop(context); 
                           },
                         );
                       },
@@ -89,17 +86,14 @@ class UserRowWidget extends StatelessWidget {
                 SizedBox(
                   width: 33,
                   child: TextFormField(
-
                     keyboardType: TextInputType.number,
                     controller: controller(tabIndex, index),
                     decoration: const InputDecoration(
                         hintText: "qty",
                         hintStyle: TextStyle(color: ClrConstant.whiteColor)),
                     style: const TextStyle(color: Colors.white),
-
                   ),
                 ),
-                
                 Text(
                   '₹${amount.toStringAsFixed(2)}',
                   style: const TextStyle(color: Colors.white),
