@@ -1,7 +1,7 @@
 // import 'dart:developer';
 // import 'package:buttons_tabbar/buttons_tabbar.dart';
 // import 'package:flutter/material.dart';
-// import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
+// import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 // import 'package:food_crm/features/order/presentation/view/today_order_history_sreen.dart';
 // import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
 // import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
@@ -28,22 +28,23 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//         backgroundColor: ClrConstant.blackColor,
+//       resizeToAvoidBottomInset: true,
+//         backgroundColor: AppColors.blackColor,
 //         appBar: AppBar(
 //           leading: const Icon(
 //             Icons.arrow_back_ios_new,
-//             color: ClrConstant.greyColor,
+//             color: AppColors.greyColor,
 //           ),
-//           backgroundColor: ClrConstant.blackColor,
+//           backgroundColor: AppColors.blackColor,
 //           title: const Text(
 //             'Make An Order',
-//             style: TextStyle(fontSize: 18, color: ClrConstant.whiteColor),
+//             style: TextStyle(fontSize: 18, color: AppColors.whiteColor),
 //           ),
 //         ),
-//         body: Consumer<ItemProvider>(builder: (context, stateAddItem, child) {
-//           final orderList = stateAddItem.localitemOrder;
+//         body: Consumer<ItemAddProvider>(builder: (context, stateAddItem, child) {
+//           // final orderList = stateAddItem.localitemOrder;
 //           return DefaultTabController(
-//             length: stateAddItem.localitemOrder.length + 1,
+//             // length: stateAddItem.localitemOrder.length + 1,
 //             child: Padding(
 //               padding: const EdgeInsets.all(16),
 //               child: Column(
@@ -53,14 +54,14 @@
 //                     child: Text(
 //                       'Order Summery',
 //                       style: TextStyle(
-//                           fontSize: 16, color: ClrConstant.whiteColor),
+//                           fontSize: 16, color: AppColors.whiteColor),
 //                     ),
 //                   ),
 //                   const SizedBox(height: 24),
 //                   Container(
 //                     width: width * 1,
 //                     decoration: BoxDecoration(
-//                       color: ClrConstant.greyColor,
+//                       color: AppColors.greyColor,
 //                       borderRadius: BorderRadius.circular(10),
 //                     ),
 //                     child: Column(
@@ -140,7 +141,7 @@
 //                     child: Text(
 //                       'People',
 //                       style: TextStyle(
-//                           fontSize: 16, color: ClrConstant.whiteColor),
+//                           fontSize: 16, color: AppColors.whiteColor),
 //                     ),
 //                   ),
 //                   const SizedBox(height: 24),
@@ -149,13 +150,13 @@
 //                     width: 124,
 //                     center: false,
 //                     physics: const NeverScrollableScrollPhysics(),
-//                     backgroundColor: ClrConstant.greyColor,
-//                     unselectedBackgroundColor: ClrConstant.blackColor,
-//                     unselectedBorderColor: ClrConstant.greyColor,
+//                     backgroundColor: AppColors.greyColor,
+//                     unselectedBackgroundColor: AppColors.blackColor,
+//                     unselectedBorderColor: AppColors.greyColor,
 //                     unselectedLabelStyle:
-//                         const TextStyle(color: ClrConstant.whiteColor),
+//                         const TextStyle(color: AppColors.whiteColor),
 //                     labelStyle: const TextStyle(
-//                       color: ClrConstant.blackColor,
+//                       color: AppColors.blackColor,
 //                       fontWeight: FontWeight.bold,
 //                     ),
 //                     tabs: [
@@ -196,14 +197,13 @@
 //                               Expanded(
 //                                 child: ListView.builder(
 //                                   itemCount: item.users.length,
-//                                   shrinkWrap: true,
 //                                   itemBuilder:
 //                                       (BuildContext context, int userIndex) {
 //                                     final user = item.users[userIndex];
 //                                     return UserRowWidget(
 //                                       name: user.name,
 //                                       qty: item.quantity,
-//                                       amount: item.splitAmount,
+//                                       amount: 0,
 //                                       index: userIndex,
 //                                       tabIndex: orderList.indexOf(item),
 //                                       onDelete: (int tabIndex, int userIndex) {
@@ -222,25 +222,26 @@
 //                                 ),
 //                               ),
 //                               ListTile(
-//                                 trailing: Row(
-//                                   mainAxisSize: MainAxisSize.min,
-//                                   children: [
-//                                     Text(
-//                                       'Qty:${item.quantity}',
-//                                       style: const TextStyle(
-//                                           fontSize: 14,
-//                                           color: ClrConstant.whiteColor),
-//                                     ),
-//                                     const SizedBox(
-//                                       width: 10,
-//                                     ),
-//                                     Text(
-//                                       '₹${item.rate}',
-//                                       style: const TextStyle(
-//                                           fontSize: 14,
-//                                           color: ClrConstant.whiteColor),
-//                                     ),
-//                                   ],
+//                                 trailing: SizedBox(
+//                                   width: 100,
+//                                   child: Row(
+//                                     mainAxisAlignment:
+//                                         MainAxisAlignment.spaceBetween,
+//                                     children: [
+//                                       Text(
+//                                         'Qty:${item.quantity}',
+//                                         style: const TextStyle(
+//                                             fontSize: 14,
+//                                             color: AppColors.whiteColor),
+//                                       ),
+//                                       Text(
+//                                         '₹${item.rate}',
+//                                         style: const TextStyle(
+//                                             fontSize: 14,
+//                                             color: AppColors.whiteColor),
+//                                       ),
+//                                     ],
+//                                   ),
 //                                 ),
 //                               ),
 //                             ],
@@ -257,7 +258,7 @@
 //           );
 //         }),
 //         bottomNavigationBar:
-//             Consumer<ItemProvider>(builder: (context, stateAddItem, child) {
+//             Consumer<ItemAddProvider>(builder: (context, stateAddItem, child) {
 //           return Padding(
 //             padding: const EdgeInsets.symmetric(horizontal: 16),
 //             child: TotalAmountContainer(
@@ -274,6 +275,5 @@
 //               },
 //             ),
 //           );
-//         }));
-//   }
+// }));}
 // }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 
 class OrderItemAddRowWidget extends StatelessWidget {
-  final AddItemModel addItem;
+  final ItemUploadingModel addItem;
   final VoidCallback onAdd;
   final VoidCallback onDelete;
   final bool isAdd;
@@ -50,7 +50,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
               controller: addItem.quantity,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: ClrConstant.whiteColor,
+                color: AppColors.whiteColor,
                 fontSize: 16,
               ),
               decoration: const InputDecoration(
@@ -66,7 +66,7 @@ class OrderItemAddRowWidget extends StatelessWidget {
               controller: addItem.price,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: ClrConstant.whiteColor,
+                color: AppColors.whiteColor,
                 fontSize: 16,
               ),
               decoration: const InputDecoration(
@@ -84,10 +84,10 @@ class OrderItemAddRowWidget extends StatelessWidget {
               padding: EdgeInsets.zero,
               icon:  Icon(
                isAdd?Icons.add : Icons.close,
-                color: ClrConstant.whiteColor,
+                color: AppColors.whiteColor,
                 size: 24,
               ),
-              onPressed:isAdd  ?onAdd : onDelete
+              onPressed:isAdd?onAdd : onDelete
             ),
           ),
         ],

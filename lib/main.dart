@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/add_item/data/i_item_facade.dart';
-import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
-import 'package:food_crm/features/order/data/model/i_order_facade.dart';
-import 'package:food_crm/features/order/presentation/provider/order_provider.dart';
+import 'package:food_crm/features/add_item/data/i_add_item_facade.dart';
+import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/splash/presentation/view/splash_screen.dart';
 import 'package:food_crm/features/users/data/i_auth_facade.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
@@ -31,9 +29,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => UserProvider(sl<IUserFacade>()),
         ),
-        ChangeNotifierProvider(create: (_) =>ItemProvider( )),
-        ChangeNotifierProvider(
-            create: (_) => OrderProvider( sl<IOrderFacade>()))
+        ChangeNotifierProvider(create: (_) =>AddItemProvider(sl<IItemFacade>()),),
+        // ChangeNotifierProvider(
+        //     create: (_) => OrderProvider( sl<IOrderFacade>()))
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/general/utils/color_const.dart'; // Ensure this import is in place
+import 'package:food_crm/general/utils/app_colors.dart'; // Ensure this import is in place
 
 class TotalCardWidget extends StatelessWidget {
   final String subtitle;
@@ -18,7 +18,7 @@ class TotalCardWidget extends StatelessWidget {
         color: Colors.black,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: ClrConstant.whiteColor,
+          color: AppColors.whiteColor,
           width: 1.5,
         ),
       ),
@@ -30,18 +30,16 @@ class TotalCardWidget extends StatelessWidget {
             const Text(
               "Total",
               style: TextStyle(
-                color: ClrConstant.whiteColor,
-                fontSize: 15,
-                 fontWeight: FontWeight.w400
-              ),
+                  color: AppColors.whiteColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400),
             ),
             Text(
               "₹$subtitle",
               style: const TextStyle(
-                color: ClrConstant.whiteColor,
-                fontSize: 24,
-                fontWeight: FontWeight.w600
-              ),
+                  color: AppColors.whiteColor,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600),
             ),
           ],
         ),

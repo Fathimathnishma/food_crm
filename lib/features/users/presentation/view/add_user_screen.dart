@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/features/users/presentation/view/user_screen.dart';
-import 'package:food_crm/general/utils/color_const.dart';
-import 'package:food_crm/general/widgets/add_button_widget.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:food_crm/general/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class AddUserScreen extends StatefulWidget {
@@ -19,21 +19,21 @@ class _AddUserScreenState extends State<AddUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ClrConstant.blackColor,
+      backgroundColor: AppColors.blackColor,
       appBar: AppBar(
-        backgroundColor: ClrConstant.blackColor,
+        backgroundColor: AppColors.blackColor,
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
           child: const Icon(
             Icons.arrow_back_ios_new,
-            color: ClrConstant.whiteColor,
+            color: AppColors.whiteColor,
           ),
         ),
         title: const Text(
           "Add New People",
-          style: TextStyle(color: ClrConstant.whiteColor),
+          style: TextStyle(color: AppColors.whiteColor),
         ),
       ),
       body: Consumer<UserProvider>(
@@ -54,17 +54,17 @@ class _AddUserScreenState extends State<AddUserScreen> {
                             label: Text("Name"),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: ClrConstant.greyColor),
+                                  BorderSide(color: AppColors.greyColor),
                             ),
                             labelStyle:
-                                TextStyle(color: ClrConstant.whiteColor),
+                                TextStyle(color: AppColors.whiteColor),
                             border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
                             ),
                           ),
-                          cursorColor: ClrConstant.whiteColor,
-                          style: const TextStyle(color: ClrConstant.whiteColor),
+                          cursorColor: AppColors.whiteColor,
+                          style: const TextStyle(color: AppColors.whiteColor),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Name cannot be empty, please enter a name.';
@@ -81,12 +81,12 @@ class _AddUserScreenState extends State<AddUserScreen> {
                           decoration: const InputDecoration(
                             label: Text("Phone Numbers"),
                             hintText: "Phone Number",
-                            focusColor: ClrConstant.whiteColor,
+                            focusColor: AppColors.whiteColor,
                             labelStyle:
-                                TextStyle(color: ClrConstant.whiteColor),
+                                TextStyle(color: AppColors.whiteColor),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: ClrConstant.greyColor),
+                                  BorderSide(color: AppColors.greyColor),
                             ),
                             border: OutlineInputBorder(
                               borderRadius:
@@ -97,9 +97,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly
                           ],
-                          cursorColor: ClrConstant.whiteColor,
+                          cursorColor: AppColors.whiteColor,
                           maxLength: 10,
-                          style: const TextStyle(color: ClrConstant.whiteColor),
+                          style: const TextStyle(color: AppColors.whiteColor),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'Number cannot be empty.';
@@ -118,7 +118,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                   ),
                   Column(
                     children: [
-                      AddButtonWidget(
+                      CustomButton(
                         onTap: () async {
                           if (formKey.currentState?.validate() == true) {
                             stateAdduser.addUser();

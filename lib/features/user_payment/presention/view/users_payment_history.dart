@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_crm/features/user_payment/presention/view/widgets/amount_bottomsheet.dart';
 import 'package:food_crm/features/user_payment/presention/view/widgets/total_card.dart';
 import 'package:food_crm/features/users/presentation/view/add_user_screen.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 
 class UserpaymentHistory extends StatefulWidget {
   const UserpaymentHistory({super.key});
@@ -15,24 +15,24 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ClrConstant.blackColor,
+      backgroundColor: AppColors.blackColor,
       appBar: AppBar(
-        backgroundColor: ClrConstant.blackColor,
+        backgroundColor: AppColors.blackColor,
         leading: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
             child: const Icon(
               Icons.arrow_back_ios_new,
-              color: ClrConstant.whiteColor,
+              color: AppColors.whiteColor,
             )),
         title: const Text(
           "Name",
-          style: TextStyle(color: ClrConstant.whiteColor),
+          style: TextStyle(color: AppColors.whiteColor),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-           backgroundColor: ClrConstant.primaryColor,
+           backgroundColor: AppColors.primaryColor,
         child: const Icon(Icons.add,size: 40,),
           onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const AddUserScreen(),));
@@ -57,9 +57,9 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                       },);
                  },
                     child: const ListTile(
-                      trailing: Text("₹390.00",style: TextStyle(fontSize: 16,color: ClrConstant.whiteColor,fontWeight: FontWeight.w400)),
-                      title: Text("Day",style: TextStyle(fontSize: 17,color: ClrConstant.whiteColor,fontWeight: FontWeight.w400),),
-                      subtitle: Text("Date",style: TextStyle(color: ClrConstant.greyColor,fontWeight: FontWeight.w300),),
+                      trailing: Text("₹390.00",style: TextStyle(fontSize: 16,color: AppColors.whiteColor,fontWeight: FontWeight.w400)),
+                      title: Text("Day",style: TextStyle(fontSize: 17,color: AppColors.whiteColor,fontWeight: FontWeight.w400),),
+                      subtitle: Text("Date",style: TextStyle(color: AppColors.greyColor,fontWeight: FontWeight.w300),),
                     ),
                   ),
                 );

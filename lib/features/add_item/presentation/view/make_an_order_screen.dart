@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/add_item/presentation/provider/item_provider.dart';
+import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/add_item/presentation/view/widget/order_item_add_row_widget.dart';
-import 'package:food_crm/general/widgets/add_button_widget.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:food_crm/general/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 class MakeAnOrderScreen extends StatefulWidget {
@@ -16,30 +16,30 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
   @override
   void initState() {
     super.initState();
-    final itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    final itemProvider = Provider.of<AddItemProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      itemProvider.addItems();
+      itemProvider.addItem();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ClrConstant.blackColor,
+      backgroundColor: AppColors.blackColor,
       appBar: AppBar(
-        backgroundColor: ClrConstant.blackColor,
+        backgroundColor: AppColors.blackColor,
         title: const Text(
           'Make An Order',
-          style: TextStyle(fontSize: 18, color: ClrConstant.whiteColor),
+          style: TextStyle(fontSize: 18, color: AppColors.whiteColor),
         ),
       ),
-      body: Consumer<ItemProvider>(
+      body: Consumer<AddItemProvider>(
         builder: (context, stateItemAdd, child) {
           if (stateItemAdd.itemList.isEmpty) {
             return const Center(
               child: Text(
                 'No orders available',
-                style: TextStyle(color: ClrConstant.whiteColor),
+                style: TextStyle(color: AppColors.whiteColor),
               ),
             );
           } else {
@@ -49,7 +49,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
                 final item = stateItemAdd.itemList[index];
                 return OrderItemAddRowWidget(
                   onAdd: () {
-                    stateItemAdd.addItems();
+                    stateItemAdd.addItem();
                   },
                   addItem: item,
                   onDelete: () {
@@ -66,7 +66,7 @@ class _MakeAnOrderScreenState extends State<MakeAnOrderScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: AddButtonWidget(
+        child: CustomButton(
           onTap: () async {
             // Navigator.push(
             //   context,

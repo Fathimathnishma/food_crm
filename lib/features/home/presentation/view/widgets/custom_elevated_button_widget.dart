@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   final String text;
@@ -28,7 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: ClrConstant.primaryColor),
+            color: AppColors.primaryColor),
         child: SizedBox(
           height: height,
           width: width,

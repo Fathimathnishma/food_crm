@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/general/utils/color_const.dart';
+import 'package:food_crm/general/utils/app_colors.dart';
 
 class TotalAmountContainer extends StatelessWidget {
   final String title;
@@ -22,7 +22,7 @@ class TotalAmountContainer extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: ClrConstant.greyColor),
+        border: Border.all(color: AppColors.greyColor),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -36,14 +36,14 @@ class TotalAmountContainer extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: ClrConstant.greyColor,
+                    color: AppColors.greyColor,
                   ),
                 ),
                 Text(
                   amount,
                   style: const TextStyle(
                     fontSize: 18,
-                    color: ClrConstant.greyColor,
+                    color: AppColors.greyColor,
                   ),
                 ),
               ],
@@ -55,14 +55,14 @@ class TotalAmountContainer extends StatelessWidget {
                 width: 99,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: ClrConstant.primaryColor,
+                  color: AppColors.primaryColor,
                 ),
                 child: Center(
                   child: Text(
                     buttonText,
                     style: const TextStyle(
                       fontSize: 16,
-                      color: ClrConstant.blackColor,
+                      color: AppColors.blackColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
