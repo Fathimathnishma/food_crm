@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/add_item/presentation/view/widget/order_item_add_widget.dart';
+import 'package:food_crm/features/order_summery/prsentation/view/order_summery_screen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/general/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +81,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
           ),
           child: CustomButton(
             onTap: () async {
-              itemProvider.addSugetion();
+              itemProvider.addSuggestions();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderSummeryScreen(),));
             },
             buttontext: 'Generate',
           ),

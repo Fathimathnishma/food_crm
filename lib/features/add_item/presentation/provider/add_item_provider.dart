@@ -8,6 +8,7 @@ class AddItemProvider extends ChangeNotifier {
   AddItemProvider(this.iItemFacade);
 
   List<ItemUploadingModel> itemList = [];
+  List<UserItemQtyAloccatedModel> users = [];
   List<ItemUploadingModel> itemsuggestionList = [];
 
   bool isLoading = true;
@@ -19,7 +20,7 @@ class AddItemProvider extends ChangeNotifier {
         name: TextEditingController(),
         quantity: TextEditingController(),
         price: TextEditingController(),
-        users: [],
+        users: users,
       ),
     );
     notifyListeners();
@@ -30,7 +31,7 @@ class AddItemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addSugetion() async {
+  Future<void> addSuggestions() async {
     final result = await iItemFacade.addSuggestions(itemList: itemList);
     result.fold(
       (l) {
@@ -56,4 +57,6 @@ class AddItemProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+ 
 }
