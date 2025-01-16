@@ -60,7 +60,9 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
 
                       onChanged: (value) {
                         widget.itemModel.name.text = value;
-                        setState(() {});
+                        setState(() {
+                          
+                        });
                       },
                       focusNode: focusNode,
                       style: const TextStyle(
@@ -91,7 +93,9 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       alignment: Alignment.topLeft,
                       child: Material(
                         elevation: 4,
-                        child: SizedBox(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
                           height: 200, // Customize height as needed
                           child: ListView.builder(
                             padding: EdgeInsets.zero,

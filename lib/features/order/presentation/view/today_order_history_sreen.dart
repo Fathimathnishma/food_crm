@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/add_item/presentation/view/make_an_order_screen.dart';
+import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dart';
 import 'package:food_crm/features/order/presentation/view/widgets/order_Card.dart';
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
@@ -38,7 +38,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const MakeAnOrderScreen(),
+                  builder: (context) => const AddItemScreen(),
                 ));
           },
           backgroundColor: AppColors.primaryColor,

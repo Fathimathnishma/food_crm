@@ -6,22 +6,24 @@ import 'package:provider/provider.dart';
 
 class UserRowWidget extends StatelessWidget {
   final String name;
-  final num qty;
+  // final num qty;
   final num amount;
   final int index;
   final int tabIndex;
-  final Function(int, int) controller;
+  final TextEditingController controller;
+  // final Function(int, int) controller;
   final Function(int, int) onDelete;
 
   const UserRowWidget({
     super.key,
     required this.name,
-    required this.qty,
+    // required this.qty,
     required this.amount,
     required this.index,
     required this.tabIndex,
     required this.onDelete,
     required this.controller,
+    // required this.controller,
   });
 
   @override
@@ -50,17 +52,13 @@ class UserRowWidget extends StatelessWidget {
                       },
                     );
                   },
-                  child: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                    size: 30,
-                  ),
+                  child: Image.asset('assets/images/trash.png'),
                 ),
                 const SizedBox(
                   width: 2,
                 ),
                 CircleAvatar(
-                  radius: 22,
+                  radius: 18,
                   backgroundColor: AppColors.whiteColor,
                   child: Text(
                     stateUserAdd
@@ -87,9 +85,10 @@ class UserRowWidget extends StatelessWidget {
                   width: 33,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    controller: controller(tabIndex, index),
+                    controller: controller,
                     decoration: const InputDecoration(
                         hintText: "qty",
+                        contentPadding: EdgeInsets.symmetric(vertical: 0),
                         hintStyle: TextStyle(color: AppColors.whiteColor)),
                     style: const TextStyle(color: Colors.white),
                   ),

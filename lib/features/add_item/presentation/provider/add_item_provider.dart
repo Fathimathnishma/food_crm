@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/i_add_item_facade.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
+import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 
 class AddItemProvider extends ChangeNotifier {
@@ -19,9 +21,47 @@ class AddItemProvider extends ChangeNotifier {
         name: TextEditingController(),
         quantity: TextEditingController(),
         price: TextEditingController(),
-        users: [],
+        users: itemAloccatedUsers,
       ),
     );
+    notifyListeners();
+  }
+
+  List<UserItemQtyAloccatedModel> itemAloccatedUsers = [];
+  // void generateItems(List<UserModel> users) {
+  //   for (var user in users) {
+  //     itemAloccatedUsers.add(
+  //       UserItemQtyAloccatedModel(
+  //           name: user.name,
+  //           phoneNumber: user.phoneNumber,
+  //           id: user.id ?? "",
+  //           qtyController: TextEditingController()),
+  //     );
+  //   }
+
+  //   log(itemAloccatedUsers.toString());
+  //   for (var element in itemList) {
+  //     log(element.users.length.toString());
+  //     element = element.copyWith(users: itemAloccatedUsers);
+  //   }
+  //   notifyListeners();
+  // }
+
+  void generateItems(List<UserModel> users) {
+    for (var i = 0; i < itemList.length; i++) {
+      final uniqueUsers = users.map((user) {
+        return UserItemQtyAloccatedModel(
+          name: user.name,
+          phoneNumber: user.phoneNumber,
+          id: user.id ?? "",
+          qtyController: TextEditingController(),
+        );
+      }).toList();
+
+      itemList[i] = itemList[i].copyWith(users: uniqueUsers);
+    }
+
+    log(itemList.map((e) => e.users.length).toString());
     notifyListeners();
   }
 
@@ -36,7 +76,9 @@ class AddItemProvider extends ChangeNotifier {
       (l) {
         l.toString();
       },
-      (r) {},
+      (r) {
+        log('suggestion added');
+      },
     );
   }
 
@@ -54,6 +96,15 @@ class AddItemProvider extends ChangeNotifier {
       },
     );
     isLoading = false;
+    notifyListeners();
+  }
+
+  void addUserToItem(int itemIndex, UserItemQtyAloccatedModel user) {
+    if (itemIndex < 0 || itemIndex >= itemList.length) {
+      log('Invalid item index');
+      return;
+    }
+    itemList[itemIndex].users.add(user);
     notifyListeners();
   }
 }

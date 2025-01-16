@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/add_item/presentation/view/widget/order_item_add_widget.dart';
+import 'package:food_crm/features/order_summery/prsentation/view/order_summery_screen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/general/widgets/custom_button.dart';
+import 'package:food_crm/general/widgets/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class AddItemScreen extends StatefulWidget {
@@ -35,7 +37,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
   Widget build(BuildContext context) {
     return Consumer<AddItemProvider>(builder: (context, itemProvider, _) {
       return Scaffold(
-        
         backgroundColor: AppColors.blackColor,
         appBar: AppBar(
           iconTheme: const IconThemeData(
@@ -80,7 +81,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
           ),
           child: CustomButton(
             onTap: () async {
-              itemProvider.addSugetion();
+              if (itemProvider.itemsuggestionList.isNotEmpty) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderSummeryScreen(
+                      itemList: itemProvider.itemList,
+                    ),
+                  ),
+                );
+              } else {
+                Customtoast.showErrorToast('No Item Found.!');
+              }
             },
             buttontext: 'Generate',
           ),

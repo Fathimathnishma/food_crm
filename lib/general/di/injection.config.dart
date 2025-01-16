@@ -15,6 +15,8 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/add_item/data/i_add_item_facade.dart' as _i920;
 import '../../features/add_item/repo/i_add_item_impli.dart' as _i151;
+import '../../features/order_summery/data/i_order_summary_facade.dart' as _i99;
+import '../../features/order_summery/repo/i_order_impl.dart' as _i718;
 import '../../features/users/data/i_auth_facade.dart' as _i413;
 import '../../features/users/repo/i_auth_impli.dart' as _i108;
 import 'injectable_module.dart' as _i109;
@@ -41,6 +43,8 @@ Future<_i174.GetIt> init(
       () => firebaseInjectableModule.firebaseAuth);
   gh.lazySingleton<_i920.IItemFacade>(
       () => _i151.IAddItemImpli(gh<_i974.FirebaseFirestore>()));
+  gh.lazySingleton<_i99.IOrderSummaryFacade>(
+      () => _i718.IOrderImpl(firebaseFirestore: gh<_i974.FirebaseFirestore>()));
   gh.lazySingleton<_i413.IUserFacade>(() => _i108.IUserImpli(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),

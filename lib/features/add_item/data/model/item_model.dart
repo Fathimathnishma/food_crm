@@ -8,7 +8,6 @@ class ItemUploadingModel {
   TextEditingController name;
   TextEditingController quantity;
   TextEditingController price;
-
   List<UserItemQtyAloccatedModel> users;
 
   ItemUploadingModel({
