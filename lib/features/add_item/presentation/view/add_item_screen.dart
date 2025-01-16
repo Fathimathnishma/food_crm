@@ -82,7 +82,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
           child: CustomButton(
             onTap: () async {
               itemProvider.addSuggestions();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderSummeryScreen(),));
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  OrderSummeryScreen(itemList:itemProvider.itemList),));
             },
             buttontext: 'Generate',
           ),

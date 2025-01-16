@@ -8,7 +8,7 @@ class AddItemProvider extends ChangeNotifier {
   AddItemProvider(this.iItemFacade);
 
   List<ItemUploadingModel> itemList = [];
-  List<UserItemQtyAloccatedModel> users = [];
+  
   List<ItemUploadingModel> itemsuggestionList = [];
 
   bool isLoading = true;
@@ -20,7 +20,7 @@ class AddItemProvider extends ChangeNotifier {
         name: TextEditingController(),
         quantity: TextEditingController(),
         price: TextEditingController(),
-        users: users,
+        users: [],
       ),
     );
     notifyListeners();

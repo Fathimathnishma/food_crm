@@ -30,9 +30,7 @@ class _AlertDialogWidgetState extends State<AlertDialogWidget> {
       setState(() {
         _isLoading = false;
       });
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
+     
     }
   }
 
