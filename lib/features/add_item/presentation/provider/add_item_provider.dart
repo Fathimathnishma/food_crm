@@ -10,6 +10,7 @@ class AddItemProvider extends ChangeNotifier {
   AddItemProvider(this.iItemFacade);
 
   List<ItemUploadingModel> itemList = [];
+  
   List<ItemUploadingModel> itemsuggestionList = [];
 
   bool isLoading = true;
@@ -21,13 +22,13 @@ class AddItemProvider extends ChangeNotifier {
         name: TextEditingController(),
         quantity: TextEditingController(),
         price: TextEditingController(),
-        users: itemAloccatedUsers,
+        users: [],
       ),
     );
     notifyListeners();
   }
 
-  List<UserItemQtyAloccatedModel> itemAloccatedUsers = [];
+  // List<UserItemQtyAloccatedModel> itemAloccatedUsers = [];
   // void generateItems(List<UserModel> users) {
   //   for (var user in users) {
   //     itemAloccatedUsers.add(
@@ -44,33 +45,33 @@ class AddItemProvider extends ChangeNotifier {
   //     log(element.users.length.toString());
   //     element = element.copyWith(users: itemAloccatedUsers);
   //   }
-  //   notifyListeners();
+  //   notifyListeners(); 
   // }
 
-  void generateItems(List<UserModel> users) {
-    for (var i = 0; i < itemList.length; i++) {
-      final uniqueUsers = users.map((user) {
-        return UserItemQtyAloccatedModel(
-          name: user.name,
-          phoneNumber: user.phoneNumber,
-          id: user.id ?? "",
-          qtyController: TextEditingController(),
-        );
-      }).toList();
+  // void generateItems(List<UserModel> users) {
+  //   for (var i = 0; i < itemList.length; i++) {
+  //     final uniqueUsers = users.map((user) {
+  //       return UserItemQtyAloccatedModel(
+  //         name: user.name,
+  //         phoneNumber: user.phoneNumber,
+  //         id: user.id ?? "",
+  //         qtyController: TextEditingController(),
+  //       );
+  //     }).toList();
 
-      itemList[i] = itemList[i].copyWith(users: uniqueUsers);
-    }
+  //     itemList[i] = itemList[i].copyWith(users: uniqueUsers);
+  //   }
 
-    log(itemList.map((e) => e.users.length).toString());
-    notifyListeners();
-  }
+  //   log(itemList.map((e) => e.users.length).toString());
+  //   notifyListeners();
+  // }
 
   void removeItem(int index) {
     itemList.removeAt(index);
     notifyListeners();
   }
 
-  Future<void> addSugetion() async {
+  Future<void> addSuggestions() async {
     final result = await iItemFacade.addSuggestions(itemList: itemList);
     result.fold(
       (l) {
@@ -99,12 +100,5 @@ class AddItemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addUserToItem(int itemIndex, UserItemQtyAloccatedModel user) {
-    if (itemIndex < 0 || itemIndex >= itemList.length) {
-      log('Invalid item index');
-      return;
-    }
-    itemList[itemIndex].users.add(user);
-    notifyListeners();
-  }
+ 
 }

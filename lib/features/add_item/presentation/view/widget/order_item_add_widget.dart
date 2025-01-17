@@ -25,6 +25,8 @@ class OrderItemAddWidget extends StatefulWidget {
 }
 
 class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
+
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AddItemProvider>(builder: (context, addItemProvider, _) {
@@ -36,8 +38,7 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
               children: [
                 Expanded(
                     child: Autocomplete<ItemUploadingModel>(
-                  initialValue:
-                      TextEditingValue(text: widget.itemModel.name.text),
+                      initialValue: TextEditingValue(text: widget.itemModel.name.text),
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<ItemUploadingModel>.empty();
@@ -121,7 +122,9 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                     widget.itemModel.quantity.text =
                         selectedOption.quantity.text;
                     widget.itemModel.price.text = selectedOption.price.text;
-                    setState(() {});
+                    setState(() {
+                      
+                    });
                   },
                 )),
                 const SizedBox(width: 8),

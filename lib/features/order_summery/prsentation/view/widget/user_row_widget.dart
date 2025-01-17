@@ -10,9 +10,10 @@ class UserRowWidget extends StatelessWidget {
   final num amount;
   final int index;
   final int tabIndex;
-  final TextEditingController controller;
-  // final Function(int, int) controller;
-  final Function(int, int) onDelete;
+  final TextEditingController
+      controller; 
+  final Function(int, int)
+      onDelete; 
 
   const UserRowWidget({
     super.key,
@@ -84,6 +85,7 @@ class UserRowWidget extends StatelessWidget {
                 SizedBox(
                   width: 33,
                   child: TextFormField(
+        
                     keyboardType: TextInputType.number,
                     controller: controller,
                     decoration: const InputDecoration(
@@ -91,6 +93,7 @@ class UserRowWidget extends StatelessWidget {
                         contentPadding: EdgeInsets.symmetric(vertical: 0),
                         hintStyle: TextStyle(color: AppColors.whiteColor)),
                     style: const TextStyle(color: Colors.white),
+        
                   ),
                 ),
                 Text(

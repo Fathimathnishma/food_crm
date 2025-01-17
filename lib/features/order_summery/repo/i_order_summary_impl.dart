@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:food_crm/features/order_summery/data/i_order_summary_facade.dart';
+import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
 import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
 import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:injectable/injectable.dart';
-@LazySingleton(as: IOrderSummaryFacade)
-class IOrderImpl implements IOrderSummaryFacade {
+
+@LazySingleton(as: IOrderSummeryFacade)
+class IOrderSummaryImpl implements IOrderSummeryFacade {
   final FirebaseFirestore firebaseFirestore;
-  IOrderImpl({required this.firebaseFirestore});
+  IOrderSummaryImpl({required this.firebaseFirestore});
   @override
   Future<Either<MainFailures, List<UserModel>>> fetchUsers() async {
     try {

@@ -13,14 +13,11 @@ class UserProvider extends ChangeNotifier {
   TextEditingController nameController = TextEditingController();
   TextEditingController numberController = TextEditingController();
 
-
   final phoneValidation = RegExp(r"^[0-9]{10}$");
   bool isLoading = false;
   List<UserModel> users = [];
- 
 
   Future<void> addUser() async {
-   
     final cleanPhoneNumber =
         numberController.text.replaceAll(RegExp(r'[^\d]'), '');
     final formattedPhoneNumber = '+91$cleanPhoneNumber';
@@ -35,11 +32,9 @@ class UserProvider extends ChangeNotifier {
 
     result.fold(
       (failure) {
-        Customtoast.showToast(
-            "Failed to add user");
+        Customtoast.showToast("Failed to add user");
       },
       (success) {
-       
         Customtoast.showToast("User added successfully");
         clearController();
         notifyListeners();
@@ -57,6 +52,7 @@ class UserProvider extends ChangeNotifier {
 
     return firstLetter + lastLetter;
   }
+
   Future<void> fetchUser() async {
     clearData();
     isLoading = true;
@@ -82,9 +78,19 @@ class UserProvider extends ChangeNotifier {
       (failure) {
         failure.errormsg;
       },
-      (success) {
+      (success) async {
         log('Delete User');
         users.removeWhere((user) => user.id == userId);
+        try {
+          await FirebaseFirestore.instance
+              .collection('general')
+              .doc('general')
+              .update({'count': FieldValue.increment(-1)});
+
+          log('Count decremented successfully');
+        } catch (e) {
+          log('Count decremented failed');
+        }
         notifyListeners();
       },
     );
@@ -97,5 +103,16 @@ class UserProvider extends ChangeNotifier {
   void clearController() {
     nameController.clear();
     numberController.clear();
+  }
+
+  Future<void> getUsersCount() async {
+    final result = await iUserFacade.fetchGeneral();
+
+    result.fold(
+      (failure) {
+        log(failure.errormsg);
+      },
+      (success) {},
+    );
   }
 }

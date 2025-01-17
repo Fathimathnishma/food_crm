@@ -99,6 +99,7 @@ class _UserScreenState extends State<UserScreen> {
                           'delete',
                           () async {
                             await stateAdduser.removeUser(userId: data.id!);
+                            Navigator.pop(context);
                           },
                         );
                       },
@@ -123,8 +124,8 @@ class _UserScreenState extends State<UserScreen> {
               ),
               title: Text(
                 data.name,
-                style: const TextStyle(
-                    fontSize: 17, color: AppColors.whiteColor),
+                style:
+                    const TextStyle(fontSize: 17, color: AppColors.whiteColor),
               ),
               subtitle: Text(
                 data.phoneNumber,

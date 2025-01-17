@@ -21,8 +21,9 @@ class IUserImpli implements IUserFacade {
     try {
       final id = firestore.collection(FirebaseCollection.users).doc().id;
 
-      final generalRef =
-          firestore.collection(FirebaseCollection.general).doc(FirebaseCollection.general);
+      final generalRef = firestore
+          .collection(FirebaseCollection.general)
+          .doc(FirebaseCollection.general);
       final userRef = firestore.collection(FirebaseCollection.users).doc(id);
       final user = usermodel.copyWith(id: id);
       final batch = firestore.batch();
@@ -65,7 +66,8 @@ class IUserImpli implements IUserFacade {
   Future<Either<MainFailures, Unit>> removeUser(
       {required String userId}) async {
     try {
-      final userDoc = firestore.collection(FirebaseCollection.users).doc(userId);
+      final userDoc =
+          firestore.collection(FirebaseCollection.users).doc(userId);
       await userDoc.delete();
 
       return right(unit);
