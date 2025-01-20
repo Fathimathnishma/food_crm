@@ -69,7 +69,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
         );
       }
       return Scaffold(
-     
           backgroundColor: AppColors.blackColor,
           appBar: AppBar(
             leading: const Icon(
@@ -136,7 +135,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                         itemBuilder: (BuildContext context, int index) {
                           final itemList = stateAddOrder.itemsList;
                           final data = itemList[index];
-                          
+
                           //log(widget.itemList.length.toString());
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -227,7 +226,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                   ],
                 ),
                 Expanded(
-                 
                     child: TabBarView(
                   controller: tabController,
                   children: [
@@ -246,7 +244,8 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                                   onDelete: (int tabIndex, int userIndex) {
                                     stateAddOrder.removeUserFromSummery(
                                       tabIndex: tabIndex,
-                                      userIndex: userIndex, price: item.price.text,
+                                      userIndex: userIndex,
+                                      price: item.price.text,
                                     );
                                   },
                                   controller: item.users[index].qtyController,
@@ -267,7 +266,14 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                       ),
                     ),
                   ],
-                ))
+                )),
+                const Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    '250',
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                )
               ],
             ),
           ),
@@ -278,18 +284,17 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 title: 'Total',
                 buttonText: 'Save',
                 onTap: () async {
-                  if(stateAddOrder.isValid) {
-                await  stateAddOrder.addOrder();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TodayOrderHistoryScreen(),
-                      ));
-
-                  }else{
-                    Customtoast.showErrorToast("Please check the values you've given.");
+                  if (stateAddOrder.isValid) {
+                    await stateAddOrder.addOrder();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TodayOrderHistoryScreen(),
+                        ));
+                  } else {
+                    Customtoast.showErrorToast(
+                        "Please check the values you've given.");
                   }
-                  
                 }),
           ));
     });

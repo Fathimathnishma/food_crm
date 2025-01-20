@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/features/users/data/i_auth_facade.dart';
 import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
@@ -87,6 +88,25 @@ class IUserImpli implements IUserFacade {
       return right(count);
     } catch (e) {
       log("Batch commit failed: $e");
+      return left(MainFailures.serverFailures(errormsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<MainFailures, OrderModel>> addDailyOrder(
+      {required String userId, required OrderModel orderModel}) async {
+    try {
+      final userDoc =
+          firestore.collection(FirebaseCollection.users).doc(userId);
+
+      final orderRef = userDoc.collection('dailyOrder').doc();
+
+      final newOrder = orderModel.copyWith(id: orderRef.id);
+
+      await orderRef.set(newOrder.toMap());
+
+      return right(newOrder);
+    } catch (e) {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/i_add_item_facade.dart';
 import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
+import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
 import 'package:food_crm/features/order_history/data/model/i_order_history_facade.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(create: (_) =>AddItemProvider(sl<IItemFacade>()),),
         ChangeNotifierProvider(create: (_) => OrderHistoryProvider( sl<IOrderHistoryFacade>())),
-        ChangeNotifierProvider(create: (context) => OrderSummeryProvider(sl<IOrderSummeryFacade>()),)
+        ChangeNotifierProvider(create: (context) => OrderSummeryProvider(sl<IOrderSummeryFacade>()),),
+        ChangeNotifierProvider(create: (_)=> HomeProvider()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
