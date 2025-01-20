@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:food_crm/features/order_history/data/model/i_order_history_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
-import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 
 
