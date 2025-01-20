@@ -14,6 +14,21 @@ class UserModel {
     this.id,
     required this.createdAt,
   });
+  
+
+  UserModel copyWith({
+    String? phoneNumber,
+    String? name,
+    String? id,
+    Timestamp? createdAt,
+  }) {
+    return UserModel(
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      name: name ?? this.name,
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -29,25 +44,11 @@ class UserModel {
       phoneNumber: map['phoneNumber'] as String,
       name: map['name'] as String,
       id: map['id'] != null ? map['id'] as String : null,
-      createdAt: map['createdAt'] as Timestamp,
+      createdAt:map['createdAt'] as Timestamp,
     );
   }
 
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  UserModel copyWith({
-    String? phoneNumber,
-    String? name,
-    String? id,
-    Timestamp? createdAt,
-  }) {
-    return UserModel(
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      name: name ?? this.name,
-      id: id ?? this.id,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
 }

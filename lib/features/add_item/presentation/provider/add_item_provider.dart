@@ -22,6 +22,7 @@ class AddItemProvider extends ChangeNotifier {
         quantity: TextEditingController(),
         price: TextEditingController(),
         users: [],
+        
       ),
     );
     notifyListeners();

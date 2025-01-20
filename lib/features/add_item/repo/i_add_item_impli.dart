@@ -71,6 +71,7 @@ class IAddItemImpli implements IItemFacade {
               quantity: quantity,
               price: price,
               users: [],
+              
             ),
           );
         },

@@ -48,11 +48,8 @@ class AmountBottomSheet extends StatelessWidget {
             child: ListView.builder(
               itemCount: 4,
               itemBuilder: (context, index) {
-                return const OrderCard(
-                    itemName: "akdms",
-                    quantity: "dcs",
-                    rate: "sxs",
-                    listCount: 4);
+                return const OrderCard(items: [], total: '677',
+                    );
               },
             ),
           ),

@@ -80,7 +80,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const OrderHistorySreen(),
+                                builder: (context) => const OrderHistoryScreen(),
                               ));
                         },
                         child: Container(

@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
-import 'package:food_crm/main.dart';
+import 'package:provider/provider.dart';
 
-class OrderHistorySreen extends StatefulWidget {
-  const OrderHistorySreen({super.key});
+class OrderHistoryScreen extends StatefulWidget {
+  const OrderHistoryScreen({super.key});
 
   @override
-  State<OrderHistorySreen> createState() => _OrderHistorySreenState();
+  State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
 }
 
-class _OrderHistorySreenState extends State<OrderHistorySreen> {
+class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
+  @override
+  void initState() {
+    final historyProvider = Provider.of<OrderHistoryProvider>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+     
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,54 +34,66 @@ class _OrderHistorySreenState extends State<OrderHistorySreen> {
         ),
         backgroundColor: AppColors.blackColor,
         title: const Text(
-          "History ",
+          "History",
           style: TextStyle(color: AppColors.whiteColor),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const Row(
-                children: [
-                  Text(
-                    "Showing Results : All",
-                    style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
-                  ),
-                ],
+      body: Consumer<OrderHistoryProvider>(
+        builder: (context, stateFetchOrder, child) {
+          // Check if the orders list is empty
+          if (stateFetchOrder.allOrders.isEmpty) {
+            return const Center(
+              child: Text(
+                "No orders available",
+                style: TextStyle(color: AppColors.whiteColor, fontSize: 16),
               ),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(), 
-                itemCount: 2,
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 16);
-                },
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: height * 0.1,
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Row(
+            );
+          }
+           if (stateFetchOrder.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+                strokeWidth: 2,
+              ),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Showing Results: All",
+                  style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: stateFetchOrder.allOrders.length,
+                    separatorBuilder: (context, index) => const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      final order = stateFetchOrder.allOrders[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "23 March",
-                                    style: TextStyle(
+                                   stateFetchOrder.formatCreatedAt(order.createdAt) ,
+                                    style: const TextStyle(
                                       color: AppColors.whiteColor,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
                                   Text(
-                                    "₹290.50",
-                                    style: TextStyle(
+                                    "₹${order.totalAmount}",
+                                    style: const TextStyle(
                                       color: AppColors.whiteColor,
                                       fontSize: 24,
                                       fontWeight: FontWeight.w500,
@@ -81,32 +103,20 @@ class _OrderHistorySreenState extends State<OrderHistorySreen> {
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(), 
-                        itemCount: 2,
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(height: 16);
-                        },
-                        itemBuilder: (context, index) {
-                          return const OrderCard(
-                            itemName: "chappathi",
-                            quantity: "10",
-                            rate: "6",
-                            // total: "890",
-                            listCount: 2,
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+                          const SizedBox(height: 8),
+                          OrderCard(
+                            items: order.order,
+                            total: order.totalAmount.toString(),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,12 +1,12 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
-import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/today_order_history_sreen.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:food_crm/general/widgets/fluttertoast.dart';
 import 'package:food_crm/main.dart';
 import 'package:provider/provider.dart';
 
@@ -42,52 +42,47 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
           vsync: this,
         );
       });
+      tabController.addListener(
+        () {
+          setState(() {});
+        },
+      );
     });
   }
 
-  // void initState() {
-  //   final summeryProvider =Provider.of<OrderSummeryProvider>(context, listen: false);
-  //   WidgetsBinding.instance.addPostFrameCallback(
-  //     (_) {
-  //       summeryProvider.addItemToSummery(widget.itemList);
-  //       summeryProvider.fetchUser();
-
-  //     },
-  //   );
-
-  //   // tabController = TabController(
-  //   //   length:summeryProvider. itemsList.length + 1,
-  //   //   vsync: this,
-  //   // );
-  //   super.initState();
-  // }
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.blackColor,
-        appBar: AppBar(
-          leading: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.greyColor,
+    return Consumer<OrderSummeryProvider>(
+        builder: (context, stateAddOrder, child) {
+      if (stateAddOrder.isLoading) {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+            strokeWidth: 2,
           ),
+        );
+      }
+      return Scaffold(
+     
           backgroundColor: AppColors.blackColor,
-          title: const Text(
-            'Make An Order',
-            style: TextStyle(fontSize: 18, color: AppColors.whiteColor),
+          appBar: AppBar(
+            leading: const Icon(
+              Icons.arrow_back_ios_new,
+              color: AppColors.greyColor,
+            ),
+            backgroundColor: AppColors.blackColor,
+            title: const Text(
+              'Make An Order',
+              style: TextStyle(fontSize: 18, color: AppColors.whiteColor),
+            ),
           ),
-        ),
-        body: Consumer<OrderSummeryProvider>(
-            builder: (context, stateAddOrder, child) {
-          if (stateAddOrder.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryColor,
-                strokeWidth: 2,
-              ),
-            );
-          }
-          return Padding(
+          body: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -141,6 +136,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                         itemBuilder: (BuildContext context, int index) {
                           final itemList = stateAddOrder.itemsList;
                           final data = itemList[index];
+                          
                           //log(widget.itemList.length.toString());
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -231,102 +227,71 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                   ],
                 ),
                 Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    children: [
-                      ...stateAddOrder.itemsList.map((item) {
-                        return item.users.isNotEmpty
-                            ? ListView.builder(
-                                itemCount: item.users.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final user = item.users[index];
-                                  return UserRowWidget(
-                                    name: user.name,
-                                    amount: 0,
-                                    index: index,
-                                    tabIndex:
-                                        stateAddOrder.itemsList.indexOf(item),
-                                    onDelete: (int tabIndex, int userIndex) {
-                                      stateAddOrder.removeUserFromSummery(
-                                        tabIndex: tabIndex,
-                                        userIndex: userIndex,
-                                      );
-                                    },
-                                    controller: item.users[index].qtyController,
-                                  );
-                                },
-                              )
-                              
-                            : const Center(
-                                child: Text(
-                                  'No Users',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              );
-                      }).toList(),
-                      const Center(
-                        child: Text(
-                          'Total Amount',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                        ),
+                 
+                    child: TabBarView(
+                  controller: tabController,
+                  children: [
+                    ...stateAddOrder.itemsList.map((item) {
+                      return item.users.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: item.users.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final user = item.users[index];
+                                return UserRowWidget(
+                                  name: user.name,
+                                  price: item.price.text,
+                                  index: index,
+                                  tabIndex:
+                                      stateAddOrder.itemsList.indexOf(item),
+                                  onDelete: (int tabIndex, int userIndex) {
+                                    stateAddOrder.removeUserFromSummery(
+                                      tabIndex: tabIndex,
+                                      userIndex: userIndex, price: item.price.text,
+                                    );
+                                  },
+                                  controller: item.users[index].qtyController,
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                'No Users',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
+                    }),
+                    const Center(
+                      child: Text(
+                        'Total Amount',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
-                    ],
-                  ),
-                  // child: TabBarView(
-                  //   controller: tabController,
-                  //   children: [
-                  //     for (var item in stateAddOrder.itemsList)
-                  //       if (item.users.isNotEmpty)
-                  //         ListView.builder(
-                  //           itemCount: item.users.length,
-                  //           itemBuilder: (BuildContext context, int index) {
-                  //             final user = item.users[index];
-                  //             return UserRowWidget(
-                  //                 name: user.name,
-                  //                 amount: 0,
-                  //                 index: index,
-                  //                 tabIndex:
-                  //                     stateAddOrder.itemsList.indexOf(item),
-                  //                 onDelete: (int tabIndex, int userIndex) {
-                  //                   stateAddOrder.removeUserFromSummery(
-                  //                       tabIndex: tabIndex,
-                  //                       userIndex: userIndex);
-                  //                 },
-                  //                 controller: widget
-                  //                     .itemList[tabController.index]
-                  //                     .users[index]
-                  //                     .qtyController);
-                  //           },
-                  //         ),
-                  //     const Text('Total Mount',
-                  //         style: TextStyle(fontSize: 18, color: Colors.white)),
-                  //   ],
-                  // ),
-                ),
-
-               
+                    ),
+                  ],
+                ))
               ],
             ),
-          );
-        }),
-        bottomNavigationBar:
-            Consumer<AddItemProvider>(builder: (context, stateAddItem, child) {
-          return Padding(
+          ),
+          bottomNavigationBar: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TotalAmountContainer(
-              amount: "147",
-              title: 'Total',
-              buttonText: 'Save',
-              onTap: () async {
-                //  stateAddItem.clearData();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const TodayOrderHistoryScreen(),
-                    ));
-              },
-            ),
-          );
-        }));
+                amount: stateAddOrder.overallTotal.toString(),
+                title: 'Total',
+                buttonText: 'Save',
+                onTap: () async {
+                  if(stateAddOrder.isValid) {
+                await  stateAddOrder.addOrder();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TodayOrderHistoryScreen(),
+                      ));
+
+                  }else{
+                    Customtoast.showErrorToast("Please check the values you've given.");
+                  }
+                  
+                }),
+          ));
+    });
   }
 }

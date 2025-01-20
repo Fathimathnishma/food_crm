@@ -26,6 +26,7 @@ class UserProvider extends ChangeNotifier {
       phoneNumber: formattedPhoneNumber,
       name: nameController.text,
       createdAt: Timestamp.now(),
+      
     );
 
     final result = await iUserFacade.addUser(usermodel: userModel);
