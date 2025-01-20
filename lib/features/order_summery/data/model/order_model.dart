@@ -41,10 +41,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
 
 class OrderModel {
-  final String? id;
-  final Timestamp createdAt;
-  final num totalAmount;
-  final List<ItemUploadingModel> order;
+  String? id;
+  Timestamp createdAt;
+  num totalAmount;
+  List<ItemUploadingModel> order;  // Changed from Map to List
 
   OrderModel({
     this.id,
@@ -70,25 +70,26 @@ class OrderModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'createdAt': createdAt,  // Timestamp is already Firebase-compatible
+      'createdAt': createdAt,
       'totalAmount': totalAmount,
-      'order': order.toList(),
+      'order': order.map((item) => item.toMap()).toList(), // Convert list of items to a list of maps
     };
   }
 
   factory OrderModel.fromMap(Map<String, dynamic> map) {
     return OrderModel(
       id: map['id'] != null ? map['id'] as String : null,
-      createdAt: map['createdAt'] as Timestamp,  // Directly cast to Timestamp
+      createdAt: map['createdAt'] as Timestamp,
       totalAmount: map['totalAmount'] as num,
       order: List<ItemUploadingModel>.from(
-        (map['order'] as List)
+        (map['order'] as List<dynamic>).map(
+          (item) => ItemUploadingModel.fromMap(item as Map<String, dynamic>),
+        ),
       ),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory OrderModel.fromJson(String source) => 
-      OrderModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory OrderModel.fromJson(String source) => OrderModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

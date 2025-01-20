@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 class ItemUploadingModel {
@@ -9,6 +7,7 @@ class ItemUploadingModel {
   TextEditingController quantity;
   TextEditingController price;
   List<UserItemQtyAloccatedModel> users;
+
   ItemUploadingModel({
     required this.id,
     required this.name,
@@ -17,14 +16,13 @@ class ItemUploadingModel {
     required this.users,
   });
 
-  
+ 
 
   ItemUploadingModel copyWith({
     String? id,
     TextEditingController? name,
     TextEditingController? quantity,
     TextEditingController? price,
-    num ?totalAmount ,
     List<UserItemQtyAloccatedModel>? users,
   }) {
     return ItemUploadingModel(
@@ -32,10 +30,35 @@ class ItemUploadingModel {
       name: name ?? this.name,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
-      
       users: users ?? this.users,
     );
   }
+ Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name.text, 
+      'quantity': quantity.text,
+      'price': price.text,
+      'users': users.map((x) => x.toMap()).toList(), 
+    };
+  }
+
+  factory ItemUploadingModel.fromMap(Map<String, dynamic> map) {
+    return ItemUploadingModel(
+      id: map['id'] as String,
+      name: TextEditingController(text: map['name'] as String),
+      quantity: TextEditingController(text: map['quantity'] as String),
+      price: TextEditingController(text: map['price'] as String),
+      users: List<UserItemQtyAloccatedModel>.from(
+        (map['users'] as List<dynamic>).map(
+          (x) => UserItemQtyAloccatedModel.fromMap(x as Map<String, dynamic>),
+        ),
+      ),
+    );
+  }
+
+
+
 
 }
 
@@ -43,41 +66,37 @@ class UserItemQtyAloccatedModel {
   String name;
   String phoneNumber;
   String id;
-  num total;
+ 
   num splitAmount;
   TextEditingController qtyController;
+
   UserItemQtyAloccatedModel({
     required this.name,
     required this.phoneNumber,
     required this.id,
-    required this.total,
     required this.splitAmount,
     required this.qtyController,
   });
 
+  // Convert UserItemQtyAloccatedModel to Map
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
       'phoneNumber': phoneNumber,
       'id': id,
-      'total': total,
       'splitAmount': splitAmount,
-      'qtyController': qtyController,
+      'qtyController': qtyController.text,  // Store the text value of qtyController
     };
   }
 
+  // Convert Map to UserItemQtyAloccatedModel
   factory UserItemQtyAloccatedModel.fromMap(Map<String, dynamic> map) {
     return UserItemQtyAloccatedModel(
       name: map['name'] as String,
       phoneNumber: map['phoneNumber'] as String,
       id: map['id'] as String,
-      total: map['total'] as num,
       splitAmount: map['splitAmount'] as num,
-      qtyController: map['qtyController'] as TextEditingController,
+      qtyController: TextEditingController(text: map['qtyController'] as String),  // Initialize with text value
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserItemQtyAloccatedModel.fromJson(String source) => UserItemQtyAloccatedModel.fromMap(json.decode(source) as Map<String, dynamic>);
-  }
+}

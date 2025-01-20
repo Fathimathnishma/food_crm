@@ -50,7 +50,7 @@ class OrderSummeryProvider extends ChangeNotifier {
                   qtyController: TextEditingController(),
                   id: user.id!,
                   splitAmount: 0,
-                  total: 0,
+                  
                 );
               },
             ).toList(),
@@ -111,6 +111,7 @@ class OrderSummeryProvider extends ChangeNotifier {
       num userQty = num.tryParse(formattedQty) ?? 0;
       double itemPrice = double.tryParse(price) ?? 0.0;
       user.splitAmount = itemPrice * userQty;
+      
     }
   }
 }
@@ -152,10 +153,10 @@ bool checkQty({
             createdAt: Timestamp.now(),
             totalAmount: overallTotal,
             order: itemsList));
-
+           
     result.fold(
       (l) {
-        l.toString();
+        ("add error${l.toString()}");
       },
       (unit) {},
     );
