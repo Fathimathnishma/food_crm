@@ -46,4 +46,40 @@ class OrderSummeryProvider extends ChangeNotifier {
     itemsList[tabIndex].users.removeAt(userIndex);
     notifyListeners();
   }
+
+  void splitQuantityAmongUsers(int itemIndex) {
+  final item = itemsList[itemIndex];
+  final totalQuantity = int.tryParse(item.quantity.text) ?? 0;
+  final userCount = item.users.length;
+
+  if (userCount == 0 || totalQuantity == 0) return;
+
+  // Calculate equal split and remainder
+  final equalSplit = totalQuantity ~/ userCount;
+  final remainder = totalQuantity % userCount;
+
+  for (int i = 0; i < userCount; i++) {
+    // Distribute remainder to the first few users
+    final allocatedQuantity = i < remainder ? equalSplit + 1 : equalSplit;
+    item.users[i].qtyController.text = allocatedQuantity.toString();
+  }
+
+  notifyListeners();
+}
+
+void addUserToItem(int itemIndex, UserItemQtyAloccatedModel user) {
+  final item = itemsList[itemIndex];
+  item.users.add(user);
+  splitQuantityAmongUsers(itemIndex); // Automatically distribute quantity
+  notifyListeners();
+}
+
+void updateItemQuantity(int itemIndex, String newQuantity) {
+  final item = itemsList[itemIndex];
+  item.quantity.text = newQuantity;
+  splitQuantityAmongUsers(itemIndex); // Automatically distribute quantity
+  notifyListeners();
+}
+
+
 }

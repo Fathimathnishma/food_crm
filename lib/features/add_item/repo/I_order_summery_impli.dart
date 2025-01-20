@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,5 +30,4 @@ try {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
-  
-  }
+}
