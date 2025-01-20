@@ -33,32 +33,56 @@ try {
     }
   }
 
-  @override
-  Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel})async {
-  try{
+@override
+Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) async {
+  try {
     final orderRef = firestore.collection(FirebaseCollection.order);
     final id = orderRef.doc().id;
     final orderDoc = firestore.collection(FirebaseCollection.order).doc(id);
-    
-       final Map<String, dynamic> orderData = {
-      'id': id,
-      'createdAt': orderModel.createdAt,
-      'totalAmount': orderModel.totalAmount,
-      'order': orderModel.order.map((item) {
-        return {
-          'id': item.id,
+    final Map<String, dynamic> itemMap = {
+      for (var item in orderModel.order)
+        item.name.text: {
           'name': item.name.text,
           'price': item.price.text,
           'quantity': item.quantity.text,
-        };
-      }).toList(),
+          'users': {
+            for (var user in item.users)
+              user.id: user.toMap(),
+          },
+        }
     };
-   await orderDoc.set(orderData);
-   return right(unit);
-  }catch (e) {
-      log("Error while adding order: $e");
-      return left(MainFailures.serverFailures(errormsg: e.toString()));
+
+    final Map<String, dynamic> orderData = {
+      'id': id,
+      'createdAt': orderModel.createdAt,
+      'totalAmount': orderModel.totalAmount,
+      'order': itemMap,
+    };
+    final batch = firestore.batch();
+
+    batch.set(orderDoc, orderData);
+
+    for (var item in orderModel.order) {
+      for (var user in item.users) {
+        batch.update(
+          FirebaseFirestore.instance.collection(FirebaseCollection.order).doc(user.id),
+          {
+            'monthlyTotal': FieldValue.increment(user.splitAmount), 
+          },
+        );
+      }
     }
+
+    await batch.commit();
+
+    return right(unit);
+  } catch (e) {
+    log("Error while adding order: $e");
+    return left(MainFailures.serverFailures(errormsg: e.toString()));
   }
+}
+
+
+
   
   }

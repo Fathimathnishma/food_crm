@@ -7,25 +7,30 @@ class UserModel {
   String phoneNumber;
   String name;
   String? id;
+  num monthlyTotal;
   Timestamp createdAt;
   UserModel({
     required this.phoneNumber,
     required this.name,
     this.id,
+    required this.monthlyTotal,
     required this.createdAt,
   });
+ 
   
 
   UserModel copyWith({
     String? phoneNumber,
     String? name,
     String? id,
+    num? monthlyTotal,
     Timestamp? createdAt,
   }) {
     return UserModel(
       phoneNumber: phoneNumber ?? this.phoneNumber,
       name: name ?? this.name,
       id: id ?? this.id,
+      monthlyTotal: monthlyTotal ?? this.monthlyTotal,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -35,6 +40,7 @@ class UserModel {
       'phoneNumber': phoneNumber,
       'name': name,
       'id': id,
+      'monthlyTotal': monthlyTotal,
       'createdAt': createdAt,
     };
   }
@@ -44,7 +50,8 @@ class UserModel {
       phoneNumber: map['phoneNumber'] as String,
       name: map['name'] as String,
       id: map['id'] != null ? map['id'] as String : null,
-      createdAt:map['createdAt'] as Timestamp,
+      monthlyTotal: map['monthlyTotal'] as num,
+      createdAt: map['createdAt'] as Timestamp,
     );
   }
 
