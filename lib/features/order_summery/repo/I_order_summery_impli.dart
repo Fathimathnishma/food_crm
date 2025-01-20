@@ -33,55 +33,62 @@ try {
     }
   }
 
-@override
 Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) async {
   try {
     final orderRef = firestore.collection(FirebaseCollection.order);
     final id = orderRef.doc().id;
     final orderDoc = firestore.collection(FirebaseCollection.order).doc(id);
-    final Map<String, dynamic> itemMap = {
-      for (var item in orderModel.order)
-        item.name.text: {
-          'name': item.name.text,
-          'price': item.price.text,
-          'quantity': item.quantity.text,
-          'users': {
-            for (var user in item.users)
-              user.id: user.toMap(),
-          },
-        }
-    };
+    
+    final Map<String, dynamic> itemMap = {};
+    for (var item in orderModel.order) {
+      itemMap[item.name] = {
+        'name': item.name,
+        'price': item.price,
+        'quantity': item.qty,
+        'users': {
+          for (var user in item.users)
+            user.id: user.toMap(),
+        },
+      };
+    }
 
+    // Create the orderData map with the necessary order details
     final Map<String, dynamic> orderData = {
       'id': id,
       'createdAt': orderModel.createdAt,
       'totalAmount': orderModel.totalAmount,
-      'order': itemMap,
+      'order': itemMap,  // This is where the items are stored as a map of maps
     };
-    final batch = firestore.batch();
 
+    // Start the batch operation
+    final batch = firestore.batch();
+    
+    // Add the order document to the orders collection
     batch.set(orderDoc, orderData);
 
+    // Update users' monthlyTotal for each user in each item
     for (var item in orderModel.order) {
       for (var user in item.users) {
         batch.update(
-          FirebaseFirestore.instance.collection(FirebaseCollection.order).doc(user.id),
+          FirebaseFirestore.instance.collection(FirebaseCollection.users).doc(user.id),
           {
-            'monthlyTotal': FieldValue.increment(user.splitAmount), 
+            'monthlyTotal': FieldValue.increment(user.splitAmount), // Incrementing the user's total
           },
         );
       }
     }
 
+    // Commit the batch
     await batch.commit();
 
+    // Return success
     return right(unit);
   } catch (e) {
+    // Log the error and return failure
     log("Error while adding order: $e");
     return left(MainFailures.serverFailures(errormsg: e.toString()));
   }
 }
-
 
 
   

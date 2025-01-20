@@ -89,7 +89,7 @@ class UserRowWidget extends StatelessWidget {
               price: price,
             );
             controller.text = stateAddOrder
-                .itemsList[tabIndex].users[index].qtyController.text;
+                .itemsList[tabIndex].users[index].qty.text;
           }
 
           return SizedBox(

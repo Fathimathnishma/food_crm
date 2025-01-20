@@ -62,10 +62,11 @@ notifyListeners();
 }
 
   Future<void> fetchOrders() async {
-   
+   log('fetching');
     if (isLoading || noMoreData) return;
     isLoading = true;
     notifyListeners();
+    log('1');
     final result = await iOrderFacade.fetchOrderList();
 
     result.fold(

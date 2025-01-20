@@ -2,9 +2,8 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:flutter/widgets.dart';
-import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/order_history/data/model/i_order_history_facade.dart';
+import 'package:food_crm/features/order_summery/data/model/item_uploading%20_model.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
 import 'package:food_crm/general/utils/firebase_collection.dart';
@@ -18,50 +17,60 @@ class OrderHistoryImpl implements IOrderHistoryFacade {
 
   bool noMoreData = false;
   DocumentSnapshot? lastDocument;
+  
+
 
   @override
-  Future<Either<MainFailures, List<OrderModel>>> fetchOrderList() async {
-    try {
-      final orderRef = firebaseFirestore.collection(FirebaseCollection.order).orderBy("createdAt");
-      Query query = lastDocument == null ? orderRef.limit(15) : orderRef.startAfterDocument(lastDocument!).limit(15);
-      final snapshot = await query.get();
+  @override
+Future<Either<MainFailures, List<OrderModel>>> fetchOrderList() async {
+  try {
+    // Reference to the orders collection in Firestore
+    final orderCollection = firebaseFirestore.collection(FirebaseCollection.order);
 
-      if (snapshot.docs.isEmpty) {
-        noMoreData = true;
-        return right([]); 
+    // Query for orders. You can add limits, sorting, or filtering as needed
+    final querySnapshot = await orderCollection.get();
+
+    // If no orders are found, return an empty list
+    if (querySnapshot.docs.isEmpty) {
+      return right([]);
+    }
+
+    // Parse the order documents into a list of OrderModel
+    List<OrderModel> orders = [];
+    for (var doc in querySnapshot.docs) {
+      final orderData = doc.data() as Map<String, dynamic>;
+
+      // Log the fetched data for debugging purposes
+      log("Fetched order data: $orderData");
+
+      // Parse the order data
+      List<ItemUploadingModel> orderItems = [];
+      if (orderData['order'] is Map<String, dynamic>) {
+        (orderData['order'] as Map<String, dynamic>).forEach((key, value) {
+          orderItems.add(ItemUploadingModel.fromMap(value as Map<String, dynamic>));
+        });
       }
 
-      lastDocument = snapshot.docs.last;
+      // Create the OrderModel from the fetched data
+      final order = OrderModel(
+        id: orderData['id'] as String,
+        createdAt: orderData['createdAt'] as Timestamp,
+        totalAmount: orderData['totalAmount'] as num,
+        order: orderItems,
+      );
 
-      final orders = snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-
-        List<ItemUploadingModel> orderItems = [];
-        (data['order'] as List).forEach((item) {
-          orderItems.add(
-             
-            ItemUploadingModel(
-              id: item['id'] ?? DateTime.now().millisecondsSinceEpoch.toString(),
-              name: TextEditingController(text: item['name']),
-              quantity:TextEditingController(text: item['quantity']),
-              price:TextEditingController(text: item['price']),
-              users: [],  
-            ),
-          );
-        });
-        //Return the populated OrderModel
-        return OrderModel(
-          id: data['id'] as String?,
-          createdAt: data['createdAt'] as Timestamp,
-          totalAmount: data['totalAmount'] as num,
-          order: orderItems,
-        );
-      }).toList();
-      return right(orders);
-    } catch (e) {
-      // Log the error
-      log("Error fetching order list: $e");
-      return left(MainFailures.serverFailures(errormsg: e.toString()));
+      // Add the parsed order to the list
+      orders.add(order);
     }
+
+    // Return the list of orders wrapped in a successful result
+    return right(orders);
+  } catch (e) {
+    // Log the error and return a failure result
+    log("Error while fetching order list: $e");
+    return left(MainFailures.serverFailures(errormsg: e.toString()));
   }
+}
+
+
 }

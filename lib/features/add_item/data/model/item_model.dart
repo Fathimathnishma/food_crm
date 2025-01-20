@@ -1,14 +1,14 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-class ItemUploadingModel {
+class ItemAddingModel {
   String id;
   TextEditingController name;
   TextEditingController quantity;
   TextEditingController price;
   List<UserItemQtyAloccatedModel> users;
 
-  ItemUploadingModel({
+  ItemAddingModel({
     required this.id,
     required this.name,
     required this.quantity,
@@ -16,16 +16,14 @@ class ItemUploadingModel {
     required this.users,
   });
 
- 
-
-  ItemUploadingModel copyWith({
+  ItemAddingModel copyWith({
     String? id,
     TextEditingController? name,
     TextEditingController? quantity,
     TextEditingController? price,
     List<UserItemQtyAloccatedModel>? users,
   }) {
-    return ItemUploadingModel(
+    return ItemAddingModel(
       id: id ?? this.id,
       name: name ?? this.name,
       quantity: quantity ?? this.quantity,
@@ -33,18 +31,19 @@ class ItemUploadingModel {
       users: users ?? this.users,
     );
   }
- Map<String, dynamic> toMap() {
+
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name.text, 
+      'name': name.text,
       'quantity': quantity.text,
       'price': price.text,
-      'users': users.map((x) => x.toMap()).toList(), 
+      'users': users.map((x) => x.toMap()).toList(),
     };
   }
 
-  factory ItemUploadingModel.fromMap(Map<String, dynamic> map) {
-    return ItemUploadingModel(
+  factory ItemAddingModel.fromMap(Map<String, dynamic> map) {
+    return ItemAddingModel(
       id: map['id'] as String,
       name: TextEditingController(text: map['name'] as String),
       quantity: TextEditingController(text: map['quantity'] as String),
@@ -56,26 +55,22 @@ class ItemUploadingModel {
       ),
     );
   }
-
-
-
-
 }
 
 class UserItemQtyAloccatedModel {
   String name;
   String phoneNumber;
   String id;
- 
+
   num splitAmount;
-  TextEditingController qtyController;
+  TextEditingController qty;
 
   UserItemQtyAloccatedModel({
     required this.name,
     required this.phoneNumber,
     required this.id,
     required this.splitAmount,
-    required this.qtyController,
+    required this.qty,
   });
 
   // Convert UserItemQtyAloccatedModel to Map
@@ -85,7 +80,8 @@ class UserItemQtyAloccatedModel {
       'phoneNumber': phoneNumber,
       'id': id,
       'splitAmount': splitAmount,
-      'qtyController': qtyController.text,  // Store the text value of qtyController
+      'qtyController':
+          qty.text, // Store the text value of qtyController
     };
   }
 
@@ -96,7 +92,8 @@ class UserItemQtyAloccatedModel {
       phoneNumber: map['phoneNumber'] as String,
       id: map['id'] as String,
       splitAmount: map['splitAmount'] as num,
-      qtyController: TextEditingController(text: map['qtyController'] as String),  // Initialize with text value
+      qty: TextEditingController(
+          text: map['qtyController'] as String), // Initialize with text value
     );
   }
 }

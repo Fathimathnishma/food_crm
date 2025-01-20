@@ -7,7 +7,7 @@ import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class OrderItemAddWidget extends StatefulWidget {
-  final ItemUploadingModel itemModel;
+  final ItemAddingModel itemModel;
   final bool isAdd;
   final VoidCallback onAdd;
   final VoidCallback onRemove;
@@ -37,11 +37,11 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
             Row(
               children: [
                 Expanded(
-                    child: Autocomplete<ItemUploadingModel>(
+                    child: Autocomplete<ItemAddingModel>(
                       initialValue: TextEditingValue(text: widget.itemModel.name.text),
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     if (textEditingValue.text.isEmpty) {
-                      return const Iterable<ItemUploadingModel>.empty();
+                      return const Iterable<ItemAddingModel>.empty();
                     } else {
                       return addItemProvider.itemsuggestionList.where(
                         (element) => element.name.text.toLowerCase().contains(
@@ -50,7 +50,7 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       );
                     }
                   },
-                  displayStringForOption: (ItemUploadingModel option) =>
+                  displayStringForOption: (ItemAddingModel option) =>
                       option.name.text,
                   fieldViewBuilder: (BuildContext context,
                       TextEditingController controller,
@@ -88,8 +88,8 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                     );
                   },
                   optionsViewBuilder: (BuildContext context,
-                      AutocompleteOnSelected<ItemUploadingModel> onSelected,
-                      Iterable<ItemUploadingModel> options) {
+                      AutocompleteOnSelected<ItemAddingModel> onSelected,
+                      Iterable<ItemAddingModel> options) {
                     return Align(
                       alignment: Alignment.topLeft,
                       child: Material(
@@ -114,7 +114,7 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       ),
                     );
                   },
-                  onSelected: (ItemUploadingModel selectedOption) {
+                  onSelected: (ItemAddingModel selectedOption) {
                     // Update the TextField value and perform any actions on selection
                     widget.itemModel.name.text = selectedOption.name.text;
                     widget.itemModel.quantity.text =

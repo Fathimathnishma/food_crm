@@ -7,15 +7,15 @@ class AddItemProvider extends ChangeNotifier {
   final IItemFacade iItemFacade;
   AddItemProvider(this.iItemFacade);
 
-  List<ItemUploadingModel> itemList = [];
+  List<ItemAddingModel> itemList = [];
   
-  List<ItemUploadingModel> itemsuggestionList = [];
+  List<ItemAddingModel> itemsuggestionList = [];
 
   bool isLoading = true;
 
   void addItem() {
     itemList.add(
-      ItemUploadingModel(
+      ItemAddingModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: TextEditingController(),
         quantity: TextEditingController(),

@@ -15,7 +15,7 @@ class IAddItemImpli implements IItemFacade {
 
   @override
   Future<Either<MainFailures, Unit>> addSuggestions(
-      {required List<ItemUploadingModel> itemList}) async {
+      {required List<ItemAddingModel> itemList}) async {
     try {
       Map<String, dynamic> suggestionMap = {'suggestions': {}};
 
@@ -51,21 +51,21 @@ class IAddItemImpli implements IItemFacade {
   }
 
   @override
-  Future<Either<MainFailures, List<ItemUploadingModel>>>
+  Future<Either<MainFailures, List<ItemAddingModel>>>
       fetchSuggestions() async {
     try {
       final result = await firestore
           .collection(FirebaseCollection.general)
           .doc('general')
           .get();
-      List<ItemUploadingModel> itemsuggestionList = [];
+      List<ItemAddingModel> itemsuggestionList = [];
       (result.data()?['suggestions'] as Map? ?? {}).forEach(
         (key, value) {
           final name = TextEditingController(text: value['name']);
           final quantity = TextEditingController(text: value['quantity']);
           final price = TextEditingController(text: value['price']);
           itemsuggestionList.add(
-            ItemUploadingModel(
+            ItemAddingModel(
               id: DateTime.now().millisecondsSinceEpoch.toString(),
               name: name,
               quantity: quantity,
