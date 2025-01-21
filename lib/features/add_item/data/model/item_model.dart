@@ -61,7 +61,6 @@ class UserItemQtyAloccatedModel {
   String name;
   String phoneNumber;
   String id;
-
   num splitAmount;
   TextEditingController qty;
 
@@ -73,19 +72,17 @@ class UserItemQtyAloccatedModel {
     required this.qty,
   });
 
-  // Convert UserItemQtyAloccatedModel to Map
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
       'phoneNumber': phoneNumber,
       'id': id,
       'splitAmount': splitAmount,
-      'qtyController':
-          qty.text, // Store the text value of qtyController
+      'qtyController': num.tryParse(qty.text) ?? 0, 
     };
   }
 
-  // Convert Map to UserItemQtyAloccatedModel
   factory UserItemQtyAloccatedModel.fromMap(Map<String, dynamic> map) {
     return UserItemQtyAloccatedModel(
       name: map['name'] as String,
@@ -93,7 +90,8 @@ class UserItemQtyAloccatedModel {
       id: map['id'] as String,
       splitAmount: map['splitAmount'] as num,
       qty: TextEditingController(
-          text: map['qtyController'] as String), // Initialize with text value
+          text: (map['qtyController'] as num).toString()), 
     );
   }
 }
+

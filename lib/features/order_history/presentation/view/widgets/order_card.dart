@@ -53,9 +53,9 @@ class OrderCard extends StatelessWidget {
             final itemName = item.name is TextEditingController
                 ? item.name.text
                 : item.name.toString();
-            final itemQuantity = item.quantity is TextEditingController
-                ? item.quantity.text
-                : item.quantity.toString();
+            final itemQuantity = item.qty is TextEditingController
+                ? item.qty.text
+                : item.qty.toString();
             final itemPrice = item.price is TextEditingController
                 ? item.price.text
                 : item.price.toString();

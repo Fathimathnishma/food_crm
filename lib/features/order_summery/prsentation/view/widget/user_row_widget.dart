@@ -85,7 +85,6 @@ class UserRowWidget extends StatelessWidget {
             // Initialize quantity for the first time
             stateAddOrder.initiolSplitQty(
               tabIndex: tabIndex,
-              userIndex: index,
               price: price,
             );
             controller.text = stateAddOrder
@@ -116,7 +115,7 @@ class UserRowWidget extends StatelessWidget {
                  controller.text = formattedQty.toString();
                  stateAddOrder.checkQty(tabIndex: tabIndex);
                 }
-                  stateAddOrder.updateSplitAmount(tabIndex: tabIndex, userIndex: index, price: price);
+                  stateAddOrder.updateSplitAmount(tabIndex: tabIndex, price: price);
               },
                     decoration: const InputDecoration(
                       hintText: "qty",

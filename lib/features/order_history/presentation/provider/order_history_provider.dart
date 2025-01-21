@@ -46,7 +46,7 @@ void filterTodayOrders() {
     String orderDate = DateFormat('dd MMMM').format(order.createdAt.toDate());
     return orderDate == todayDate;
   }).toList());
-
+calculateTodayTotal();
   
 }
 
@@ -55,6 +55,8 @@ void calculateTodayTotal(){
   total=0;
   for(var order in todayOrders){
    total +=  order.totalAmount;
+   log("total${total.toString()}");
+   notifyListeners();
 
   }
 
