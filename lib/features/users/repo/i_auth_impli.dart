@@ -8,6 +8,8 @@ import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
 import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
+import 'package:sync_time_ntp_totalxsoftware/sync_time_ntp_totalxsoftware.dart';
 
 @LazySingleton(as: IUserFacade)
 class IUserImpli implements IUserFacade {
@@ -92,22 +94,42 @@ class IUserImpli implements IUserFacade {
     }
   }
 
+  
   @override
   Future<Either<MainFailures, OrderModel>> addDailyOrder(
       {required String userId, required OrderModel orderModel}) async {
+
+        final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
+
+        final formattedDate = DateFormat('yyyy-MM-dd').format(today);
     try {
       final userDoc =
           firestore.collection(FirebaseCollection.users).doc(userId);
 
-      final orderRef = userDoc.collection('dailyOrder').doc();
+      final orderDoc =  userDoc.collection('dailyOrder').doc(formattedDate);
 
-      final newOrder = orderModel.copyWith(id: orderRef.id);
+      final orderDocSnapshot = await orderDoc.get();
+      if(orderDocSnapshot.exists){
 
-      await orderRef.set(newOrder.toMap());
+        orderDoc.update({
+          'totalAmount': FieldValue.increment(orderModel.totalAmount ),
+          'createdAt': FieldValue.serverTimestamp(),
+          'order': {
 
-      return right(newOrder);
+          }
+
+        });
+      }else{
+        orderDoc.set({
+
+        });
+      }
+      return right(orderModel);
+      
     } catch (e) {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
+
+  
 }

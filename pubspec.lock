@@ -565,6 +565,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  ntp:
+    dependency: transitive
+    description:
+      name: ntp
+      sha256: "198db73e5059b334b50dbe8c626011c26576778ee9fc53f4c55c1d89d08ed2d2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  open_settings_plus:
+    dependency: transitive
+    description:
+      name: open_settings_plus
+      sha256: "7576f0922a650dd5d9c128235cb7537e56a99a5f3ac0943a4a07613cc25c4582"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   package_config:
     dependency: transitive
     description:
@@ -698,6 +714,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  sync_time_ntp_totalxsoftware:
+    dependency: "direct main"
+    description:
+      name: sync_time_ntp_totalxsoftware
+      sha256: e67fa162ce3fd1f3f95080f6c4fc1400a8b6b7317023d62bf3e08e44fdfd7921
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   term_glyph:
     dependency: transitive
     description:
