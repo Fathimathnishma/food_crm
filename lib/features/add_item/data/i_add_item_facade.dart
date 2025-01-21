@@ -5,12 +5,12 @@ import 'package:food_crm/general/failures/failures.dart';
 
 abstract class IItemFacade {
   Future<Either<MainFailures, Unit>> addSuggestions({
-    required List<ItemUploadingModel> itemList,
+    required List<ItemAddingModel> itemList,
   }) {
     throw UnimplementedError("addSuggections() implementation");
   }
 
-  Future<Either<MainFailures, List<ItemUploadingModel>>> fetchSuggestions() {
+  Future<Either<MainFailures, List<ItemAddingModel>>> fetchSuggestions() {
     throw UnimplementedError("fetchSuggestions () implementation");
   }
   

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
+import 'package:food_crm/features/order_summery/data/model/item_uploading%20_model.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 
@@ -11,12 +12,12 @@ class OrderSummeryProvider extends ChangeNotifier {
   final IOrderSummeryFacade iOrderSummeryFacade;
   OrderSummeryProvider(this.iOrderSummeryFacade);
 
-  List<ItemUploadingModel> itemsList = [];
+  List<ItemAddingModel> itemsList = [];
   bool isLoading = false;
   num overallTotal = 0;
  bool isValid=true;
 
-  void addItemToSummery(List<ItemUploadingModel> items) {
+  void addItemToSummery(List<ItemAddingModel> items) {
     overallTotal = 0;
 
     for (var item in items) {
@@ -25,9 +26,13 @@ class OrderSummeryProvider extends ChangeNotifier {
       final num itemTotal = price * itemQty;
       overallTotal += itemTotal;
     }
-    itemsList = items;
+    itemsList=items;
+
     notifyListeners();
   }
+
+
+
 
   Future<void> fetchUser() async {
     isLoading = true;
@@ -47,7 +52,7 @@ class OrderSummeryProvider extends ChangeNotifier {
                 return UserItemQtyAloccatedModel(
                   name: user.name,
                   phoneNumber: user.phoneNumber,
-                  qtyController: TextEditingController(),
+                  qty: TextEditingController(),
                   id: user.id!,
                   splitAmount: 0,
                   
@@ -63,34 +68,59 @@ class OrderSummeryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeUserFromSummery({
-    required int tabIndex,
-    required int userIndex,
-    required String price,
-  }) {
-    itemsList[tabIndex].users.removeAt(userIndex);
-    if (itemsList[tabIndex].users.isNotEmpty) {
-      initiolSplitQty(tabIndex: tabIndex, userIndex: userIndex, price: price);
-      updateSplitAmount(tabIndex: tabIndex, userIndex: userIndex, price: price);
-    }
-    notifyListeners();
-  }
 
-  void updateSplitAmount({
-    required int tabIndex,
-    required int userIndex,
-    required String price,
-  }) {
+
+
+
+
+
+
+
+
+void removeUserFromSummery({
+  required int tabIndex,
+  required int userIndex,
+  required String price,
+}) {
+  if (userIndex >= 0 && userIndex < itemsList[tabIndex].users.length) {
+    itemsList[tabIndex].users.removeAt(userIndex);
+
+    if (itemsList[tabIndex].users.isNotEmpty) {
+      initiolSplitQty(tabIndex: tabIndex, price: price);  
+      updateSplitAmount(tabIndex: tabIndex, price: price); 
+    }
+    else {
+      log("No users left in the list after removal for tabIndex: $tabIndex.");
+    }
+  }
+  notifyListeners();
+}
+
+
+
+
+
+void updateSplitAmount({
+  required int tabIndex,
+  required String price,
+}) {
+  for (int userIndex = 0; userIndex < itemsList[tabIndex].users.length; userIndex++) {
     final user = itemsList[tabIndex].users[userIndex];
-    final num qty = num.tryParse(user.qtyController.text) ?? 0;
+    final num qty = num.tryParse(user.qty.text) ?? 0;
 
     final double itemPrice = double.tryParse(price) ?? 0.0;
     user.splitAmount = itemPrice * qty;
   }
+}
 
-  void initiolSplitQty({
+
+
+
+
+
+
+void initiolSplitQty({
   required int tabIndex,
-  required int userIndex,
   required String price,
 }) {
   final num totalQty = num.tryParse(itemsList[tabIndex].quantity.text) ?? 0;
@@ -107,14 +137,19 @@ class OrderSummeryProvider extends ChangeNotifier {
         formattedQty = qtyPerUser.toStringAsFixed(1); 
       }
 
-      user.qtyController.text = formattedQty;
+      user.qty.text = formattedQty;
       num userQty = num.tryParse(formattedQty) ?? 0;
       double itemPrice = double.tryParse(price) ?? 0.0;
       user.splitAmount = itemPrice * userQty;
-      
     }
   }
 }
+
+
+
+
+
+
 
 
 bool checkQty({
@@ -125,13 +160,11 @@ bool checkQty({
   int totalUserQty = 0;
 
   for (var user in item.users) {
-    final qty = num.tryParse(user.qtyController.text) ?? 0;
+    final qty = num.tryParse(user.qty.text) ?? 0;
     totalUserQty += qty.toInt(); 
   }
 
   final itemQty = num.tryParse(item.quantity.text) ?? 0;
-
-  // Compare the total user quantity (as integer) with the item quantity (as integer)
   if (totalUserQty != itemQty.toInt()) {
     Customtoast.showErrorToast(
       "Total quantity of all users must match the item quantity."
@@ -147,18 +180,47 @@ bool checkQty({
 
 
 
-  Future<void> addOrder() async {
-    final result = await iOrderSummeryFacade.addOrder(
-        orderModel: OrderModel(
-            createdAt: Timestamp.now(),
-            totalAmount: overallTotal,
-            order: itemsList));
-           
-    result.fold(
-      (l) {
-        ("add error${l.toString()}");
-      },
-      (unit) {},
+
+
+
+
+
+
+
+ Future<void> addOrder() async {
+  final List<ItemUploadingModel> order = []; 
+  for (var data in itemsList) {
+    final num price = num.parse(data.price.text);
+    final num itemQty = num.parse(data.quantity.text);
+    
+    order.add(
+      ItemUploadingModel(
+      
+        name: data.name.text, 
+        price: price, 
+        qty: itemQty, 
+        users: data.users
+      )
     );
   }
+
+  log("Total order length: ${order.length}");
+
+  final result = await iOrderSummeryFacade.addOrder(
+    orderModel: OrderModel(
+      createdAt: Timestamp.now(),
+      totalAmount: overallTotal,
+      order: order
+    )
+  );
+
+  result.fold(
+    (l) {
+      log("Add error: ${l.toString()}");
+    },
+    (unit) {
+    },
+  );
+}
+
 }

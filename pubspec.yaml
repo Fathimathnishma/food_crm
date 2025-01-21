@@ -50,7 +50,6 @@ dependencies:
   intl: ^0.20.1
   sync_time_ntp_totalxsoftware: ^0.0.3
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

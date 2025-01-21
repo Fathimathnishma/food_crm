@@ -1,30 +1,32 @@
-
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
+import 'package:food_crm/features/order_summery/data/model/user_dialy_order_model.dart';
 import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
+import 'package:food_crm/general/utils/dialy_enum.dart';
 import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:injectable/injectable.dart';
-
+import 'package:intl/intl.dart';
+import 'package:sync_time_ntp_totalxsoftware/sync_time_ntp_totalxsoftware.dart';
 
 @LazySingleton(as: IOrderSummeryFacade)
-class IOrderSummeryImpli implements IOrderSummeryFacade{
-   final FirebaseFirestore firestore;
+class IOrderSummeryImpli implements IOrderSummeryFacade {
+  final FirebaseFirestore firestore;
   IOrderSummeryImpli(this.firestore);
 
   @override
   Future<Either<MainFailures, List<UserModel>>> fetchUsers() async {
-try {
+    try {
       final userRef = firestore
           .collection(FirebaseCollection.users)
           .orderBy("createdAt", descending: true);
       final querySnapshot = await userRef.get();
       final List<UserModel> users = querySnapshot.docs.map((e) {
-        return UserModel.fromMap(e.data() );
+        return UserModel.fromMap(e.data());
       }).toList();
       return right(users);
     } catch (e) {
@@ -33,24 +35,40 @@ try {
     }
   }
 
+
 @override
-Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) async {
+Future<Either<MainFailures, Unit>> addOrder(
+    {required OrderModel orderModel}) async {
   try {
     final orderRef = firestore.collection(FirebaseCollection.order);
     final id = orderRef.doc().id;
     final orderDoc = firestore.collection(FirebaseCollection.order).doc(id);
-    final Map<String, dynamic> itemMap = {
-      for (var item in orderModel.order)
-        item.name.text: {
-          'name': item.name.text,
-          'price': item.price.text,
-          'quantity': item.quantity.text,
-          'users': {
-            for (var user in item.users)
-              user.id: user.toMap(),
-          },
-        }
-    };
+
+    final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
+    final formattedDate = DateFormat('yyyy-MM-dd').format(today);
+
+    FoodTime foodTime;
+    final currentHour = today.hour;
+    
+    if (currentHour >= 6 && currentHour < 12) {
+      foodTime = FoodTime.breakfast;
+    } else if (currentHour >= 12 && currentHour < 18) {
+      foodTime = FoodTime.lunch;
+    } else {
+      foodTime = FoodTime.dinner;
+    }
+
+    final Map<String, dynamic> itemMap = {};
+    for (var item in orderModel.order) {
+      itemMap[item.name] = {
+        'name': item.name,
+        'price': item.price,
+        'qty': item.qty,
+        'users': {
+          for (var user in item.users) user.id: user.toMap(),
+        },
+      };
+    }
 
     final Map<String, dynamic> orderData = {
       'id': id,
@@ -58,21 +76,50 @@ Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) as
       'totalAmount': orderModel.totalAmount,
       'order': itemMap,
     };
-    final batch = firestore.batch();
 
+    final batch = firestore.batch();
     batch.set(orderDoc, orderData);
 
     for (var item in orderModel.order) {
       for (var user in item.users) {
+        final userDoc =
+            firestore.collection(FirebaseCollection.users).doc(user.id);
+        final userOrderDoc =
+            userDoc.collection('dailyOrder').doc(formattedDate);
+
+        final userOrderDocSnapshot = await userOrderDoc.get();
+
+        final qty = num.parse(user.qty.text);
+        final userOrderMap = {
+          foodTime.name: {
+            if (userOrderDocSnapshot.exists && userOrderDocSnapshot.data()?[foodTime.name] != null)
+              ...userOrderDocSnapshot.data()?[foodTime.name] as Map<String, dynamic>,
+            item.name: UserDialyOrderModel(
+              createdAt: Timestamp.now(),
+              name: item.name,
+              qty: qty,
+              splitAmount: user.splitAmount,
+            ).toMap(),
+          }
+        };
+        if (userOrderDocSnapshot.exists) {
+          userOrderDoc.update(userOrderMap);
+        } else {
+          userOrderDoc.set(userOrderMap);
+        }
+
         batch.update(
-          FirebaseFirestore.instance.collection(FirebaseCollection.order).doc(user.id),
+          FirebaseFirestore.instance
+              .collection(FirebaseCollection.users)
+              .doc(user.id),
           {
-            'monthlyTotal': FieldValue.increment(user.splitAmount), 
+            'monthlyTotal': FieldValue.increment(user.splitAmount),
           },
         );
       }
     }
 
+    // Commit the batch operation
     await batch.commit();
 
     return right(unit);
@@ -83,3 +130,11 @@ Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) as
 }
 
 }
+
+
+
+
+
+
+
+

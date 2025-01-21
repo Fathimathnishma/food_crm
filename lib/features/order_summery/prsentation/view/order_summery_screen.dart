@@ -11,7 +11,7 @@ import 'package:food_crm/main.dart';
 import 'package:provider/provider.dart';
 
 class OrderSummeryScreen extends StatefulWidget {
-  final List<ItemUploadingModel> itemList;
+  final List<ItemAddingModel> itemList;
   const OrderSummeryScreen({super.key, required this.itemList});
 
   @override
@@ -248,7 +248,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                                       price: item.price.text,
                                     );
                                   },
-                                  controller: item.users[index].qtyController,
+                                  controller: item.users[index].qty,
                                 );
                               },
                             )

@@ -85,11 +85,10 @@ class UserRowWidget extends StatelessWidget {
             // Initialize quantity for the first time
             stateAddOrder.initiolSplitQty(
               tabIndex: tabIndex,
-              userIndex: index,
               price: price,
             );
             controller.text = stateAddOrder
-                .itemsList[tabIndex].users[index].qtyController.text;
+                .itemsList[tabIndex].users[index].qty.text;
           }
 
           return SizedBox(
@@ -116,7 +115,7 @@ class UserRowWidget extends StatelessWidget {
                  controller.text = formattedQty.toString();
                  stateAddOrder.checkQty(tabIndex: tabIndex);
                 }
-                  stateAddOrder.updateSplitAmount(tabIndex: tabIndex, userIndex: index, price: price);
+                  stateAddOrder.updateSplitAmount(tabIndex: tabIndex, price: price);
               },
                     decoration: const InputDecoration(
                       hintText: "qty",

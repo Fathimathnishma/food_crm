@@ -22,7 +22,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
         Provider.of<OrderHistoryProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       historyProvider.fetchOrders();
-      historyProvider.calculateTodayTotal();
+     
     });
   }
 
