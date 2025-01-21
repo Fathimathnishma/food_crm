@@ -148,41 +148,79 @@ bool checkQty({
 }
 
 
+Future<void> addOrder() async {
+  try {
+    final List<ItemUploadingModel> order = [];
 
- Future<void> addOrder() async {
-  final List<ItemUploadingModel> order = []; 
-  for (var data in itemsList) {
-    final num price = num.parse(data.price.text);
-    final num itemQty = num.parse(data.quantity.text);
-    
-    order.add(
-      ItemUploadingModel(
-        id: data.id, 
-        name: data.name.text, 
-        price: price, 
-        qty: itemQty, 
-        users: data.users
-      )
+    // Iterate through the items and validate inputs
+    for (var data in itemsList) {
+      // Validate and parse price
+      final num? price = num.tryParse(data.price.text);
+      if (price == null || price <= 0) {
+        log("Invalid price for item: ${data.name.text}, skipping this item.");
+        continue;
+      }
+
+      // Validate and parse quantity
+      final num? itemQty = num.tryParse(data.quantity.text);
+      if (itemQty == null || itemQty <= 0) {
+        log("Invalid quantity for item: ${data.name.text}, skipping this item.");
+        continue;
+      }
+
+      // Ensure users are not null
+      if (data.users == null || data.users.isEmpty) {
+        log("No users found for item: ${data.name.text}, skipping this item.");
+        continue;
+      }
+
+      // Add valid item to the order list
+      order.add(
+        ItemUploadingModel(
+          id: data.id ?? "", // Fallback to empty string if id is null
+          name: data.name.text.isNotEmpty ? data.name.text : "Unknown", // Fallback for name
+          price: price,
+          qty: itemQty,
+          users: data.users,
+        ),
+      );
+    }
+
+    log("Total valid order items: ${order.length}");
+
+    // Check if the order list is empty before proceeding
+    if (order.isEmpty) {
+      log("No valid items to add to the order.");
+      return;
+    }
+
+    // Ensure overallTotal is valid
+    if (overallTotal == null || overallTotal <= 0) {
+      log("Invalid total amount: $overallTotal. Aborting order creation.");
+      return;
+    }
+
+    // Call the addOrder function in the facade
+    final result = await iOrderSummeryFacade.addOrder(
+      orderModel: OrderModel(
+        createdAt: Timestamp.now(),
+        totalAmount: overallTotal,
+        order: order,
+      ),
     );
+
+    // Handle the result of the addOrder call
+    result.fold(
+      (failure) {
+        log("Add error: ${failure.toString()}");
+      },
+      (unit) {
+        log("Order added successfully.");
+      },
+    );
+  } catch (e) {
+    log("Error in addOrder: $e");
   }
-
-  log("Total order length: ${order.length}");
-
-  final result = await iOrderSummeryFacade.addOrder(
-    orderModel: OrderModel(
-      createdAt: Timestamp.now(),
-      totalAmount: overallTotal,
-      order: order
-    )
-  );
-
-  result.fold(
-    (l) {
-      log("Add error: ${l.toString()}");
-    },
-    (unit) {
-    },
-  );
 }
 
 }

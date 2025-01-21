@@ -32,7 +32,7 @@ try {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
-
+@override
 Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) async {
   try {
     final orderRef = firestore.collection(FirebaseCollection.order);
@@ -41,7 +41,7 @@ Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) as
     
     final Map<String, dynamic> itemMap = {};
     for (var item in orderModel.order) {
-      itemMap[item.name] = {
+      itemMap[item.name]= {
         'name': item.name,
         'price': item.price,
         'quantity': item.qty,
@@ -52,43 +52,67 @@ Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) as
       };
     }
 
-    // Create the orderData map with the necessary order details
     final Map<String, dynamic> orderData = {
       'id': id,
       'createdAt': orderModel.createdAt,
       'totalAmount': orderModel.totalAmount,
-      'order': itemMap,  // This is where the items are stored as a map of maps
+      'order': itemMap,  
     };
 
-    // Start the batch operation
     final batch = firestore.batch();
     
-    // Add the order document to the orders collection
     batch.set(orderDoc, orderData);
 
-    // Update users' monthlyTotal for each user in each item
     for (var item in orderModel.order) {
       for (var user in item.users) {
         batch.update(
           FirebaseFirestore.instance.collection(FirebaseCollection.users).doc(user.id),
           {
-            'monthlyTotal': FieldValue.increment(user.splitAmount), // Incrementing the user's total
+            'monthlyTotal': FieldValue.increment(user.splitAmount), 
           },
         );
       }
     }
-
-    // Commit the batch
     await batch.commit();
-
-    // Return success
     return right(unit);
   } catch (e) {
-    // Log the error and return failure
     log("Error while adding order: $e");
     return left(MainFailures.serverFailures(errormsg: e.toString()));
   }
 }
+// @override
+//   Future<Either<MainFailures, OrderModel>> addDailyOrder(
+//       {required String userId, required OrderModel orderModel}) async {
+
+//         final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
+
+//         final formattedDate = DateFormat('yyyy-MM-dd').format(today);
+//     try {
+//       final userDoc =
+//           firestore.collection(FirebaseCollection.users).doc(userId);
+
+//       final orderDoc =  userDoc.collection('dailyOrder').doc(formattedDate);
+
+//       final orderDocSnapshot = await orderDoc.get();
+//       if(orderDocSnapshot.exists){
+
+//         orderDoc.update({
+//           'totalAmount': FieldValue.increment(orderModel.totalAmount ),
+//           'createdAt': FieldValue.serverTimestamp(),
+          
+
+//         });
+//       }else{
+//         orderDoc.set({
+
+//         });
+//       }
+//       return right(orderModel);
+      
+//     } catch (e) {
+//       return left(MainFailures.serverFailures(errormsg: e.toString()));
+//    }
+//  }
 
 
   

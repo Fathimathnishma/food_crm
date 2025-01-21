@@ -19,8 +19,6 @@ class OrderHistoryImpl implements IOrderHistoryFacade {
   DocumentSnapshot? lastDocument;
   
 
-
-  @override
   @override
 Future<Either<MainFailures, List<OrderModel>>> fetchOrderList() async {
   try {
@@ -38,7 +36,7 @@ Future<Either<MainFailures, List<OrderModel>>> fetchOrderList() async {
     // Parse the order documents into a list of OrderModel
     List<OrderModel> orders = [];
     for (var doc in querySnapshot.docs) {
-      final orderData = doc.data() as Map<String, dynamic>;
+      final orderData = doc.data();
 
       // Log the fetched data for debugging purposes
       log("Fetched order data: $orderData");
@@ -53,7 +51,7 @@ Future<Either<MainFailures, List<OrderModel>>> fetchOrderList() async {
 
       // Create the OrderModel from the fetched data
       final order = OrderModel(
-        id: orderData['id'] as String,
+        id: orderData['id'] != null ? orderData['id'] as String : 'unknown_id',
         createdAt: orderData['createdAt'] as Timestamp,
         totalAmount: orderData['totalAmount'] as num,
         order: orderItems,
