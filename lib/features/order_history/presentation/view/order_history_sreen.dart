@@ -14,10 +14,6 @@ class OrderHistoryScreen extends StatefulWidget {
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
   void initState() {
-    final historyProvider = Provider.of<OrderHistoryProvider>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-     
-    });
     super.initState();
   }
 
@@ -40,7 +36,8 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       ),
       body: Consumer<OrderHistoryProvider>(
         builder: (context, stateFetchOrder, child) {
-          // Check if the orders list is empty
+          final dateKeys = stateFetchOrder.groupedOrders.keys.toList();
+
           if (stateFetchOrder.allOrders.isEmpty) {
             return const Center(
               child: Text(
@@ -49,14 +46,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               ),
             );
           }
-          //  if (stateFetchOrder.isLoading) {
-          //   return const Center(
-          //     child: CircularProgressIndicator(
-          //       color: AppColors.primaryColor,
-          //       strokeWidth: 2,
-          //     ),
-          //   );
-          // }
 
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -70,43 +59,60 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: stateFetchOrder.allOrders.length,
+                    shrinkWrap: true, 
+                    itemCount: dateKeys.length,
                     separatorBuilder: (context, index) => const SizedBox(height: 16),
                     itemBuilder: (context, index) {
-                      final order = stateFetchOrder.allOrders[index];
+                      final date = dateKeys[index];
+                      final orders = stateFetchOrder.groupedOrders[date]!;
+                  
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                   stateFetchOrder.formatCreatedAt(order.createdAt) ,
-                                    style: const TextStyle(
-                                      color: AppColors.whiteColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w300,
+                          SizedBox(
+                            height: 70,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      date,
+                                      style: const TextStyle(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w300,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "₹${order.totalAmount}",
-                                    style: const TextStyle(
-                                      color: AppColors.whiteColor,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
+                                    const Text(
+                                      "₹${4567}",
+                                      style: TextStyle(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 8),
-                          OrderCard(
-                            items: order.order,
-                            total: order.totalAmount.toString(),
+                          ListView.separated(
+                            shrinkWrap: true, 
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: orders.length,
+                            itemBuilder: (context, index) {
+                              final data = orders[index];
+                              return OrderCard(
+                                items: data.order,
+                                total: '123',
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(height: 10);
+                            },
                           ),
                         ],
                       );

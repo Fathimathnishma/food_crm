@@ -16,9 +16,10 @@ class OrderHistoryProvider with ChangeNotifier {
   num total=0;
   bool isLoading = false;
   bool noMoreData = false;
+   
 List<OrderModel>allOrders =[];
 List<OrderModel> todayOrders = [];
-
+Map<String, List<OrderModel>> groupedOrders = {};
 
 
 
@@ -32,22 +33,18 @@ String formatCreatedAt(Timestamp timestamp) {
   return formattedDate;
 }
 void filterTodayOrders() {
- // log("Filtering started");
+todayOrders.clear();
   String todayDate = DateFormat('dd MMMM').format(DateTime.now());
- 
-  todayOrders.clear();
-
   if (allOrders.isEmpty) {
     log("No orders found in allOrders");
     return;
   }
-
   todayOrders.addAll(allOrders.where((order) {
     String orderDate = DateFormat('dd MMMM').format(order.createdAt.toDate());
     return orderDate == todayDate;
   }).toList());
 calculateTodayTotal();
-  
+  notifyListeners();
 }
 
 
@@ -56,11 +53,8 @@ void calculateTodayTotal(){
   for(var order in todayOrders){
    total +=  order.totalAmount;
    //log("total${total.toString()}");
-   notifyListeners();
-
   }
 
-notifyListeners();
 }
 
   Future<void> fetchOrders() async {
@@ -80,6 +74,8 @@ notifyListeners();
       allOrders.addAll(success);
         log('Order fetched');
         filterTodayOrders();
+        groupedOrders = groupOrdersByDate(allOrders);
+
       },
     );
     isLoading = false;
@@ -90,6 +86,23 @@ void clearData (){
   allOrders=[];
   todayOrders=[];
   total=0;
+}
+
+
+  Map<String, List<OrderModel>> groupOrdersByDate(List<OrderModel> allOrders) {
+  Map<String, List<OrderModel>> groupedOrders = {};
+
+  for (var order in allOrders) {
+    String dateKey = DateFormat('dd MMMM yyyy').format(order.createdAt.toDate());
+
+    if (groupedOrders.containsKey(dateKey)) {
+      groupedOrders[dateKey]!.add(order);
+    } else {
+      groupedOrders[dateKey] = [order];
+    }
+  }
+
+  return groupedOrders;
 }
 
 

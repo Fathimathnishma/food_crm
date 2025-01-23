@@ -9,7 +9,9 @@ import 'package:provider/provider.dart';
 
 class UserpaymentHistory extends StatefulWidget {
   final String userId;
-  const UserpaymentHistory({super.key, required this.userId});
+  final String userName;
+  final String total;
+  const UserpaymentHistory({super.key, required this.userId, required this.userName, required this.total});
 
   @override
   State<UserpaymentHistory> createState() => _UserpaymentHistoryState();
@@ -41,9 +43,9 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
               Icons.arrow_back_ios_new,
               color: AppColors.whiteColor,
             )),
-        title: const Text(
-          "Name",
-          style: TextStyle(color: AppColors.whiteColor),
+        title:  Text(
+         widget.userName ,
+          style: const TextStyle(color: AppColors.whiteColor),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -64,22 +66,23 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const TotalCardWidget(subtitle: "124"),
+             TotalCardWidget(subtitle: widget.total ),
             Expanded(
               child: Consumer<UserPaymentProvider>(
                 builder: (context, userPaymentPro, child) {
+                 
                   return ListView.separated(
-                    itemCount: userPaymentPro.availableDates.length,
+                    itemCount: userPaymentPro.userOrder.length,
                     itemBuilder: (context, index) {
-                      final userPayment = userPaymentPro.userPaymentList[index];
+                      final userPayment = userPaymentPro.userOrder[index];
 
-                      // final dateTime = userPayment["createdAt"].toDate();
+                      final dateTime = userPayment.createdAt!.toDate();
 
-                      // // Format date
-                      // final formattedDate =
-                      //     DateFormat('yyyy-MM-dd').format(dateTime);
-                       // Format day
-                      // final day = DateFormat('EEEE').format(dateTime);
+                      // Format date
+                      final formattedDate =
+                          DateFormat('yyyy-MM-dd').format(dateTime);
+                      //  Format day
+                      final day = DateFormat('EEEE').format(dateTime);
                       return InkWell(
                         onTap: () {
                           // Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
@@ -89,25 +92,25 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                             showBottomSheet(
                               context: context,
                               builder: (context) {
-                                return const AmountBottomSheet();
+                                return  AmountBottomSheet(order:userPayment.items!, day: day, date: formattedDate,);
                               },
                             );
                           },
                           child: ListTile(
-                            trailing: Text("890",
+                            trailing:  Text(userPaymentPro.getMonthlyTotalForUser(userOrders: userPaymentPro.userOrder).toString(),
                                 style: const TextStyle(
                                     fontSize: 16,
                                     color: AppColors.whiteColor,
                                     fontWeight: FontWeight.w400)),
                             title: Text(
-                              userPayment,
+                              formattedDate,
                               style: const TextStyle(
                                   fontSize: 17,
                                   color: AppColors.whiteColor,
                                   fontWeight: FontWeight.w400),
                             ),
                             subtitle: Text(
-                             "day",
+                             day,
                               style: const TextStyle(
                                   color: AppColors.greyColor,
                                   fontWeight: FontWeight.w300),

@@ -26,7 +26,7 @@ class UserProvider extends ChangeNotifier {
       phoneNumber: formattedPhoneNumber,
       name: nameController.text,
       createdAt: Timestamp.now(),
-       monthlyTotal: 0,
+      monthlyTotal: 0,
       
     );
 
