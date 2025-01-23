@@ -85,7 +85,7 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
                     children: [
                       const Text("Total",
                           style: TextStyle(fontSize: 13, color: Colors.grey)),
-                      Text(user.monthlyTotal.toString(),
+                      Text(user.monthlyTotal.toStringAsFixed(0),
                           style: const TextStyle(
                               fontSize: 16, color: AppColors.whiteColor)),
                     ],

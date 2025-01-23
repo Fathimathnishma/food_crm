@@ -7,6 +7,8 @@ import 'package:food_crm/features/order_history/presentation/provider/order_hist
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/splash/presentation/view/splash_screen.dart';
+import 'package:food_crm/features/user_payment/data/i_user_payment_facade.dart';
+import 'package:food_crm/features/user_payment/presention/user_payment_provider/user_payment_provider.dart';
 import 'package:food_crm/features/users/data/i_auth_facade.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/general/di/injection.dart';
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderHistoryProvider( sl<IOrderHistoryFacade>())),
         ChangeNotifierProvider(create: (context) => OrderSummeryProvider(sl<IOrderSummeryFacade>()),),
         ChangeNotifierProvider(create: (_)=> HomeProvider()),
+        ChangeNotifierProvider(create: (_)=> UserPaymentProvider(sl<IUserPaymentFacade>()))
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

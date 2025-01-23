@@ -15,10 +15,13 @@ import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/add_item/data/i_add_item_facade.dart' as _i920;
 import '../../features/add_item/repo/i_add_item_impli.dart' as _i151;
-import '../../features/order_summery/repo/I_order_summery_impli.dart' as _i724;
-import '../../features/order_history/data/model/i_order_history_facade.dart' as _i1058;
-import '../../features/order_history/repo/order_history_impl.dart' as _i690;
+import '../../features/order_history/data/model/i_order_history_facade.dart'
+    as _i709;
+import '../../features/order_history/repo/order_history_impl.dart' as _i565;
 import '../../features/order_summery/data/i_order_summery_facade.dart' as _i212;
+import '../../features/order_summery/repo/I_order_summery_impli.dart' as _i946;
+import '../../features/user_payment/data/i_user_payment_facade.dart' as _i454;
+import '../../features/user_payment/repo/i_user_payment_impl.dart' as _i576;
 import '../../features/users/data/i_auth_facade.dart' as _i413;
 import '../../features/users/repo/i_auth_impli.dart' as _i108;
 import 'injectable_module.dart' as _i109;
@@ -45,10 +48,12 @@ Future<_i174.GetIt> init(
       () => firebaseInjectableModule.firebaseAuth);
   gh.lazySingleton<_i920.IItemFacade>(
       () => _i151.IAddItemImpli(gh<_i974.FirebaseFirestore>()));
-  gh.lazySingleton<_i1058.IOrderHistoryFacade>(
-      () => _i690.OrderHistoryImpl(firebaseFirestore: gh<_i974.FirebaseFirestore>()));
+  gh.lazySingleton<_i709.IOrderHistoryFacade>(() =>
+      _i565.OrderHistoryImpl(firebaseFirestore: gh<_i974.FirebaseFirestore>()));
   gh.lazySingleton<_i212.IOrderSummeryFacade>(
-      () => _i724.IOrderSummeryImpli(gh<_i974.FirebaseFirestore>()));
+      () => _i946.IOrderSummeryImpli(gh<_i974.FirebaseFirestore>()));
+  gh.lazySingleton<_i454.IUserPaymentFacade>(() =>
+      _i576.IUserPaymentRepo(firebaseFirestore: gh<_i974.FirebaseFirestore>()));
   gh.lazySingleton<_i413.IUserFacade>(() => _i108.IUserImpli(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),

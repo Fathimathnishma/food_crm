@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sync_time_ntp_totalxsoftware/sync_time_ntp_totalxsoftware.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key});
@@ -16,7 +18,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   void initState() {
     final historyProvider = Provider.of<OrderHistoryProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-     
+     historyProvider.fetchOrders();
     });
     super.initState();
   }
@@ -40,6 +42,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       ),
       body: Consumer<OrderHistoryProvider>(
         builder: (context, stateFetchOrder, child) {
+
+          // final today =  NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
+          // final formattedDate = DateFormat('yyyy-MM-dd').format(today);
+
           // Check if the orders list is empty
           if (stateFetchOrder.allOrders.isEmpty) {
             return const Center(
