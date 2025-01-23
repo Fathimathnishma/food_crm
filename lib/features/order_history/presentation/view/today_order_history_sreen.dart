@@ -7,7 +7,7 @@ import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class TodayOrderHistoryScreen extends StatefulWidget {
-  const TodayOrderHistoryScreen({super.key});
+  const TodayOrderHistoryScreen({super.key,});
 
   @override
   State<TodayOrderHistoryScreen> createState() =>
@@ -22,7 +22,6 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
         Provider.of<OrderHistoryProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       historyProvider.fetchOrders();
-     
     });
   }
 

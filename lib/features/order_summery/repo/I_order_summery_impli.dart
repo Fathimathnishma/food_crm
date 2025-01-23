@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
@@ -35,106 +34,93 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
     }
   }
 
+  @override
+  Future<Either<MainFailures, Unit>> addOrder(
+      {required OrderModel orderModel}) async {
+    try {
+      final orderRef = firestore.collection(FirebaseCollection.order);
+      final id = orderRef.doc().id;
+      final orderDoc = firestore.collection(FirebaseCollection.order).doc(id);
+      final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
+      final formattedDate = DateFormat('yyyy-MM-dd').format(today);
 
-@override
-Future<Either<MainFailures, Unit>> addOrder(
-    {required OrderModel orderModel}) async {
-  try {
-    final orderRef = firestore.collection(FirebaseCollection.order);
-    final id = orderRef.doc().id;
-    final orderDoc = firestore.collection(FirebaseCollection.order).doc(id);
+      FoodTime foodTime;
+      final currentHour = today.hour;
 
-    final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
-    final formattedDate = DateFormat('yyyy-MM-dd').format(today);
-
-    FoodTime foodTime;
-    final currentHour = today.hour;
-    
-    if (currentHour >= 6 && currentHour < 12) {
-      foodTime = FoodTime.breakfast;
-    } else if (currentHour >= 12 && currentHour < 18) {
-      foodTime = FoodTime.lunch;
-    } else {
-      foodTime = FoodTime.dinner;
-    }
-
-    final Map<String, dynamic> itemMap = {};
-    for (var item in orderModel.order) {
-      itemMap[item.name] = {
-        'name': item.name,
-        'price': item.price,
-        'qty': item.qty,
-        'users': {
-          for (var user in item.users) user.id: user.toMap(),
-        },
-      };
-    }
-
-    final Map<String, dynamic> orderData = {
-      'id': id,
-      'createdAt': orderModel.createdAt,
-      'totalAmount': orderModel.totalAmount,
-      'order': itemMap,
-    };
-
-    final batch = firestore.batch();
-    batch.set(orderDoc, orderData);
-
-    for (var item in orderModel.order) {
-      for (var user in item.users) {
-        final userDoc =
-            firestore.collection(FirebaseCollection.users).doc(user.id);
-        final userOrderDoc =
-            userDoc.collection('dailyOrder').doc(formattedDate);
-
-        final userOrderDocSnapshot = await userOrderDoc.get();
-
-        final qty = num.parse(user.qty.text);
-        final userOrderMap = {
-          foodTime.name: {
-            if (userOrderDocSnapshot.exists && userOrderDocSnapshot.data()?[foodTime.name] != null)
-              ...userOrderDocSnapshot.data()?[foodTime.name] as Map<String, dynamic>,
-            item.name: UserDialyOrderModel(
-              createdAt: Timestamp.now(),
-              name: item.name,
-              qty: qty,
-              splitAmount: user.splitAmount,
-            ).toMap(),
-          }
-        };
-        if (userOrderDocSnapshot.exists) {
-          userOrderDoc.update(userOrderMap);
-        } else {
-          userOrderDoc.set(userOrderMap);
-        }
-
-        batch.update(
-          FirebaseFirestore.instance
-              .collection(FirebaseCollection.users)
-              .doc(user.id),
-          {
-            'monthlyTotal': FieldValue.increment(user.splitAmount),
-          },
-        );
+      if (currentHour >= 6 && currentHour < 12) {
+        foodTime = FoodTime.breakfast;
+      } else if (currentHour >= 12 && currentHour < 18) {
+        foodTime = FoodTime.lunch;
+      } else {
+        foodTime = FoodTime.dinner;
       }
+
+      final Map<String, dynamic> itemMap = {};
+      for (var item in orderModel.order) {
+        itemMap[item.name] = {
+          'name': item.name,
+          'price': item.price,
+          'qty': item.qty,
+          'users': {
+            for (var user in item.users) user.id: user.toMap(),
+          },
+        };
+      }
+
+      final Map<String, dynamic> orderData = {
+        'id': id,
+        'createdAt': orderModel.createdAt,
+        'totalAmount': orderModel.totalAmount,
+        'order': itemMap,
+      };
+
+      final batch = firestore.batch();
+      batch.set(orderDoc, orderData);
+
+      for (var item in orderModel.order) {
+        for (var user in item.users) {
+          if (item.users.contains(user)) {
+            final userDoc =
+                firestore.collection(FirebaseCollection.users).doc(user.id);
+            final userOrderDoc =
+                userDoc.collection(FirebaseCollection.dailyOrders).doc(formattedDate);
+            final userOrderDocSnapshot = await userOrderDoc.get();
+            final qty = num.parse(user.qty.text);
+            final userItemMap ={foodTime.name: {
+              "createdAt": FieldValue.serverTimestamp(),
+              item.name: UserDialyOrderModel(
+                foodTime: foodTime.name,
+                name: item.name,
+                qty: qty,
+                splitAmount: user.splitAmount,
+              ).toMap(),
+            }};
+            log("added");
+            if (userOrderDocSnapshot.exists) {
+              batch.set(userOrderDoc, {"item": userItemMap}, SetOptions(merge: true));
+            } else {
+              batch.set(
+                  userOrderDoc, {"item": userItemMap}, SetOptions(merge: true));
+            }
+            batch.update(
+              FirebaseFirestore.instance
+                  .collection(FirebaseCollection.users)
+                  .doc(user.id),
+              {
+                'monthlyTotal': FieldValue.increment(user.splitAmount),
+              },
+            );
+          }
+        }
+      }
+
+      // Commit the batch operation
+      await batch.commit();
+
+      return right(unit);
+    } catch (e) {
+      log("Error while adding order: $e");
+      return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
-
-    // Commit the batch operation
-    await batch.commit();
-
-    return right(unit);
-  } catch (e) {
-    log("Error while adding order: $e");
-    return left(MainFailures.serverFailures(errormsg: e.toString()));
   }
 }
-
-}
-
-
-
-
-
-
-
-

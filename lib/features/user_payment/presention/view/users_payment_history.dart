@@ -4,6 +4,7 @@ import 'package:food_crm/features/user_payment/presention/view/widgets/amount_bo
 import 'package:food_crm/features/user_payment/presention/view/widgets/total_card.dart';
 import 'package:food_crm/features/users/presentation/view/add_user_screen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UserpaymentHistory extends StatefulWidget {
@@ -15,6 +16,17 @@ class UserpaymentHistory extends StatefulWidget {
 }
 
 class _UserpaymentHistoryState extends State<UserpaymentHistory> {
+  @override
+  void initState() {
+    super.initState();
+    final userPaymentProvider =
+        Provider.of<UserPaymentProvider>(context, listen: false);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      userPaymentProvider.fetchUserPayment(userId: widget.userId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,58 +69,65 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
               child: Consumer<UserPaymentProvider>(
                 builder: (context, userPaymentPro, child) {
                   return ListView.separated(
-                  itemCount: userPaymentPro.userPayments!.length,
-                  itemBuilder: (context, index) {
-                    final userPayment = userPaymentPro.userPayments![index];
-                    return InkWell(
-                      onTap: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
-                      },
-                      child: InkWell(
+                    itemCount: userPaymentPro.availableDates.length,
+                    itemBuilder: (context, index) {
+                      final userPayment = userPaymentPro.userPaymentList[index];
+
+                      // final dateTime = userPayment["createdAt"].toDate();
+
+                      // // Format date
+                      // final formattedDate =
+                      //     DateFormat('yyyy-MM-dd').format(dateTime);
+                       // Format day
+                      // final day = DateFormat('EEEE').format(dateTime);
+                      return InkWell(
                         onTap: () {
-                          showBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return const AmountBottomSheet();
-                            },
-                          );
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
                         },
-                        child: const ListTile(
-                          trailing: Text("₹390.00",
-                              style: TextStyle(
-                                  fontSize: 16,
+                        child: InkWell(
+                          onTap: () {
+                            showBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return const AmountBottomSheet();
+                              },
+                            );
+                          },
+                          child: ListTile(
+                            trailing: Text("890",
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    color: AppColors.whiteColor,
+                                    fontWeight: FontWeight.w400)),
+                            title: Text(
+                              userPayment,
+                              style: const TextStyle(
+                                  fontSize: 17,
                                   color: AppColors.whiteColor,
-                                  fontWeight: FontWeight.w400)),
-                          title: Text(
-                            "Day",
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: AppColors.whiteColor,
-                                fontWeight: FontWeight.w400),
-                          ),
-                          subtitle: Text(
-                            "Date",
-                            style: TextStyle(
-                                color: AppColors.greyColor,
-                                fontWeight: FontWeight.w300),
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            subtitle: Text(
+                             "day",
+                              style: const TextStyle(
+                                  color: AppColors.greyColor,
+                                  fontWeight: FontWeight.w300),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider(
-                      color: Colors.grey.shade600,
-                    );
-                  },
-                );
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(
+                        color: Colors.grey.shade600,
+                      );
+                    },
+                  );
                 },
-                
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
+     ),
+   );
+   }
 }

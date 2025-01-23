@@ -2,17 +2,17 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:food_crm/features/order_history/data/model/i_order_history_facade.dart';
+import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
 import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IOrderHistoryFacade)
-class OrderHistoryImpl implements IOrderHistoryFacade {
+class IOrderHistoryImpl implements IOrderHistoryFacade {
   final FirebaseFirestore firebaseFirestore;
 
-  OrderHistoryImpl({required this.firebaseFirestore});
+  IOrderHistoryImpl({required this.firebaseFirestore});
 
   bool noMoreData = false;
   DocumentSnapshot? lastDocument;
@@ -43,4 +43,5 @@ class OrderHistoryImpl implements IOrderHistoryFacade {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
+  
 }

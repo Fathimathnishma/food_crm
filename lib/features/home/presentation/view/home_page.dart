@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       homeProvider.updateDateTime(DateTime.now());
       homeProvider.getUsersCount();
+      //homeProvider.fetchTodayOrderList();
     });
   }
 
@@ -34,121 +35,130 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color(0XFF060606),
         leading: Image.asset('assets/images/total-x-logo.png'),
       ),
-      body: Consumer<HomeProvider>(
-        builder: (context, homePro, child) {
-          return Padding(
+      body:Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                const SizedBox(
-                  height: 24,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: 96,
-                      width: 144,
-                      decoration: BoxDecoration(
-                        color: const Color(0XFFE4E4E4),
-                        borderRadius: BorderRadius.circular(16),
+                Consumer<HomeProvider>(
+                  builder: (context, homePro, child) {
+                    return  Column(
+                    children: [
+                      const SizedBox(
+                        height: 24,
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 13,
+                       Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 96,
+                        width: 144,
+                        decoration: BoxDecoration(
+                          color: const Color(0XFFE4E4E4),
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Hello',
-                              style: TextStyle(
-                                  fontSize: 20, color: Color(0XFF000000)),
-                            ),
-                            Text(
-                              'Admin',
-                              style: TextStyle(
-                                  fontSize: 32, color: Color(0XFF000000)),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 96,
-                      width: 170,
-                      decoration: BoxDecoration(
-                        color: const Color(0XFFE4E4E4),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              homePro.formattedDate,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Color(0XFF000000)),
-                            ),
-                            Text(
-                              homePro.formattedTime,
-                              style: const TextStyle(
-                                  fontSize: 30, color: Color(0XFF000000)),
-                            )
-                          ],
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 13,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Hello',
+                                style: TextStyle(
+                                    fontSize: 20, color: Color(0XFF000000)),
+                              ),
+                              Text(
+                                'Admin',
+                                style: TextStyle(
+                                    fontSize: 32, color: Color(0XFF000000)),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 38,
-                ),
-                Container(
-                  height: 105,
-                  width: MediaQuery.sizeOf(context).width,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0XFFE4E4E4),
+                     Container(
+                          height: 96,
+                          width: 170,
+                          decoration: BoxDecoration(
+                            color: const Color(0XFFE4E4E4),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  homePro.formattedDate,
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Color(0XFF000000)),
+                                ),
+                                Text(
+                                  homePro.formattedTime,
+                                  style: const TextStyle(
+                                      fontSize: 30, color: Color(0XFF000000)),
+                                )
+                              ],
+                            ),
+                          ),
                       ),
-                      borderRadius: BorderRadius.circular(16)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Today',
-                              style: TextStyle(
-                                  fontSize: 14, color: Color(0XFFFFFFFF)),
-                            ),
-                            Text(
-                              '₹290',
-                              style: TextStyle(
-                                  fontSize: 34, color: Color(0XFFFFFFFF)),
-                            ),
-                          ],
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 38,
+                  ),
+                  Container(
+                    height: 105,
+                    width: MediaQuery.sizeOf(context).width,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0XFFE4E4E4),
                         ),
-                        CustomElevatedButton(
-                          text: 'Make A Order',
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const TodayOrderHistoryScreen(),
-                                ));
-                          },
-                          backgroundColor: const Color(0XFFFFF200),
-                        )
-                      ],
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                        Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Today',
+                                  style: TextStyle(
+                                      fontSize: 14, color: Color(0XFFFFFFFF)),
+                                ),
+                                Text(
+                                homePro.total.toString()  ,
+                                  style: const TextStyle(
+                                      fontSize: 34, color: Color(0XFFFFFFFF)),
+                                ),
+                              ],
+                          ),
+                          CustomElevatedButton(
+                            text: 'Make A Order',
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const TodayOrderHistoryScreen(),
+                                  ));
+                            },
+                            backgroundColor: const Color(0XFFFFF200),
+                          )
+                        ],
+                      ),
                     ),
                   ),
+                  
+                  
+                    ],
+                  );
+                  },
                 ),
+               
                 const SizedBox(
                   height: 42,
                 ),
@@ -261,55 +271,59 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Positioned(
                       left: 10,
-                      child: Container(
-                        height: 100.93,
-                        width: 234.35,
-                        decoration: BoxDecoration(
-                            color: const Color(0XFF131318),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0XFFFFF200))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 31,
-                                backgroundColor: const Color(0XFFFFFFFF),
-                                child: Image.asset('assets/images/person.png'),
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Total Members',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Color(0XFFFFFFFF)),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    homePro.usersCount.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 24, color: Color(0XFFFFFFFF)),
-                                  )
-                                ],
-                              )
-                            ],
+                      child: Consumer<HomeProvider>(
+                        builder: (context, homePro, child) {
+                           return Container(
+                          height: 100.93,
+                          width: 234.35,
+                          decoration: BoxDecoration(
+                              color: const Color(0XFF131318),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: const Color(0XFFFFF200))),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 31,
+                                  backgroundColor: const Color(0XFFFFFFFF),
+                                  child: Image.asset('assets/images/person.png'),
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Total Members',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Color(0XFFFFFFFF)),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(
+                                      homePro.usersCount.toString(),
+                                      style: const TextStyle(
+                                          fontSize: 24, color: Color(0XFFFFFFFF)),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
+                        );
+                        },
+                       
                       ),
                     ),
                   ],
                 )
               ],
             ),
-          );
-        },
-      ),
+          ),
+       
     );
   }
 }

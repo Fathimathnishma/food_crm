@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:food_crm/features/order_history/data/model/i_order_history_facade.dart';
+import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:intl/intl.dart';
 
@@ -32,7 +32,7 @@ String formatCreatedAt(Timestamp timestamp) {
   return formattedDate;
 }
 void filterTodayOrders() {
-  log("Filtering started");
+ // log("Filtering started");
   String todayDate = DateFormat('dd MMMM').format(DateTime.now());
  
   todayOrders.clear();
@@ -55,7 +55,7 @@ void calculateTodayTotal(){
   total=0;
   for(var order in todayOrders){
    total +=  order.totalAmount;
-   log("total${total.toString()}");
+   //log("total${total.toString()}");
    notifyListeners();
 
   }
@@ -65,6 +65,7 @@ notifyListeners();
 
   Future<void> fetchOrders() async {
    log('fetching');
+    clearData();
     if (isLoading || noMoreData) return;
     isLoading = true;
     notifyListeners();
@@ -85,7 +86,11 @@ notifyListeners();
     notifyListeners();
   }
 
-
+void clearData (){
+  allOrders=[];
+  todayOrders=[];
+  total=0;
+}
 
 
 }
