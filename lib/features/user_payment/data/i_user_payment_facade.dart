@@ -1,17 +1,12 @@
 import 'package:dartz/dartz.dart';
-import 'package:food_crm/features/order_summery/data/model/user_dialy_order_model.dart';
+import 'package:food_crm/features/user_payment/data/model/user_payment_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
 
 abstract class IUserPaymentFacade {
-  Future<Either<MainFailures, UserDialyOrderModel?>> fetchUserPayment({
-    required String userId,
-  }) async {
+  Future<Either<MainFailures, List<OrderDailyReportModel>>> fetchUserPayment(
+      {required String userId}) async {
     throw UnimplementedError('fetchUserPayment() not implemented');
   }
+ 
 
-  // Future<Either<MainFailures, List<dynamic>>> fetchUserDailyOrder({
-  //   required String userId,
-  // }) async {
-  //   throw UnimplementedError('fetchUserPayment() not implemented');
-  // }
 }

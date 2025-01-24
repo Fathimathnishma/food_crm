@@ -26,22 +26,20 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
       final orderCollection = firebaseFirestore
           .collection(FirebaseCollection.order)
           .orderBy("createdAt");
-      final querySnapshot = await orderCollection.limit(15).get();
+      final querySnapshot = await orderCollection.limit(20).get();
 
       if (querySnapshot.docs.isEmpty) {
         log("No orders found.");
         return right([]);
       }
-     final orders = querySnapshot.docs
-        .map((doc) => OrderModel.fromMap(doc.data()))
-        .toList();
+      final orders = querySnapshot.docs
+          .map((doc) => OrderModel.fromMap(doc.data()))
+          .toList();
       return right(orders);
-
     } catch (e, stackTrace) {
       log("Error while fetching orders: $e");
       log("Stack trace: $stackTrace");
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
-  
 }

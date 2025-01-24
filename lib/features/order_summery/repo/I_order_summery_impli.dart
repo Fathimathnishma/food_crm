@@ -86,21 +86,21 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
                 userDoc.collection(FirebaseCollection.dailyOrders).doc(formattedDate);
             final userOrderDocSnapshot = await userOrderDoc.get();
             final qty = num.parse(user.qty.text);
-            final userItemMap ={foodTime.name: {
-              "createdAt": FieldValue.serverTimestamp(),
+            final userItemMap ={
+             
               item.name: UserDialyOrderModel(
                 foodTime: foodTime.name,
                 name: item.name,
                 qty: qty,
                 splitAmount: user.splitAmount,
               ).toMap(),
-            }};
+            };
             log("added");
             if (userOrderDocSnapshot.exists) {
-              batch.set(userOrderDoc, {"item": userItemMap}, SetOptions(merge: true));
+              batch.set(userOrderDoc, {"item": userItemMap, "createdAt": FieldValue.serverTimestamp(),}, SetOptions(merge: true));
             } else {
               batch.set(
-                  userOrderDoc, {"item": userItemMap}, SetOptions(merge: true));
+                  userOrderDoc, {"item": userItemMap,"createdAt": FieldValue.serverTimestamp()}, SetOptions(merge: true));
             }
             batch.update(
               FirebaseFirestore.instance

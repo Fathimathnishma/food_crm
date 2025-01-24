@@ -40,7 +40,7 @@ class OrderCard extends StatelessWidget {
                     children: [
                       Text("Qty"),
                       SizedBox(width: 20),
-                      Text("Rate"),
+                      Text("Price"),
                     ],
                   ),
                 ],
@@ -56,6 +56,8 @@ class OrderCard extends StatelessWidget {
             final itemQuantity = item.qty is TextEditingController
                 ? item.qty.text
                 : item.qty.toString();
+
+            // Now we only use price
             final itemPrice = item.price is TextEditingController
                 ? item.price.text
                 : item.price.toString();
@@ -70,7 +72,7 @@ class OrderCard extends StatelessWidget {
                     children: [
                       Text(itemQuantity),
                       const SizedBox(width: 20),
-                      Text("₹$itemPrice"),
+                      Text("₹$itemPrice"), // Display the price
                     ],
                   ),
                 ],

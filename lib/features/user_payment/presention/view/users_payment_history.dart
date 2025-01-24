@@ -4,17 +4,25 @@ import 'package:food_crm/features/user_payment/presention/view/widgets/amount_bo
 import 'package:food_crm/features/user_payment/presention/view/widgets/total_card.dart';
 import 'package:food_crm/features/users/presentation/view/add_user_screen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UserpaymentHistory extends StatefulWidget {
   final String userId;
-  const UserpaymentHistory({super.key, required this.userId});
+  final String userName;
+  final String total;
+  const UserpaymentHistory(
+      {super.key,
+      required this.userId,
+      required this.userName,
+      required this.total});
 
   @override
   State<UserpaymentHistory> createState() => _UserpaymentHistoryState();
 }
 
 class _UserpaymentHistoryState extends State<UserpaymentHistory> {
+  final scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -23,6 +31,15 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userPaymentProvider.fetchUserPayment(userId: widget.userId);
+    });
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (!userPaymentProvider.isLoading && !userPaymentProvider.noMoreData) {
+          userPaymentProvider.fetchUserPayment(userId: widget.userId);
+        }
+      }
     });
   }
 
@@ -40,9 +57,9 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
               Icons.arrow_back_ios_new,
               color: AppColors.whiteColor,
             )),
-        title: const Text(
-          "Name",
-          style: TextStyle(color: AppColors.whiteColor),
+        title: Text(
+          widget.userName,
+          style: const TextStyle(color: AppColors.whiteColor),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -63,53 +80,90 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const TotalCardWidget(subtitle: "124"),
+            TotalCardWidget(subtitle: widget.total),
             Expanded(
               child: Consumer<UserPaymentProvider>(
                 builder: (context, userPaymentPro, child) {
-                  final userPayment = userPaymentPro.userPayment;
+                  if (userPaymentPro.isLoading &&
+                      userPaymentPro.userOrder.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primaryColor,
+                      ),
+                    );
+                  } else if (userPaymentPro.userOrder.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No data available',
+                        style: TextStyle(fontSize: 20, color: Colors.red),
+                      ),
+                    );
+                  } else {
+                    return ListView.separated(
+                      controller: scrollController,
+                      itemCount: userPaymentPro.userOrder.length,
+                      itemBuilder: (context, index) {
+                        final userPayment = userPaymentPro.userOrder[index];
 
-                  // final dateTime = userPayment.createdAt.toDate();
-                  // // Format date
-                  // final formattedDate =
-                  //     DateFormat('yyyy-MM-dd').format(dateTime);
-                  // // Format day
-                  // final day = DateFormat('EEEE').format(dateTime);
-                  return InkWell(
-                    onTap: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
-                    },
-                    child: InkWell(
-                      onTap: () {
-                        showBottomSheet(
-                          context: context,
-                          builder: (context) {
-                            return const AmountBottomSheet();
+                        final dateTime = userPayment.createdAt!.toDate();
+
+                        // Format date
+                        final formattedDate =
+                            DateFormat('yyyy-MM-dd').format(dateTime);
+                        //  Format day
+                        final day = DateFormat('EEEE').format(dateTime);
+                        return InkWell(
+                          onTap: () {
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
                           },
+                          child: InkWell(
+                            onTap: () {
+                              showBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return AmountBottomSheet(
+                                    order: userPayment.items!,
+                                    day: day,
+                                    date: formattedDate,
+                                  );
+                                },
+                              );
+                            },
+                            child: ListTile(
+                              trailing: Text(
+                                  userPaymentPro
+                                      .getMonthlyTotalForUser(
+                                          userOrders: userPaymentPro.userOrder)
+                                      .toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.whiteColor,
+                                      fontWeight: FontWeight.w400)),
+                              title: Text(
+                                formattedDate,
+                                style: const TextStyle(
+                                    fontSize: 17,
+                                    color: AppColors.whiteColor,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              subtitle: Text(
+                                day,
+                                style: const TextStyle(
+                                    color: AppColors.greyColor,
+                                    fontWeight: FontWeight.w300),
+                              ),
+                            ),
+                          ),
                         );
                       },
-                      child: const ListTile(
-                        trailing: Text('userPayment!.splitAmount.toString()',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors.whiteColor,
-                                fontWeight: FontWeight.w400)),
-                        title: Text(
-                          'userPayment.foodTime!',
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: AppColors.whiteColor,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        // subtitle: Text(
-                        //   day,
-                        //   style: const TextStyle(
-                        //       color: AppColors.greyColor,
-                        //       fontWeight: FontWeight.w300),
-                        // ),
-                      ),
-                    ),
-                  );
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          color: Colors.grey.shade600,
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             ),

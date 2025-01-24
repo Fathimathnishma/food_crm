@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/data/i_home_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
+import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:intl/intl.dart';
 
 class HomeProvider with ChangeNotifier {
@@ -21,14 +22,21 @@ final IHomeFacade iHomeFacade;
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? countListner;
   String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
 
+
   int usersCount = 0;
   List<OrderModel> todayOrders = [];
   num total=0;
+  num totalAmount=0;
   bool isLoading = false;
   bool noMoreData = false;
+  List<UserModel> users = [];
 
-
-
+void calculateTotal(){
+  for( var user in users){
+  totalAmount +=  user.monthlyTotal;
+  }
+  notifyListeners();
+}
 
 
 
@@ -52,7 +60,7 @@ final IHomeFacade iHomeFacade;
   }
 
 Future<void> fetchTodayOrderList()async{
-  log("1");
+  //log("1");
   clearData();
      if (isLoading || noMoreData) return;
     isLoading = true;
@@ -61,6 +69,7 @@ Future<void> fetchTodayOrderList()async{
     final result = await iHomeFacade.fetchTodayOrderList(todayDate: todayDate);
     result.fold((l) {
       l.toString();
+      isLoading = false;
     }, 
     (r) {
       log("added");
@@ -69,9 +78,23 @@ Future<void> fetchTodayOrderList()async{
 
      isLoading = false;
      calculateTodayTotal();
-    notifyListeners();
+  
 }
   
+    Future<void> fetchUsers() async {
+    clearData();
+    final result = await iHomeFacade.fetchUser();
+    result.fold(
+      (l) {
+        l.toString();
+      },
+      (user) {
+        users.addAll(user);
+        notifyListeners();
+        log("users${users.length.toString()}");
+      },
+    );
+  }
 
 
 void calculateTodayTotal(){
@@ -80,6 +103,7 @@ void calculateTodayTotal(){
    total +=  order.totalAmount;
    //log("total${total.toString()}");
   }
+  
 }
 
 

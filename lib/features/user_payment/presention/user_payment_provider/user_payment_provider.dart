@@ -1,55 +1,60 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/order_summery/data/model/user_dialy_order_model.dart';
 import 'package:food_crm/features/user_payment/data/i_user_payment_facade.dart';
+import 'package:food_crm/features/user_payment/data/model/user_payment_model.dart';
+import 'package:food_crm/features/users/data/model/user_model.dart';
 
 class UserPaymentProvider with ChangeNotifier {
   final IUserPaymentFacade iUserPaymentFacade;
   UserPaymentProvider(this.iUserPaymentFacade);
 
-  UserDialyOrderModel? userPayment;
+  List<OrderDailyReportModel> userOrder = [];
+  List<UserModel> users = [];
 
-  List<dynamic> userOrderList = [];
-
+  bool isLoading = false;
+  bool noMoreData = false;
   Future<void> fetchUserPayment({required String userId}) async {
+    if (isLoading || noMoreData) return;
+    isLoading = true;
+    notifyListeners();
+    userOrder = [];
+
     final result = await iUserPaymentFacade.fetchUserPayment(userId: userId);
 
     result.fold(
       (failure) {
         log(failure.errormsg);
-        log('failed');
       },
       (success) {
-        // for (var payment in success) {
-        //   log('Name : ${payment.name},\nqty : ${payment.qty},\nsplitamount :${payment.splitAmount},\ncreatedAt : ${payment.createdAt}');
-        // }
-        if (success != null) {
-          userPayment = success;
-        }
+        userOrder.addAll(success);
         notifyListeners();
-        log('success');
       },
     );
+    isLoading = false;
+    notifyListeners();
   }
 
-  num get todayTotalAmount {
-    num amount = 0;
-    if (userPayment != null) {}
-    return amount;
+  Future<void> addUsers({required List<UserModel> user}) async {
+    users.addAll(user);
+    notifyListeners();
   }
 
-  // Future<void> fetchUserDailyOrder({required String userId}) async {
-  //   final result = await iUserPaymentFacade.fetchUserDailyOrder(userId: userId);
+  num getMonthlyTotalForUser({
+    required List<OrderDailyReportModel> userOrders,
+  }) {
+    num total = 0;
+    for (var order in userOrders) {
+      for (var item in order.items!) {
+        total += item.splitAmount;
+        log(total.toString());
+      }
+    }
+    return total;
+  }
 
-  //   result.fold(
-  //     (failure) {
-  //       log(failure.errormsg);
-  //     },
-  //     (success) {
-  //       userOrderList = success;
-  //     },
-  //   );
-  //   notifyListeners();
-  // }
+  void clearData() {
+    userOrder = [];
+    users = [];
+    notifyListeners();
+  }
 }

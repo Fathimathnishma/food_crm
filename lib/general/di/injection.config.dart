@@ -22,7 +22,7 @@ import '../../features/order_history/repo/i_order_history_impl.dart' as _i174;
 import '../../features/order_summery/data/i_order_summery_facade.dart' as _i212;
 import '../../features/order_summery/repo/I_order_summery_impli.dart' as _i946;
 import '../../features/user_payment/data/i_user_payment_facade.dart' as _i454;
-import '../../features/user_payment/repo/i_user_payment_impl.dart' as _i631;
+import '../../features/user_payment/repo/i_user_payment_repo.dart' as _i576;
 import '../../features/users/data/i_auth_facade.dart' as _i413;
 import '../../features/users/repo/i_auth_impli.dart' as _i108;
 import 'injectable_module.dart' as _i109;
@@ -51,12 +51,12 @@ Future<_i174.GetIt> init(
       () => _i151.IAddItemImpli(gh<_i974.FirebaseFirestore>()));
   gh.lazySingleton<_i212.IOrderSummeryFacade>(
       () => _i946.IOrderSummeryImpli(gh<_i974.FirebaseFirestore>()));
-  gh.lazySingleton<_i454.IUserPaymentFacade>(() =>
-      _i631.IUserPaymentRepo(firebaseFirestore: gh<_i974.FirebaseFirestore>()));
   gh.lazySingleton<_i731.IOrderHistoryFacade>(() => _i174.IOrderHistoryImpl(
       firebaseFirestore: gh<_i974.FirebaseFirestore>()));
   gh.lazySingleton<_i914.IHomeFacade>(
       () => _i741.IHomeImpli(gh<_i974.FirebaseFirestore>()));
+  gh.lazySingleton<_i454.IUserPaymentFacade>(() =>
+      _i576.IUserPaymentRepo(firebaseFirestore: gh<_i974.FirebaseFirestore>()));
   gh.lazySingleton<_i413.IUserFacade>(() => _i108.IUserImpli(
         gh<_i974.FirebaseFirestore>(),
         gh<_i59.FirebaseAuth>(),
