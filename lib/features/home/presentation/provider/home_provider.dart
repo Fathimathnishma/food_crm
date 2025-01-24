@@ -31,12 +31,7 @@ final IHomeFacade iHomeFacade;
   bool noMoreData = false;
   List<UserModel> users = [];
 
-void calculateTotal(){
-  for( var user in users){
-  totalAmount +=  user.monthlyTotal;
-  }
-  notifyListeners();
-}
+
 
 
 
@@ -88,9 +83,11 @@ Future<void> fetchTodayOrderList()async{
       (l) {
         l.toString();
       },
-      (user) {
-        users.addAll(user);
-        
+      (userList) {
+        users.addAll(userList);
+        for( var user in userList){
+  totalAmount +=  user.monthlyTotal;
+  }
         notifyListeners();
         log("users${users.length.toString()}");
       },
@@ -107,7 +104,11 @@ void calculateTodayTotal(){
   
 }
 
+void init(){
+fetchTodayOrderList();
+fetchUsers();
 
+}
 
 void clearData (){
   todayOrders=[];

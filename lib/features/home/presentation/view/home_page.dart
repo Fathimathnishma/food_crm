@@ -32,9 +32,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
   final homeProvider = Provider.of<HomeProvider>(context,listen: false);
   WidgetsBinding.instance.addPostFrameCallback((_) {
-   homeProvider.fetchTodayOrderList();
-   homeProvider.fetchUsers();
-   homeProvider.calculateTotal();
+  homeProvider.init();
+
   },);
     super.initState();
   }
