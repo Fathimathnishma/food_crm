@@ -14,19 +14,19 @@ class OrderHistoryScreen extends StatefulWidget {
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   final scrollController = ScrollController();
   @override
-  void initState() {
+ void initState() {
     super.initState();
-    final orderHistoryProvider =
-        Provider.of<OrderHistoryProvider>(context, listen: false);
+    final orderHistory = Provider.of<OrderHistoryProvider>(context, listen: false);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    orderHistory.fetchOrders();
+      
+    });
 
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        if (!orderHistoryProvider.isLoading &&
-            !orderHistoryProvider.noMoreData) {
-          orderHistoryProvider.fetchOrders();
+    scrollController.addListener((){
+      if(scrollController.position.pixels==scrollController.position.maxScrollExtent){
+        if(!orderHistory.isLoading&&!orderHistory.noMoreData){
+          orderHistory.fetchOrders();
         }
       }
     });
@@ -52,6 +52,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       ),
       body: Consumer<OrderHistoryProvider>(
         builder: (context, stateFetchOrder, child) {
+         if (stateFetchOrder.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryColor,
+                strokeWidth: 2,
+              ),
+            );
+          }
+
           final dateKeys = stateFetchOrder.groupedOrders.keys.toList();
 
           if (stateFetchOrder.allOrders.isEmpty) {
@@ -145,3 +154,4 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     );
   }
 }
+

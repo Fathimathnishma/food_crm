@@ -126,6 +126,9 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                                     order: userPayment.items!,
                                     day: day,
                                     date: formattedDate,
+                                    total: userPaymentPro
+                                        .getTotalForOrder(userPayment)
+                                        .toString(),
                                   );
                                 },
                               );
@@ -133,8 +136,7 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                             child: ListTile(
                               trailing: Text(
                                   userPaymentPro
-                                      .getMonthlyTotalForUser(
-                                          userOrders: userPaymentPro.userOrder)
+                                      .getTotalForOrder(userPayment)
                                       .toString(),
                                   style: const TextStyle(
                                       fontSize: 16,

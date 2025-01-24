@@ -26,21 +26,25 @@ class OrderSummeryProvider extends ChangeNotifier {
       final num itemTotal = price * itemQty;
       overallTotal += itemTotal;
     }
-    itemsList = items;
+    itemsList=items;
+  }
 
-    notifyListeners();
+  void init(List<ItemAddingModel> items){
+     addItemToSummery(items);
+    fetchUser();
+    initiolSplitQty();
   }
 
   Future<void> fetchUser() async {
-    isLoading = true;
-    notifyListeners();
 
+    log("message");
     final result = await iOrderSummeryFacade.fetchUsers();
     result.fold(
       (l) {
         log("Error fetching users: ${l.toString()}");
       },
       (userList) {
+        if(itemsList.isNotEmpty){
         for (var item in itemsList) {
           // Add users to the item first
           item.users.addAll(
@@ -56,31 +60,46 @@ class OrderSummeryProvider extends ChangeNotifier {
               },
             ).toList(),
           );
+          initiolSplitQty();
         }
+        }
+        notifyListeners();
       },
     );
 
-    isLoading = false;
-    notifyListeners();
   }
 
-  void removeUserFromSummery({
-    required int tabIndex,
-    required int userIndex,
-    required String price,
-  }) {
-    if (userIndex >= 0 && userIndex < itemsList[tabIndex].users.length) {
-      itemsList[tabIndex].users.removeAt(userIndex);
 
-      if (itemsList[tabIndex].users.isNotEmpty) {
-        initiolSplitQty(tabIndex: tabIndex, price: price);
-        updateSplitAmount(tabIndex: tabIndex, price: price);
-      } else {
-        log("No users left in the list after removal for tabIndex: $tabIndex.");
-      }
+
+
+
+
+
+
+
+
+void removeUserFromSummery({
+  required int tabIndex,
+  required int userIndex,
+  required String price,
+}) {
+  if (userIndex >= 0 && userIndex < itemsList[tabIndex].users.length) {
+    itemsList[tabIndex].users.removeAt(userIndex);
+
+    if (itemsList[tabIndex].users.isNotEmpty) {
+      initiolSplitQty();  
+      updateSplitAmount(tabIndex: tabIndex, price: price); 
     }
-    notifyListeners();
+    else {
+      log("No users left in the list after removal for tabIndex: $tabIndex.");
+    }
   }
+  notifyListeners();
+}
+
+
+
+
 
   void updateSplitAmount({
     required int tabIndex,
@@ -92,36 +111,36 @@ class OrderSummeryProvider extends ChangeNotifier {
       final user = itemsList[tabIndex].users[userIndex];
       final num qty = num.tryParse(user.qty.text) ?? 0;
 
-      final double itemPrice = double.tryParse(price) ?? 0.0;
-      user.splitAmount = itemPrice * qty;
-    }
+    final double itemPrice = double.tryParse(price) ?? 0.0;
+    user.splitAmount = itemPrice * qty;
   }
+}
 
-  void initiolSplitQty({
-    required int tabIndex,
-    required String price,
-  }) {
-    final num totalQty = num.tryParse(itemsList[tabIndex].quantity.text) ?? 0;
-    final users = itemsList[tabIndex].users;
 
-    if (users.isNotEmpty) {
-      final num qtyPerUser = totalQty / users.length;
 
-      for (var user in users) {
-        String formattedQty;
-        if (qtyPerUser == qtyPerUser.toInt()) {
-          formattedQty = qtyPerUser.toInt().toString();
-        } else {
-          formattedQty = qtyPerUser.toStringAsFixed(1);
-        }
 
-        user.qty.text = formattedQty;
-        num userQty = num.tryParse(formattedQty) ?? 0;
-        double itemPrice = double.tryParse(price) ?? 0.0;
-        user.splitAmount = itemPrice * userQty;
+
+
+
+void initiolSplitQty() {
+ for(var item in itemsList){
+  for(var user in item.users){
+    final num totalPrice = num.tryParse(item.price.text)??0;
+     final num totalQty = num.tryParse(item.quantity.text)??0;
+     final num qtyPerUser = totalQty / item.users.length;
+      String formattedQty;
+      if (qtyPerUser == qtyPerUser.toInt()) {
+        formattedQty = qtyPerUser.toInt().toString(); 
+      } else {
+        formattedQty = qtyPerUser.toStringAsFixed(1); 
       }
-    }
+     user.qty.text = formattedQty;
+     num userQty = num.tryParse(formattedQty) ?? 0;
+      user.splitAmount = totalPrice * userQty;
   }
+ }
+
+}
 
   bool checkQty({
     required int tabIndex,
@@ -148,15 +167,22 @@ class OrderSummeryProvider extends ChangeNotifier {
     return isValid;
   }
 
-  Future<void> addOrder() async {
-    final List<ItemUploadingModel> order = [];
-    for (var data in itemsList) {
-      final num price = num.parse(data.price.text);
-      final num itemQty = num.parse(data.quantity.text);
-
-      order.add(ItemUploadingModel(
-          name: data.name.text, price: price, qty: itemQty, users: data.users));
-    }
+ Future<void> addOrder({ required void Function() onSuccess,}) async {
+  final List<ItemUploadingModel> order = []; 
+  for (var data in itemsList) {
+    final num price = num.parse(data.price.text);
+    final num itemQty = num.parse(data.quantity.text);
+    
+    order.add(
+      ItemUploadingModel(
+      
+        name: data.name.text, 
+        price: price, 
+        qty: itemQty, 
+        users: data.users
+      )
+    );
+  }
 
     log("Total order length: ${order.length}");
 

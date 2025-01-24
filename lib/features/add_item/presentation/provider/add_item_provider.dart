@@ -27,6 +27,7 @@ class AddItemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  
   void removeItem(int index) {
     itemList.removeAt(index);
     notifyListeners();

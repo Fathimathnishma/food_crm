@@ -39,22 +39,23 @@ class UserPaymentProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  num getMonthlyTotalForUser({
-    required List<OrderDailyReportModel> userOrders,
-  }) {
-    num total = 0;
-    for (var order in userOrders) {
-      for (var item in order.items!) {
-        total += item.splitAmount;
-        log(total.toString());
-      }
-    }
-    return total;
-  }
+ 
 
   void clearData() {
     userOrder = [];
-    users = [];
-    notifyListeners();
+    users=[];
+   notifyListeners();
   }
+
+  num getTotalForOrder(OrderDailyReportModel order) {
+  num total = 0;
+  // Check if the order has items and calculate the total
+  if (order.items != null) {
+    for (var item in order.items!) {
+      total += item.splitAmount;  // Add the splitAmount for each item
+      log('Item: ${item.name}, Amount: ${item.splitAmount}');
+    }
+  }
+  return total;
+}
 }

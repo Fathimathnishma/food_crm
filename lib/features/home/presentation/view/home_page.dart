@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> {
   WidgetsBinding.instance.addPostFrameCallback((_) {
    homeProvider.fetchTodayOrderList();
    homeProvider.fetchUsers();
-   homeProvider.calculateTotal();
   },);
     super.initState();
   }
@@ -156,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const TodayOrderHistoryScreen(),
+                                         TodayOrderHistoryScreen(todayOrder: homePro.todayOrders,),
                                   ));
                             },
                             backgroundColor: const Color(0XFFFFF200),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/order_summery/data/model/item_uploading%20_model.dart';
+import 'package:food_crm/features/order_summery/data/model/user_dialy_order_model.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 
 class OrderCard extends StatelessWidget {
@@ -57,10 +59,17 @@ class OrderCard extends StatelessWidget {
                 ? item.qty.text
                 : item.qty.toString();
 
-            // Now we only use price
-            final itemPrice = item.price is TextEditingController
-                ? item.price.text
-                : item.price.toString();
+            // Conditional check for item type
+            String itemPrice = '';
+            if (item is ItemUploadingModel) {
+              // Use price if the item is of type ItemUploadingModel
+              itemPrice = 
+                  item.price.toString();
+            } else if (item is UserDialyOrderModel) {
+              // Use splitAmount if the item is of type UserDialyOrderModel
+              itemPrice = 
+                   item.splitAmount.toString();
+            }
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -72,7 +81,7 @@ class OrderCard extends StatelessWidget {
                     children: [
                       Text(itemQuantity),
                       const SizedBox(width: 20),
-                      Text("₹$itemPrice"), // Display the price
+                      Text("₹$itemPrice"), // Display the price or splitAmount
                     ],
                   ),
                 ],

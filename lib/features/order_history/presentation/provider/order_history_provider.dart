@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
@@ -13,48 +12,31 @@ class OrderHistoryProvider with ChangeNotifier {
   num total = 0;
   bool isLoading = false;
   bool noMoreData = false;
+   
+List<OrderModel>allOrders =[];
+List<OrderModel> todayOrders = [];
+Map<String, List<OrderModel>> groupedOrders = {};
 
-  List<OrderModel> allOrders = [];
-  List<OrderModel> todayOrders = [];
-  Map<String, List<OrderModel>> groupedOrders = {};
 
-  String formatCreatedAt(Timestamp timestamp) {
-    // Convert Firebase Timestamp to DateTime
-    DateTime dateTime = timestamp.toDate();
+void filterTodayOrders(List<OrderModel>todayOrder) {
+ todayOrders=todayOrder;
+ calculateTodayTotal();
+ notifyListeners();
+}
 
-    // Format the DateTime to the desired format
-    String formattedDate = DateFormat('dd MMMM ').format(dateTime);
 
-    return formattedDate;
+void calculateTodayTotal(){
+  total=0;
+  for(var order in todayOrders){
+   total +=  order.totalAmount;
+   
   }
 
-  void filterTodayOrders() {
-    todayOrders.clear();
-    String todayDate = DateFormat('dd MMMM').format(DateTime.now());
-    if (allOrders.isEmpty) {
-      log("No orders found in allOrders");
-      return;
-    }
-    todayOrders.addAll(allOrders.where((order) {
-      String orderDate = DateFormat('dd MMMM').format(order.createdAt.toDate());
-      return orderDate == todayDate;
-    }).toList());
-    calculateTodayTotal();
-    notifyListeners();
-  }
-
-  void calculateTodayTotal() {
-    total = 0;
-    for (var order in todayOrders) {
-      total += order.totalAmount;
-      //log("total${total.toString()}");
-    }
-  }
+}
 
   Future<void> fetchOrders() async {
     log('fetching');
     clearData();
-    if (isLoading || noMoreData) return;
     isLoading = true;
     notifyListeners();
     log('1');
@@ -67,7 +49,7 @@ class OrderHistoryProvider with ChangeNotifier {
       (success) {
         allOrders.addAll(success);
         log('Order fetched');
-        filterTodayOrders();
+        log('Calling filterTodayOrders');
         groupedOrders = groupOrdersByDate(allOrders);
       },
     );
@@ -75,11 +57,11 @@ class OrderHistoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearData() {
-    allOrders = [];
-    todayOrders = [];
-    total = 0;
-  }
+void clearData (){
+  allOrders=[];
+ 
+}
+
 
   Map<String, List<OrderModel>> groupOrdersByDate(List<OrderModel> allOrders) {
     Map<String, List<OrderModel>> groupedOrders = {};

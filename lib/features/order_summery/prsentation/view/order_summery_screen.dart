@@ -1,11 +1,11 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
-import 'package:food_crm/features/order_history/presentation/view/today_order_history_sreen.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:food_crm/general/widgets/circularload.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 import 'package:food_crm/main.dart';
 import 'package:provider/provider.dart';
@@ -20,34 +20,31 @@ class OrderSummeryScreen extends StatefulWidget {
 
 class _OrderSummeryScreenState extends State<OrderSummeryScreen>
     with TickerProviderStateMixin {
-  late TabController tabController;
-  @override
+   late TabController tabController;
+
+    @override
   void initState() {
     super.initState();
-
-    // Initialize the TabController with a default value
+    // Initialize TabController with default length (1 or based on initial state)
     tabController = TabController(length: 1, vsync: this);
+  }
 
-    final summeryProvider =
-        Provider.of<OrderSummeryProvider>(context, listen: false);
+  @override
+   void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      summeryProvider.addItemToSummery(widget.itemList);
-      summeryProvider.fetchUser();
+    final summeryProvider = Provider.of<OrderSummeryProvider>(context, listen: false);
+    summeryProvider.init(widget.itemList);
 
-      setState(() {
-        tabController = TabController(
-          length:
-              summeryProvider.itemsList.length + 1, // Add one for "Total" tab
-          vsync: this,
-        );
-      });
-      tabController.addListener(
-        () {
-          setState(() {});
-        },
+    if (summeryProvider.itemsList.isNotEmpty) {
+      tabController = TabController(
+        length: summeryProvider.itemsList.length + 1, // Add one for "Total" tab
+        vsync: this,
       );
-    });
+      tabController.addListener(() {
+        setState(() {});
+      });
+    }
   }
 
   @override
@@ -71,9 +68,14 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
       return Scaffold(
           backgroundColor: AppColors.blackColor,
           appBar: AppBar(
-            leading: const Icon(
-              Icons.arrow_back_ios_new,
-              color: AppColors.greyColor,
+            leading:  InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: AppColors.greyColor,
+              ),
             ),
             backgroundColor: AppColors.blackColor,
             title: const Text(
@@ -285,12 +287,10 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 buttonText: 'Save',
                 onTap: () async {
                   if (stateAddOrder.isValid) {
-                    await stateAddOrder.addOrder();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TodayOrderHistoryScreen(),
-                        ));
+                  Loading.addShowDialog(context,message: "adding");
+                  await stateAddOrder.addOrder(onSuccess: () {Navigator.pop(context);  });
+                  
+
                   } else {
                     Customtoast.showErrorToast(
                         "Please check the values you've given.");
