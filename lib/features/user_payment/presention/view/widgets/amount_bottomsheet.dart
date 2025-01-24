@@ -11,14 +11,6 @@ class AmountBottomSheet extends StatelessWidget {
     
     return Consumer<UserPaymentProvider>(
       builder: (context, userPaypro, child) {
-
-        // final dateTime = userPaypro.userPaymentList[index].createdAt;
-        //               // Format date
-        //               final formattedDate =
-        //                   DateFormat('yyyy-MM-dd').format(dateTime);
-        //               // Format day
-        //               final day = DateFormat('EEEE').format(dateTime);
-
         return Container(
         height: 428,
         padding: const EdgeInsets.all(16.0),

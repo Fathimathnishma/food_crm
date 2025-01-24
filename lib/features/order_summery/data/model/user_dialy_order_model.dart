@@ -56,20 +56,34 @@ class UserDialyOrderModel {
   String name;
   num qty;
   num splitAmount;
-  Timestamp createdAt;
+  String? foodTime;
   UserDialyOrderModel({
     required this.name,
     required this.qty,
     required this.splitAmount,
-    required this.createdAt,
-  });
+     this.foodTime,
+  });  
+
+  UserDialyOrderModel copyWith({
+    String? name,
+    num? qty,
+    num? splitAmount,
+    String? foodTime,
+  }) {
+    return UserDialyOrderModel(
+      name: name ?? this.name,
+      qty: qty ?? this.qty,
+      splitAmount: splitAmount ?? this.splitAmount,
+      foodTime: foodTime ?? this.foodTime,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
       'qty': qty,
       'splitAmount': splitAmount,
-      'createdAt': createdAt,
+      'foodTime': foodTime,
     };
   }
 
@@ -78,7 +92,8 @@ class UserDialyOrderModel {
       name: map['name'] as String,
       qty: map['qty'] as num,
       splitAmount: map['splitAmount'] as num,
-      createdAt: map['createdAt'] as Timestamp,
+      foodTime: map['foodTime'] != null ? map['foodTime'] as String : null,
     );
   }
 }
+

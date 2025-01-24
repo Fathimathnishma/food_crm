@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
-import 'package:food_crm/features/order_history/data/model/i_order_history_facade.dart';
+import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:intl/intl.dart';
 
@@ -16,13 +16,13 @@ class OrderHistoryProvider with ChangeNotifier {
   num total=0;
   bool isLoading = false;
   bool noMoreData = false;
-List<OrderModel>allOrders =[];
-List<OrderModel> todayOrders = [];
+  List<OrderModel>allOrders =[];
+  List<OrderModel> todayOrders = [];
 
 
 
 
-String formatCreatedAt(Timestamp timestamp) {
+  String formatCreatedAt(Timestamp timestamp) {
   // Convert Firebase Timestamp to DateTime
   DateTime dateTime = timestamp.toDate();
 
@@ -31,13 +31,13 @@ String formatCreatedAt(Timestamp timestamp) {
 
   return formattedDate;
 }
-void filterTodayOrders() {
-  log("Filtering started");
-  String todayDate = DateFormat('dd MMMM').format(DateTime.now());
+   void filterTodayOrders() {
+   // log("Filtering started");
+   String todayDate = DateFormat('dd MMMM').format(DateTime.now());
  
-  todayOrders.clear();
+   todayOrders.clear();
 
-  if (allOrders.isEmpty) {
+   if (allOrders.isEmpty) {
     log("No orders found in allOrders");
     return;
   }
@@ -46,25 +46,25 @@ void filterTodayOrders() {
     String orderDate = DateFormat('dd MMMM').format(order.createdAt.toDate());
     return orderDate == todayDate;
   }).toList());
-calculateTodayTotal();
+   calculateTodayTotal();
   
 }
 
 
-void calculateTodayTotal(){
-  total=0;
-  for(var order in todayOrders){
-   total +=  order.totalAmount;
-   log("total${total.toString()}");
-   notifyListeners();
-
+  void calculateTodayTotal(){
+    total=0;
+    for(var order in todayOrders){
+    total +=  order.totalAmount;
+    //log("total${total.toString()}");
+    notifyListeners();
   }
 
-notifyListeners();
+  notifyListeners();
 }
 
   Future<void> fetchOrders() async {
    log('fetching');
+    clearData();
     if (isLoading || noMoreData) return;
     isLoading = true;
     notifyListeners();
@@ -80,12 +80,19 @@ notifyListeners();
         log('Order fetched');
         filterTodayOrders();
       },
-    );
-    isLoading = false;
-    notifyListeners();
-  }
+     );
+       isLoading = false;
+       notifyListeners();
+    }
 
+   void clearData (){
+     allOrders=[];
+     todayOrders=[];
+     total=0;
+   }
 
+    void filterOrderBySpecificDateRange(DateTime startDate , DateTime endDate){
 
+    }
 
 }

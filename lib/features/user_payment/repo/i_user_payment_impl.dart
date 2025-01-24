@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
@@ -10,6 +11,7 @@ import 'package:injectable/injectable.dart';
 @LazySingleton(as: IUserPaymentFacade)
 class IUserPaymentRepo implements IUserPaymentFacade {
   final FirebaseFirestore firebaseFirestore;
+
   IUserPaymentRepo({required this.firebaseFirestore});
 
   @override
@@ -20,7 +22,7 @@ class IUserPaymentRepo implements IUserPaymentFacade {
           firebaseFirestore.collection(FirebaseCollection.users).doc(userId);
 
       final dailyOrderSnapshot = await userRef
-          .collection(FirebaseCollection.dailyOrder)
+          .collection(FirebaseCollection.dailyOrders)
           .where('createdAt', isEqualTo: Timestamp.now())
           .limit(1)
           .get();
@@ -28,6 +30,7 @@ class IUserPaymentRepo implements IUserPaymentFacade {
       if (dailyOrderSnapshot.docs.isNotEmpty) {
         final order =
             UserDialyOrderModel.fromMap(dailyOrderSnapshot.docs.first.data());
+        log(dailyOrderSnapshot.docs.first.toString());
 
         return right(order);
       }
@@ -36,6 +39,29 @@ class IUserPaymentRepo implements IUserPaymentFacade {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
+
+//         @override
+//     Future<Either<MainFailures, List<dynamic>>> fetchUserDailyOrder({required String userId}) async {
+//      try {
+//     final userRef = firebaseFirestore.collection(FirebaseCollection.users).doc(userId);
+
+//     final querySnapshot = await userRef.collection(FirebaseCollection.dailyOrders).get();
+
+// List<dynamic>dates=[];
+// dates.add(querySnapshot);
+//     // final orders = querySnapshot.docs.map((doc) {
+//     //   return UserDialyOrderModel.fromMap(doc.data());
+//     // }).toList();
+
+//     return Right(dates);
+//   } catch (e) {
+//     return Left(MainFailures.serverFailures(errormsg: e.toString()));
+//   }
+
+   
+
 }
+
+
 
 

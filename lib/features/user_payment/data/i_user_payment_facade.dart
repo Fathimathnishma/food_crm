@@ -8,4 +8,10 @@ abstract class IUserPaymentFacade {
   }) async {
     throw UnimplementedError('fetchUserPayment() not implemented');
   }
+
+  // Future<Either<MainFailures, List<dynamic>>> fetchUserDailyOrder({
+  //   required String userId,
+  // }) async {
+  //   throw UnimplementedError('fetchUserPayment() not implemented');
+  // }
 }

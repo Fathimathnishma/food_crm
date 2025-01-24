@@ -49,6 +49,7 @@ dependencies:
   gap: ^3.0.1
   intl: ^0.20.1
   sync_time_ntp_totalxsoftware: ^0.0.3
+  flutter_date_range_picker: ^0.1.1
 
 dev_dependencies:
   flutter_test:

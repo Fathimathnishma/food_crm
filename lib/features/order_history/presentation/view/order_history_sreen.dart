@@ -55,14 +55,14 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               ),
             );
           }
-           if (stateFetchOrder.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryColor,
-                strokeWidth: 2,
-              ),
-            );
-          }
+          //  if (stateFetchOrder.isLoading) {
+          //   return const Center(
+          //     child: CircularProgressIndicator(
+          //       color: AppColors.primaryColor,
+          //       strokeWidth: 2,
+          //     ),
+          //   );
+          // }
 
           return Padding(
             padding: const EdgeInsets.all(8.0),

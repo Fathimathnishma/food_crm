@@ -9,7 +9,7 @@ class AddItemProvider extends ChangeNotifier {
   AddItemProvider(this.iItemFacade);
 
   List<ItemAddingModel> itemList = [];
-  
+
   List<ItemAddingModel> itemsuggestionList = [];
 
   bool isLoading = true;
@@ -22,49 +22,10 @@ class AddItemProvider extends ChangeNotifier {
         quantity: TextEditingController(),
         price: TextEditingController(),
         users: [],
-        
       ),
     );
     notifyListeners();
   }
-
-  // List<UserItemQtyAloccatedModel> itemAloccatedUsers = [];
-  // void generateItems(List<UserModel> users) {
-  //   for (var user in users) {
-  //     itemAloccatedUsers.add(
-  //       UserItemQtyAloccatedModel(
-  //           name: user.name,
-  //           phoneNumber: user.phoneNumber,
-  //           id: user.id ?? "",
-  //           qtyController: TextEditingController()),
-  //     );
-  //   }
-
-  //   log(itemAloccatedUsers.toString());
-  //   for (var element in itemList) {
-  //     log(element.users.length.toString());
-  //     element = element.copyWith(users: itemAloccatedUsers);
-  //   }
-  //   notifyListeners(); 
-  // }
-
-  // void generateItems(List<UserModel> users) {
-  //   for (var i = 0; i < itemList.length; i++) {
-  //     final uniqueUsers = users.map((user) {
-  //       return UserItemQtyAloccatedModel(
-  //         name: user.name,
-  //         phoneNumber: user.phoneNumber,
-  //         id: user.id ?? "",
-  //         qtyController: TextEditingController(),
-  //       );
-  //     }).toList();
-
-  //     itemList[i] = itemList[i].copyWith(users: uniqueUsers);
-  //   }
-
-  //   log(itemList.map((e) => e.users.length).toString());
-  //   notifyListeners();
-  // }
 
   void removeItem(int index) {
     itemList.removeAt(index);
@@ -79,6 +40,7 @@ class AddItemProvider extends ChangeNotifier {
       },
       (r) {
         log('suggestion added');
+        clearController();
       },
     );
   }
@@ -100,5 +62,12 @@ class AddItemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
- 
+  void clearController() {
+    for (var item in itemList) {
+      item.name.clear();
+      item.price.clear();
+      item.quantity.clear();
+    }
+    notifyListeners();
+  }
 }

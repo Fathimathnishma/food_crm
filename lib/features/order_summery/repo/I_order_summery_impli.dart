@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
@@ -42,7 +41,6 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
       final orderRef = firestore.collection(FirebaseCollection.order);
       final id = orderRef.doc().id;
       final orderDoc = firestore.collection(FirebaseCollection.order).doc(id);
-
       final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
       final formattedDate = DateFormat('yyyy-MM-dd').format(today);
 
@@ -81,43 +79,38 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
 
       for (var item in orderModel.order) {
         for (var user in item.users) {
-          final userDoc =
-              firestore.collection(FirebaseCollection.users).doc(user.id);
-          final userOrderDoc =
-              userDoc.collection('dailyOrder').doc(formattedDate);
-
-          final userOrderDocSnapshot = await userOrderDoc.get();
-
-          final qty = num.parse(user.qty.text);
-
-          final userOrderMap = {
-            foodTime.name: {
-              if (userOrderDocSnapshot.exists &&
-                  userOrderDocSnapshot.data()?[foodTime.name] != null)
-                ...userOrderDocSnapshot.data()?[foodTime.name]
-                    as Map<String, dynamic>,
+          if (item.users.contains(user)) {
+            final userDoc =
+                firestore.collection(FirebaseCollection.users).doc(user.id);
+            final userOrderDoc =
+                userDoc.collection(FirebaseCollection.dailyOrders).doc(formattedDate);
+            final userOrderDocSnapshot = await userOrderDoc.get();
+            final qty = num.parse(user.qty.text);
+            final userItemMap ={foodTime.name: {
+              "createdAt": FieldValue.serverTimestamp(),
               item.name: UserDialyOrderModel(
-                createdAt: Timestamp.now(),
+                foodTime: foodTime.name,
                 name: item.name,
                 qty: qty,
                 splitAmount: user.splitAmount,
               ).toMap(),
+            }};
+            log("added");
+            if (userOrderDocSnapshot.exists) {
+              batch.set(userOrderDoc, {"item": userItemMap}, SetOptions(merge: true));
+            } else {
+              batch.set(
+                  userOrderDoc, {"item": userItemMap}, SetOptions(merge: true));
             }
-          };
-          if (userOrderDocSnapshot.exists) {
-            userOrderDoc.update(userOrderMap);
-          } else {
-            userOrderDoc.set(userOrderMap);
+            batch.update(
+              FirebaseFirestore.instance
+                  .collection(FirebaseCollection.users)
+                  .doc(user.id),
+              {
+                'monthlyTotal': FieldValue.increment(user.splitAmount),
+              },
+            );
           }
-
-          batch.update(
-            FirebaseFirestore.instance
-                .collection(FirebaseCollection.users)
-                .doc(user.id),
-            {
-              'monthlyTotal': FieldValue.increment(user.splitAmount),
-            },
-          );
         }
       }
 

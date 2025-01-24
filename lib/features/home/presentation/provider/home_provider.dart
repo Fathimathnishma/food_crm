@@ -1,25 +1,42 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/home/data/i_home_facade.dart';
+import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:intl/intl.dart';
 
 class HomeProvider with ChangeNotifier {
-  DateTime _dateTime = DateTime.now();
+final IHomeFacade iHomeFacade;
+   HomeProvider(this.iHomeFacade);
 
+
+
+  DateTime _dateTime = DateTime.now();
   DateTime get dateTime => _dateTime;
 
   String get formattedDate => DateFormat('EEE d').format(_dateTime);
   String get formattedTime => DateFormat('h:mm a').format(_dateTime);
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? countListner;
+  String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
 
   int usersCount = 0;
+  List<OrderModel> todayOrders = [];
+  num total=0;
+  bool isLoading = false;
+  bool noMoreData = false;
 
-  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? countListner;
+
+
+
+
 
   void updateDateTime(DateTime newDateTime) {
     _dateTime = newDateTime;
     notifyListeners();
   }
+  
 
   Future<void> getUsersCount() async {
     countListner = FirebaseFirestore.instance
@@ -33,4 +50,43 @@ class HomeProvider with ChangeNotifier {
       }
     });
   }
+
+Future<void> fetchTodayOrderList()async{
+  log("1");
+  clearData();
+     if (isLoading || noMoreData) return;
+    isLoading = true;
+    notifyListeners();
+
+    final result = await iHomeFacade.fetchTodayOrderList(todayDate: todayDate);
+    result.fold((l) {
+      l.toString();
+    }, 
+    (r) {
+      log("added");
+    todayOrders.addAll(r);
+    },);
+
+     isLoading = false;
+     calculateTodayTotal();
+    notifyListeners();
+}
+  
+
+
+void calculateTodayTotal(){
+  total=0;
+  for(var order in todayOrders){
+   total +=  order.totalAmount;
+   //log("total${total.toString()}");
+  }
+}
+
+
+
+void clearData (){
+  todayOrders=[];
+  total=0;
+}
+
 }

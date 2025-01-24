@@ -90,9 +90,10 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
                               fontSize: 16, color: AppColors.whiteColor)),
                     ],
                   ),
-                  leading: const CircleAvatar(
+                  leading: CircleAvatar(
                     radius: 23,
                     backgroundColor: AppColors.whiteColor,
+                    child: Text(userPro.getInitials(user.name)),
                   ),
                   title: Text(
                     user.name,

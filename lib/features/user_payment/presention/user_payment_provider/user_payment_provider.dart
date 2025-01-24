@@ -10,6 +10,8 @@ class UserPaymentProvider with ChangeNotifier {
 
   UserDialyOrderModel? userPayment;
 
+  List<dynamic> userOrderList = [];
+
   Future<void> fetchUserPayment({required String userId}) async {
     final result = await iUserPaymentFacade.fetchUserPayment(userId: userId);
 
@@ -33,9 +35,21 @@ class UserPaymentProvider with ChangeNotifier {
 
   num get todayTotalAmount {
     num amount = 0;
-    if (userPayment != null) {
-      
-    }
+    if (userPayment != null) {}
     return amount;
   }
+
+  // Future<void> fetchUserDailyOrder({required String userId}) async {
+  //   final result = await iUserPaymentFacade.fetchUserDailyOrder(userId: userId);
+
+  //   result.fold(
+  //     (failure) {
+  //       log(failure.errormsg);
+  //     },
+  //     (success) {
+  //       userOrderList = success;
+  //     },
+  //   );
+  //   notifyListeners();
+  // }
 }
