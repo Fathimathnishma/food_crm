@@ -92,12 +92,12 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                             showBottomSheet(
                               context: context,
                               builder: (context) {
-                                return  AmountBottomSheet(order:userPayment.items!, day: day, date: formattedDate,);
+                                return  AmountBottomSheet(order:userPayment.items!, day: day, date: formattedDate, total: userPaymentPro.getTotalForOrder(userPayment).toString(),);
                               },
                             );
                           },
                           child: ListTile(
-                            trailing:  Text(userPaymentPro.getMonthlyTotalForUser(userOrders: userPaymentPro.userOrder).toString(),
+                            trailing:  Text(userPaymentPro.getTotalForOrder(userPayment).toString(),
                                 style: const TextStyle(
                                     fontSize: 16,
                                     color: AppColors.whiteColor,

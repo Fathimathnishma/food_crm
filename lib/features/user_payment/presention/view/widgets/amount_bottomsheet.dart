@@ -6,12 +6,13 @@ class AmountBottomSheet extends StatelessWidget {
   final List<UserDialyOrderModel> order;
   final String day;
   final String date;
+  final String total;
 
   const AmountBottomSheet({
     super.key,
     required this.order,
     required this.day,
-    required this.date,
+    required this.date, required this.total,
   });
 
   @override
@@ -56,9 +57,9 @@ class AmountBottomSheet extends StatelessWidget {
                   ),
                 ],
               ),
-              const Text(
-                'Summary',
-                style: TextStyle(
+               Text(
+                total,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -74,13 +75,16 @@ class AmountBottomSheet extends StatelessWidget {
               children: [
                 if (breakfast.isNotEmpty)
                   OrderCard(items: breakfast, total: calculateTotal(breakfast)),
+                  const SizedBox(height: 10,),
                 if (lunch.isNotEmpty)
                   OrderCard(items: lunch, total: calculateTotal(lunch)),
+                   const SizedBox(height: 10,),
                 if (dinner.isNotEmpty)
                   OrderCard(items: dinner, total: calculateTotal(dinner)),
               ],
             ),
           ),
+          
         ],
       ),
     );

@@ -179,7 +179,7 @@ bool checkQty({
 
 
 
- Future<void> addOrder() async {
+ Future<void> addOrder({ required void Function() onSuccess,}) async {
   final List<ItemUploadingModel> order = []; 
   for (var data in itemsList) {
     final num price = num.parse(data.price.text);

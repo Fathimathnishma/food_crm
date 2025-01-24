@@ -5,6 +5,7 @@ import 'package:food_crm/features/order_summery/prsentation/provider/order_summe
 import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:food_crm/general/widgets/circularload.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 import 'package:food_crm/main.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +37,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
     summeryProvider.init(widget.itemList);
 
     if (summeryProvider.itemsList.isNotEmpty) {
-      // Initialize the TabController only once after the itemsList is populated
       tabController = TabController(
         length: summeryProvider.itemsList.length + 1, // Add one for "Total" tab
         vsync: this,
@@ -287,10 +287,9 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 buttonText: 'Save',
                 onTap: () async {
                   if (stateAddOrder.isValid) {
-                  await stateAddOrder.addOrder();
-                  const CircularProgressIndicator();
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Loading.addShowDialog(context,message: "adding");
+                  await stateAddOrder.addOrder(onSuccess: () {Navigator.pop(context);  });
+                  
 
                   } else {
                     Customtoast.showErrorToast(
