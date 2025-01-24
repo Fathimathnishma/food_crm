@@ -27,23 +27,27 @@ class OrderSummeryProvider extends ChangeNotifier {
       overallTotal += itemTotal;
     }
     itemsList=items;
+  }
 
-    notifyListeners();
+  void init(List<ItemAddingModel> items){
+     addItemToSummery(items);
+    fetchUser();
+    initiolSplitQty();
   }
 
 
 
 
   Future<void> fetchUser() async {
-    isLoading = true;
-    notifyListeners();
 
+    log("message");
     final result = await iOrderSummeryFacade.fetchUsers();
     result.fold(
       (l) {
         log("Error fetching users: ${l.toString()}");
       },
       (userList) {
+        if(itemsList.isNotEmpty){
         for (var item in itemsList) {
           // Add users to the item first
           item.users.addAll(
@@ -60,12 +64,13 @@ class OrderSummeryProvider extends ChangeNotifier {
               },
             ).toList(),
           );
+          initiolSplitQty();
         }
+        }
+        notifyListeners();
       },
     );
 
-    isLoading = false;
-    notifyListeners();
   }
 
 
@@ -86,7 +91,7 @@ void removeUserFromSummery({
     itemsList[tabIndex].users.removeAt(userIndex);
 
     if (itemsList[tabIndex].users.isNotEmpty) {
-      initiolSplitQty(tabIndex: tabIndex, price: price);  
+      initiolSplitQty();  
       updateSplitAmount(tabIndex: tabIndex, price: price); 
     }
     else {
@@ -119,38 +124,25 @@ void updateSplitAmount({
 
 
 
-void initiolSplitQty({
-  required int tabIndex,
-  required String price,
-}) {
-  final num totalQty = num.tryParse(itemsList[tabIndex].quantity.text) ?? 0;
-  final users = itemsList[tabIndex].users;
-
-  if (users.isNotEmpty) {
-    final num qtyPerUser = totalQty / users.length;
-
-    for (var user in users) {
+void initiolSplitQty() {
+ for(var item in itemsList){
+  for(var user in item.users){
+    final num totalPrice = num.tryParse(item.price.text)??0;
+     final num totalQty = num.tryParse(item.quantity.text)??0;
+     final num qtyPerUser = totalQty / item.users.length;
       String formattedQty;
       if (qtyPerUser == qtyPerUser.toInt()) {
         formattedQty = qtyPerUser.toInt().toString(); 
       } else {
         formattedQty = qtyPerUser.toStringAsFixed(1); 
       }
-
-      user.qty.text = formattedQty;
-      num userQty = num.tryParse(formattedQty) ?? 0;
-      double itemPrice = double.tryParse(price) ?? 0.0;
-      user.splitAmount = itemPrice * userQty;
-    }
+     user.qty.text = formattedQty;
+     num userQty = num.tryParse(formattedQty) ?? 0;
+      user.splitAmount = totalPrice * userQty;
   }
+ }
+
 }
-
-
-
-
-
-
-
 
 bool checkQty({
   required int tabIndex,

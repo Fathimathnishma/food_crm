@@ -90,6 +90,7 @@ Future<void> fetchTodayOrderList()async{
       },
       (user) {
         users.addAll(user);
+        
         notifyListeners();
         log("users${users.length.toString()}");
       },

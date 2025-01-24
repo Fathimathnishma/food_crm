@@ -28,44 +28,7 @@ class AddItemProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // List<UserItemQtyAloccatedModel> itemAloccatedUsers = [];
-  // void generateItems(List<UserModel> users) {
-  //   for (var user in users) {
-  //     itemAloccatedUsers.add(
-  //       UserItemQtyAloccatedModel(
-  //           name: user.name,
-  //           phoneNumber: user.phoneNumber,
-  //           id: user.id ?? "",
-  //           qtyController: TextEditingController()),
-  //     );
-  //   }
-
-  //   log(itemAloccatedUsers.toString());
-  //   for (var element in itemList) {
-  //     log(element.users.length.toString());
-  //     element = element.copyWith(users: itemAloccatedUsers);
-  //   }
-  //   notifyListeners(); 
-  // }
-
-  // void generateItems(List<UserModel> users) {
-  //   for (var i = 0; i < itemList.length; i++) {
-  //     final uniqueUsers = users.map((user) {
-  //       return UserItemQtyAloccatedModel(
-  //         name: user.name,
-  //         phoneNumber: user.phoneNumber,
-  //         id: user.id ?? "",
-  //         qtyController: TextEditingController(),
-  //       );
-  //     }).toList();
-
-  //     itemList[i] = itemList[i].copyWith(users: uniqueUsers);
-  //   }
-
-  //   log(itemList.map((e) => e.users.length).toString());
-  //   notifyListeners();
-  // }
-
+  
   void removeItem(int index) {
     itemList.removeAt(index);
     notifyListeners();

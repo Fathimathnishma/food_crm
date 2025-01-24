@@ -3,11 +3,13 @@ import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dar
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
+import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class TodayOrderHistoryScreen extends StatefulWidget {
-  const TodayOrderHistoryScreen({super.key,});
+  final List<OrderModel>todayOrder;
+  const TodayOrderHistoryScreen({super.key, required this.todayOrder,});
 
   @override
   State<TodayOrderHistoryScreen> createState() =>
@@ -21,7 +23,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
     final historyProvider =
         Provider.of<OrderHistoryProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      historyProvider.fetchOrders();
+      historyProvider.filterTodayOrders(widget.todayOrder);
     });
   }
 

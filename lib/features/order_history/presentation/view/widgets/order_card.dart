@@ -49,6 +49,7 @@ class OrderCard extends StatelessWidget {
           ),
           // Items
           ...items.map((item) {
+
             // Extract values whether they are strings or from a TextEditingController
             final itemName = item.name is TextEditingController
                 ? item.name.text

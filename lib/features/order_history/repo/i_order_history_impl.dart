@@ -26,7 +26,7 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
       final orderCollection = firebaseFirestore
           .collection(FirebaseCollection.order)
           .orderBy("createdAt");
-      final querySnapshot = await orderCollection.limit(15).get();
+      final querySnapshot = await orderCollection.limit(10).get();
 
       if (querySnapshot.docs.isEmpty) {
         log("No orders found.");

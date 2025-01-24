@@ -81,15 +81,15 @@ class UserRowWidget extends StatelessWidget {
       ),
       trailing: Consumer<OrderSummeryProvider>(
         builder: (context, stateAddOrder, child) {
-          if (controller.text.isEmpty) {
-            // Initialize quantity for the first time
-            stateAddOrder.initiolSplitQty(
-              tabIndex: tabIndex,
-              price: price,
-            );
-            controller.text = stateAddOrder
-                .itemsList[tabIndex].users[index].qty.text;
-          }
+          // if (controller.text.isEmpty) {
+          //   // Initialize quantity for the first time
+          //   stateAddOrder.initiolSplitQty(
+          //     tabIndex: tabIndex,
+          //     price: price,
+          //   );
+          //   controller.text = stateAddOrder
+          //       .itemsList[tabIndex].users[index].qty.text;
+          // }
 
           return SizedBox(
             width: MediaQuery.of(context).size.width * 0.3,
