@@ -11,13 +11,18 @@ class UserpaymentHistory extends StatefulWidget {
   final String userId;
   final String userName;
   final String total;
-  const UserpaymentHistory({super.key, required this.userId, required this.userName, required this.total});
+  const UserpaymentHistory(
+      {super.key,
+      required this.userId,
+      required this.userName,
+      required this.total});
 
   @override
   State<UserpaymentHistory> createState() => _UserpaymentHistoryState();
 }
 
 class _UserpaymentHistoryState extends State<UserpaymentHistory> {
+  final scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -26,6 +31,15 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       userPaymentProvider.fetchUserPayment(userId: widget.userId);
+    });
+
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (!userPaymentProvider.isLoading && !userPaymentProvider.noMoreData) {
+          userPaymentProvider.fetchUserPayment(userId: widget.userId);
+        }
+      }
     });
   }
 
@@ -43,8 +57,8 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
               Icons.arrow_back_ios_new,
               color: AppColors.whiteColor,
             )),
-        title:  Text(
-         widget.userName ,
+        title: Text(
+          widget.userName,
           style: const TextStyle(color: AppColors.whiteColor),
         ),
       ),
@@ -66,71 +80,98 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-             TotalCardWidget(subtitle: widget.total ),
+            TotalCardWidget(subtitle: widget.total),
             Expanded(
               child: Consumer<UserPaymentProvider>(
                 builder: (context, userPaymentPro, child) {
-                 
-                  return ListView.separated(
-                    itemCount: userPaymentPro.userOrder.length,
-                    itemBuilder: (context, index) {
-                      final userPayment = userPaymentPro.userOrder[index];
+                  if (userPaymentPro.isLoading &&
+                      userPaymentPro.userOrder.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primaryColor,
+                      ),
+                    );
+                  } else if (userPaymentPro.userOrder.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        'No data available',
+                        style: TextStyle(fontSize: 20, color: Colors.red),
+                      ),
+                    );
+                  } else {
+                    return ListView.separated(
+                      controller: scrollController,
+                      itemCount: userPaymentPro.userOrder.length,
+                      itemBuilder: (context, index) {
+                        final userPayment = userPaymentPro.userOrder[index];
 
-                      final dateTime = userPayment.createdAt!.toDate();
+                        final dateTime = userPayment.createdAt!.toDate();
 
-                      // Format date
-                      final formattedDate =
-                          DateFormat('yyyy-MM-dd').format(dateTime);
-                      //  Format day
-                      final day = DateFormat('EEEE').format(dateTime);
-                      return InkWell(
-                        onTap: () {
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
-                        },
-                        child: InkWell(
+                        // Format date
+                        final formattedDate =
+                            DateFormat('yyyy-MM-dd').format(dateTime);
+                        //  Format day
+                        final day = DateFormat('EEEE').format(dateTime);
+                        return InkWell(
                           onTap: () {
-                            showBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return  AmountBottomSheet(order:userPayment.items!, day: day, date: formattedDate, total: userPaymentPro.getTotalForOrder(userPayment).toString(),);
-                              },
-                            );
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) => const UserpaymentHistory(),));
                           },
-                          child: ListTile(
-                            trailing:  Text(userPaymentPro.getTotalForOrder(userPayment).toString(),
+                          child: InkWell(
+                            onTap: () {
+                              showBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return AmountBottomSheet(
+                                    order: userPayment.items!,
+                                    day: day,
+                                    date: formattedDate,
+                                    total: userPaymentPro
+                                        .getTotalForOrder(userPayment)
+                                        .toString(),
+                                  );
+                                },
+                              );
+                            },
+                            child: ListTile(
+                              trailing: Text(
+                                  userPaymentPro
+                                      .getTotalForOrder(userPayment)
+                                      .toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.whiteColor,
+                                      fontWeight: FontWeight.w400)),
+                              title: Text(
+                                formattedDate,
                                 style: const TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 17,
                                     color: AppColors.whiteColor,
-                                    fontWeight: FontWeight.w400)),
-                            title: Text(
-                              formattedDate,
-                              style: const TextStyle(
-                                  fontSize: 17,
-                                  color: AppColors.whiteColor,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            subtitle: Text(
-                             day,
-                              style: const TextStyle(
-                                  color: AppColors.greyColor,
-                                  fontWeight: FontWeight.w300),
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              subtitle: Text(
+                                day,
+                                style: const TextStyle(
+                                    color: AppColors.greyColor,
+                                    fontWeight: FontWeight.w300),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        color: Colors.grey.shade600,
-                      );
-                    },
-                  );
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          color: Colors.grey.shade600,
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             ),
           ],
         ),
-     ),
-   );
-   }
+      ),
+    );
+  }
 }

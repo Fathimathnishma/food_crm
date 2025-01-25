@@ -1,6 +1,8 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
+import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
+import 'package:food_crm/features/order_history/today_order_history/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
@@ -137,8 +139,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                         itemBuilder: (BuildContext context, int index) {
                           final itemList = stateAddOrder.itemsList;
                           final data = itemList[index];
-
-                          //log(widget.itemList.length.toString());
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
@@ -269,13 +269,13 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                     ),
                   ],
                 )),
-                const Align(
-                  alignment: Alignment.bottomRight,
-                  child: Text(
-                    '250',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                )
+                // const Align(
+                //   alignment: Alignment.bottomRight,
+                //   child: Text(
+                //     '250',
+                //     style: TextStyle(fontSize: 15, color: Colors.white),
+                //   ),
+                // )
               ],
             ),
           ),
@@ -288,8 +288,15 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 onTap: () async {
                   if (stateAddOrder.isValid) {
                   Loading.addShowDialog(context,message: "adding");
-                  await stateAddOrder.addOrder(onSuccess: () {Navigator.pop(context);  });
-                  
+                  await stateAddOrder.addOrder(
+                    onSuccess: (order) { 
+                
+                      context.read<TodayOrderHistoryProvider>().addLocalTodayOrder(order);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    Navigator.pop(navigatorKey.currentContext!);  
+                   
+                      });
 
                   } else {
                     Customtoast.showErrorToast(

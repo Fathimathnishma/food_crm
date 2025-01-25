@@ -15,7 +15,7 @@ class OrderSummeryProvider extends ChangeNotifier {
   List<ItemAddingModel> itemsList = [];
   bool isLoading = false;
   num overallTotal = 0;
- bool isValid=true;
+  bool isValid = true;
 
   void addItemToSummery(List<ItemAddingModel> items) {
     overallTotal = 0;
@@ -34,9 +34,6 @@ class OrderSummeryProvider extends ChangeNotifier {
     fetchUser();
     initiolSplitQty();
   }
-
-
-
 
   Future<void> fetchUser() async {
 
@@ -59,7 +56,6 @@ class OrderSummeryProvider extends ChangeNotifier {
                   qty: TextEditingController(),
                   id: user.id!,
                   splitAmount: 0,
-                  
                 );
               },
             ).toList(),
@@ -105,13 +101,15 @@ void removeUserFromSummery({
 
 
 
-void updateSplitAmount({
-  required int tabIndex,
-  required String price,
-}) {
-  for (int userIndex = 0; userIndex < itemsList[tabIndex].users.length; userIndex++) {
-    final user = itemsList[tabIndex].users[userIndex];
-    final num qty = num.tryParse(user.qty.text) ?? 0;
+  void updateSplitAmount({
+    required int tabIndex,
+    required String price,
+  }) {
+    for (int userIndex = 0;
+        userIndex < itemsList[tabIndex].users.length;
+        userIndex++) {
+      final user = itemsList[tabIndex].users[userIndex];
+      final num qty = num.tryParse(user.qty.text) ?? 0;
 
     final double itemPrice = double.tryParse(price) ?? 0.0;
     user.splitAmount = itemPrice * qty;
@@ -144,42 +142,32 @@ void initiolSplitQty() {
 
 }
 
-bool checkQty({
-  required int tabIndex,
-}) {
-  isValid = true; 
-  final item = itemsList[tabIndex];
-  int totalUserQty = 0;
-
-  for (var user in item.users) {
-    final qty = num.tryParse(user.qty.text) ?? 0;
-    totalUserQty += qty.toInt(); 
-  }
-
-  final itemQty = num.tryParse(item.quantity.text) ?? 0;
-  if (totalUserQty != itemQty.toInt()) {
-    Customtoast.showErrorToast(
-      "Total quantity of all users must match the item quantity."
-    );
-    isValid = false;
-  } else {
+  bool checkQty({
+    required int tabIndex,
+  }) {
     isValid = true;
+    final item = itemsList[tabIndex];
+    int totalUserQty = 0;
+
+    for (var user in item.users) {
+      final qty = num.tryParse(user.qty.text) ?? 0;
+      totalUserQty += qty.toInt();
+    }
+
+    final itemQty = num.tryParse(item.quantity.text) ?? 0;
+    if (totalUserQty != itemQty.toInt()) {
+      Customtoast.showErrorToast(
+          "Total quantity of all users must match the item quantity.");
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+
+    notifyListeners();
+    return isValid;
   }
 
-  notifyListeners(); 
-  return isValid;
-}
-
-
-
-
-
-
-
-
-
-
- Future<void> addOrder({ required void Function() onSuccess,}) async {
+ Future<void> addOrder({ required void Function(OrderModel) onSuccess,}) async {
   final List<ItemUploadingModel> order = []; 
   for (var data in itemsList) {
     final num price = num.parse(data.price.text);
@@ -196,23 +184,25 @@ bool checkQty({
     );
   }
 
-  log("Total order length: ${order.length}");
+    log("Total order length: ${order.length}");
 
-  final result = await iOrderSummeryFacade.addOrder(
-    orderModel: OrderModel(
-      createdAt: Timestamp.now(),
-      totalAmount: overallTotal,
-      order: order
-    )
-  );
+    final result = await iOrderSummeryFacade.addOrder(
+        orderModel: OrderModel(
+            createdAt: Timestamp.now(),
+            totalAmount: overallTotal,
+            order: order));
 
-  result.fold(
-    (l) {
-      log("Add error: ${l.toString()}");
-    },
-    (unit) {
-    },
-  );
-}
-
+    result.fold(
+      (l) {
+        log("Add error: ${l.toString()}");
+      },
+      (unit) {
+        onSuccess( OrderModel(
+            createdAt: Timestamp.now(),
+            totalAmount: overallTotal,
+            order: order));
+       
+      },
+    );
+  }
 }

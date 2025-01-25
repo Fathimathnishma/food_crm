@@ -10,10 +10,15 @@ class UserPaymentProvider with ChangeNotifier {
 
   List<OrderDailyReportModel> userOrder = [];
   List<UserModel> users = [];
- 
 
+  bool isLoading = false;
+  bool noMoreData = false;
   Future<void> fetchUserPayment({required String userId}) async {
-    userOrder=[];
+    if (isLoading || noMoreData) return;
+    isLoading = true;
+    notifyListeners();
+    userOrder = [];
+
     final result = await iUserPaymentFacade.fetchUserPayment(userId: userId);
 
     result.fold(
@@ -25,11 +30,13 @@ class UserPaymentProvider with ChangeNotifier {
         notifyListeners();
       },
     );
+    isLoading = false;
+    notifyListeners();
   }
 
-  Future<void> addUsers({required List<UserModel>user}) async {
-  users.addAll(user);
-  notifyListeners();
+  Future<void> addUsers({required List<UserModel> user}) async {
+    users.addAll(user);
+    notifyListeners();
   }
 
  

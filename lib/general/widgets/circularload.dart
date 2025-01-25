@@ -5,7 +5,6 @@ class Loading {
     // Set a default message if none is provided
     final String displayMessage = message ?? 'Loading...';
 
-    Future.delayed(const Duration(seconds: 2), () {
       showDialog(
         barrierDismissible: false,
         context: context,
@@ -25,6 +24,7 @@ class Loading {
           );
         },
       );
-    });
+
+  
   }
 }

@@ -19,29 +19,44 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
 
   @override
   Future<Either<MainFailures, List<OrderModel>>> fetchOrderList() async {
+     if (noMoreData) return right([]);
     try {
       log("Fetching orders...");
 
       // Fetching the Firestore collection
-      final orderCollection = firebaseFirestore
+      Query query = firebaseFirestore
           .collection(FirebaseCollection.order)
-          .orderBy("createdAt");
-      final querySnapshot = await orderCollection.limit(10).get();
+          .orderBy("createdAt",descending: true);
 
-      if (querySnapshot.docs.isEmpty) {
-        log("No orders found.");
-        return right([]);
+      if(lastDocument!=null){
+        query = query.startAfterDocument(lastDocument!);
+
       }
-     final orders = querySnapshot.docs
-        .map((doc) => OrderModel.fromMap(doc.data()))
-        .toList();
-      return right(orders);
 
+      final querySnapshot = await query.limit(10).get();
+
+       if (querySnapshot.docs.isNotEmpty) {
+        lastDocument = querySnapshot.docs.last;
+      }
+      if(querySnapshot.docs.length<10){
+        noMoreData = true;
+      }
+
+      
+      final orders = querySnapshot.docs
+          .map((doc) => OrderModel.fromMap(doc.data() as Map<String,dynamic>))
+          .toList();
+      return right(orders);
     } catch (e, stackTrace) {
       log("Error while fetching orders: $e");
       log("Stack trace: $stackTrace");
       return left(MainFailures.serverFailures(errormsg: e.toString()));
-    }
-  }
-  
+   }
+   }
+   
+     @override
+     void clearData() {
+    lastDocument= null;
+    noMoreData=false;
+     }
 }

@@ -9,10 +9,8 @@ import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:intl/intl.dart';
 
 class HomeProvider with ChangeNotifier {
-final IHomeFacade iHomeFacade;
-   HomeProvider(this.iHomeFacade);
-
-
+  final IHomeFacade iHomeFacade;
+  HomeProvider(this.iHomeFacade);
 
   DateTime _dateTime = DateTime.now();
   DateTime get dateTime => _dateTime;
@@ -22,16 +20,13 @@ final IHomeFacade iHomeFacade;
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? countListner;
   String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
 
-
   int usersCount = 0;
   List<OrderModel> todayOrders = [];
-  num total=0;
-  num totalAmount=0;
+  num total = 0;
+  num totalAmount = 0;
   bool isLoading = false;
   bool noMoreData = false;
   List<UserModel> users = [];
-
-
 
 
 
@@ -39,7 +34,6 @@ final IHomeFacade iHomeFacade;
     _dateTime = newDateTime;
     notifyListeners();
   }
-  
 
   Future<void> getUsersCount() async {
     countListner = FirebaseFirestore.instance
@@ -54,29 +48,30 @@ final IHomeFacade iHomeFacade;
     });
   }
 
-Future<void> fetchTodayOrderList()async{
-  //log("1");
-  clearData();
-     if (isLoading || noMoreData) return;
+  Future<void> fetchTodayOrderList() async {
+    //log("1");
+    clearData();
+    if (isLoading || noMoreData) return;
     isLoading = true;
     notifyListeners();
 
     final result = await iHomeFacade.fetchTodayOrderList(todayDate: todayDate);
-    result.fold((l) {
-      l.toString();
-      isLoading = false;
-    }, 
-    (r) {
-      log("added");
-    todayOrders.addAll(r);
-    },);
+    result.fold(
+      (l) {
+        l.toString();
+        isLoading = false;
+      },
+      (r) {
+        log("added");
+        todayOrders.addAll(r);
+      },
+    );
 
-     isLoading = false;
-     calculateTodayTotal();
-  
-}
-  
-    Future<void> fetchUsers() async {
+    isLoading = false;
+    calculateTodayTotal();
+  }
+
+  Future<void> fetchUsers() async {
     clearData();
     final result = await iHomeFacade.fetchUser();
     result.fold(
@@ -85,23 +80,34 @@ Future<void> fetchTodayOrderList()async{
       },
       (userList) {
         users.addAll(userList);
-        for( var user in userList){
-  totalAmount +=  user.monthlyTotal;
-  }
+        for (var user in users) {
+          totalAmount += user.monthlyTotal;
+        }
         notifyListeners();
         log("users${users.length.toString()}");
       },
     );
   }
 
-
-void calculateTodayTotal(){
-  total=0;
-  for(var order in todayOrders){
-   total +=  order.totalAmount;
-   //log("total${total.toString()}");
+  void calculateTodayTotal() {
+    total = 0;
+    for (var order in todayOrders) {
+      total += order.totalAmount;
+      //log("total${total.toString()}");
+    }
   }
+
+  void clearData() {
+    todayOrders = [];
+    total = 0;
+  }
+
   
+void addLocalTodayOrder(OrderModel order){
+  
+todayOrders.add(order);
+calculateTodayTotal();
+notifyListeners();
 }
 
 void init(){
@@ -110,9 +116,7 @@ fetchUsers();
 
 }
 
-void clearData (){
-  todayOrders=[];
-  total=0;
-}
+
+
 
 }

@@ -12,15 +12,22 @@ class OrderHistoryScreen extends StatefulWidget {
 }
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
-  @override
- void initState() {
-    super.initState();
-    final orderHistory = Provider.of<OrderHistoryProvider>(context, listen: false);
+  final ScrollController _scrollController = ScrollController();
 
+  @override
+  void initState() {
+    final orderHistory =
+        Provider.of<OrderHistoryProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    orderHistory.fetchOrders();
-      
+      orderHistory.initData(scrollController: _scrollController);
     });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    super.dispose();
   }
 
   @override
@@ -32,8 +39,28 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(Icons.arrow_back_ios_new, color: AppColors.whiteColor),
+          child:
+              const Icon(Icons.arrow_back_ios_new, color: AppColors.whiteColor),
         ),
+        actions:  [
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  
+                },
+                child: const SizedBox(
+                  height: 25,
+                  width: 25,
+                  child: Image(
+                      image: AssetImage("assets/images/preference-horizontal.png")),
+                ),
+              ),
+              SizedBox(width: 10,)
+            ],
+          ),
+          
+        ],
         backgroundColor: AppColors.blackColor,
         title: const Text(
           "History",
@@ -42,101 +69,101 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       ),
       body: Consumer<OrderHistoryProvider>(
         builder: (context, stateFetchOrder, child) {
-         if (stateFetchOrder.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryColor,
-                strokeWidth: 2,
-              ),
-            );
-          }
-
           final dateKeys = stateFetchOrder.groupedOrders.keys.toList();
+          return (stateFetchOrder.isLoading &&
+                  stateFetchOrder.allOrders.isEmpty)
+              ? const Center(
+                  child: Text(
+                  "no data",
+                  style: TextStyle(color: AppColors.whiteColor),
+                ))
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Showing Results: All",
+                        style: TextStyle(
+                            fontSize: 16, color: AppColors.whiteColor),
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                          child: ListView.separated(
+                        controller: _scrollController,
+                        shrinkWrap: true,
+                        itemCount: dateKeys.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 16),
+                        itemBuilder: (context, index) {
+                          final date = dateKeys[index];
+                          final orders = stateFetchOrder.groupedOrders[date]!;
 
-          if (stateFetchOrder.allOrders.isEmpty) {
-            return const Center(
-              child: Text(
-                "No orders available",
-                style: TextStyle(color: AppColors.whiteColor, fontSize: 16),
-              ),
-            );
-          }
-
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Showing Results: All",
-                  style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.separated(
-                    shrinkWrap: true, 
-                    itemCount: dateKeys.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final date = dateKeys[index];
-                      final orders = stateFetchOrder.groupedOrders[date]!;
-                  
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 70,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 70,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      date,
-                                      style: const TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    const Text(
-                                      "₹${4567}",
-                                      style: TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          date,
+                                          style: const TextStyle(
+                                            color: AppColors.whiteColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                        Text(
+                                          "₹${stateFetchOrder.calculateTotalForDate(date)}",
+                                          style: const TextStyle(
+                                            color: AppColors.whiteColor,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          ListView.separated(
-                            shrinkWrap: true, 
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: orders.length,
-                            itemBuilder: (context, index) {
-                              final data = orders[index];
-                              return OrderCard(
-                                items: data.order,
-                                total: '123',
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(height: 10);
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                              ),
+                              const SizedBox(height: 8),
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: orders.length,
+                                itemBuilder: (context, index) {
+                                  final data = orders[index];
+                                  return OrderCard(
+                                    items: data.order,
+                                    total: stateFetchOrder
+                                        .calculateTotal(data.order)
+                                        .toString(),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return const SizedBox(height: 10);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      )),
+                      if (stateFetchOrder.isLoading &&
+                          stateFetchOrder.allOrders.isNotEmpty)
+                        const Center(
+                            child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        ))
+                    ],
                   ),
-                ),
-              ],
-            ),
-          );
+                );
         },
       ),
     );

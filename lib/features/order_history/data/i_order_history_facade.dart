@@ -7,4 +7,6 @@ Future<Either<MainFailures,List<OrderModel>>> fetchOrderList()async{
     throw UnimplementedError('fetchOrderList() is not fetching');
   }
 
+   void clearData(); 
+
 }
