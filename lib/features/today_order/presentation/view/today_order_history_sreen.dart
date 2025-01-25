@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dart';
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
-import 'package:food_crm/features/today_order_history/presentation/provider/today_order_history_provider.dart';
+import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class TodayOrderHistoryScreen extends StatefulWidget {
   final List<OrderModel>todayOrder;
-  const TodayOrderHistoryScreen({super.key, required this.todayOrder,});
+  const TodayOrderHistoryScreen.TodayOrdersScreen({super.key, required this.todayOrder,});
 
   @override
   State<TodayOrderHistoryScreen> createState() =>
@@ -21,7 +21,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
   void initState() {
     super.initState();
     final historyProvider =
-        Provider.of<TodayOrderHistoryProvider>(context, listen: false);
+        Provider.of<TodayOrderProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       historyProvider.filterTodayOrders(widget.todayOrder);
     });
@@ -65,7 +65,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
           size: 40,
         ),
       ),
-      body: Consumer<TodayOrderHistoryProvider>(
+      body: Consumer<TodayOrderProvider>(
         builder: (context, stateFetchOrder, child) {
 
           return Padding(

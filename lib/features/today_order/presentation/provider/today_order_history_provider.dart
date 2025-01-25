@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:intl/intl.dart';
 
-class TodayOrderHistoryProvider extends ChangeNotifier {
+class TodayOrderProvider extends ChangeNotifier {
 
 List<OrderModel> todayOrders = [];
  num total = 0;
