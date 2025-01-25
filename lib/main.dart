@@ -6,7 +6,7 @@ import 'package:food_crm/features/home/presentation/provider/home_provider.dart'
 import 'package:food_crm/features/home/presentation/view/home_page.dart';
 import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
-import 'package:food_crm/features/order_history/today_order_history/presentation/provider/today_order_history_provider.dart';
+import 'package:food_crm/features/today_order_history/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/splash/presentation/view/splash_screen.dart';

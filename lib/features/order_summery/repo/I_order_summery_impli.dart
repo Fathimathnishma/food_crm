@@ -36,7 +36,7 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
 
   @override
   Future<Either<MainFailures, Unit>> addOrder(
-      {required OrderModel orderModel}) async {
+      {required OrderModel orderModel,required String foodTime}) async {
     try {
       final orderRef = firestore.collection(FirebaseCollection.order);
       final id = orderRef.doc().id;
@@ -44,16 +44,6 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
       final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
       final formattedDate = DateFormat('yyyy-MM-dd').format(today);
 
-      FoodTime foodTime;
-      final currentHour = today.hour;
-
-      if (currentHour >= 6 && currentHour < 12) {
-        foodTime = FoodTime.breakfast;
-      } else if (currentHour >= 12 && currentHour < 18) {
-        foodTime = FoodTime.lunch;
-      } else {
-        foodTime = FoodTime.dinner;
-      }
 
       final Map<String, dynamic> itemMap = {};
       for (var item in orderModel.order) {
@@ -89,7 +79,7 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
             final userItemMap ={
              
               item.name: UserDialyOrderModel(
-                foodTime: foodTime.name,
+                foodTime: foodTime,
                 name: item.name,
                 qty: qty,
                 splitAmount: user.splitAmount,
@@ -108,8 +98,11 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
                   .doc(user.id),
               {
                 'monthlyTotal': FieldValue.increment(user.splitAmount),
+                
               },
             );
+            log('Updating user ${user.id} monthlyTotal by ${user.splitAmount}');
+
           }
         }
       }

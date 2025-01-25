@@ -99,12 +99,12 @@ class UserRowWidget extends StatelessWidget {
                 SizedBox(
                   width: 40,
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     controller: controller,
                     onChanged:(value) async {
                 final newQty = num.tryParse(value);
                 if (newQty == null || newQty <= 0) {
-                  Customtoast.showErrorToast("Please enter a valid number or delete unnecessary member");
+                 // Customtoast.showErrorToast("Please enter a valid number or delete unnecessary member");
                   return;
                 } else{
                  log("Valid quantity entered: $newQty");

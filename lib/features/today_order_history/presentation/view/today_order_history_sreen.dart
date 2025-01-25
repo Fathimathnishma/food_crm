@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dart';
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
-import 'package:food_crm/features/order_history/today_order_history/presentation/provider/today_order_history_provider.dart';
+import 'package:food_crm/features/today_order_history/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';

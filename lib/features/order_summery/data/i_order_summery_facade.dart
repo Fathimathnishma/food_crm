@@ -7,7 +7,7 @@ abstract class IOrderSummeryFacade {
  Future<Either<MainFailures, List<UserModel>>> fetchUsers() {
     throw UnimplementedError("fetchSuggestions () implementation");
   }
- Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel}) {
+ Future<Either<MainFailures, Unit>> addOrder({required OrderModel orderModel,required String foodTime}) {
     throw UnimplementedError("addOrder() implementation");
   }
 }

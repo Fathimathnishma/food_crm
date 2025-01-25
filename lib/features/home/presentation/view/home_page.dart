@@ -4,7 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
 import 'package:food_crm/features/home/presentation/view/widgets/custom_elevated_button_widget.dart';
 import 'package:food_crm/features/home/presentation/view/widgets/view_button_widet.dart';
-import 'package:food_crm/features/order_history/today_order_history/presentation/view/today_order_history_sreen.dart';
+import 'package:food_crm/features/today_order_history/presentation/view/today_order_history_sreen.dart';
 import 'package:food_crm/features/user_payment/presention/view/users_payment_screen.dart';
 import 'package:food_crm/features/users/presentation/view/user_screen.dart';
 import 'package:provider/provider.dart';
@@ -32,10 +32,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
   final homeProvider = Provider.of<HomeProvider>(context,listen: false);
   WidgetsBinding.instance.addPostFrameCallback((_) {
-
-  homeProvider.init();
-
-
+    homeProvider.init();
   },);
     super.initState();
   }

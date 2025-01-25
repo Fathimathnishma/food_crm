@@ -20,9 +20,8 @@ DocumentSnapshot? lastDoc;
   @override
   Future<Either<MainFailures, List<OrderModel>>> fetchTodayOrderList({required String todayDate}) async {
   try {
-    log("1");
+    
     final date = DateFormat('dd MMMM yyyy').parse(todayDate);
-      log("2");
     final startOfDay = Timestamp.fromDate(DateTime(date.year, date.month, date.day));
     final endOfDay = Timestamp.fromDate(DateTime(date.year, date.month, date.day, 23, 59, 59, 999));
 

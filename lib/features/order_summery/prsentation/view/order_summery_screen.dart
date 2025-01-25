@@ -2,11 +2,13 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
-import 'package:food_crm/features/order_history/today_order_history/presentation/provider/today_order_history_provider.dart';
+import 'package:food_crm/features/home/presentation/view/home_page.dart';
+import 'package:food_crm/features/today_order_history/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
+import 'package:food_crm/general/utils/dialy_enum.dart';
 import 'package:food_crm/general/widgets/circularload.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 import 'package:food_crm/main.dart';
@@ -27,7 +29,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
     @override
   void initState() {
     super.initState();
-    // Initialize TabController with default length (1 or based on initial state)
     tabController = TabController(length: 1, vsync: this);
   }
 
@@ -175,12 +176,43 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'People',
-                    style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
-                  ),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'People',
+                        style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
+                      ),
+                    ),
+                    // SizedBox(width: 100,),
+               SizedBox(
+                 child: Row(
+                   children: [
+                     Text( stateAddOrder.mealToString(stateAddOrder.selectedMeal), style: const TextStyle(color: AppColors.whiteColor),),
+
+                     PopupMenuButton<FoodTime>(
+                      
+                       icon: const Icon(Icons.timer_sharp, color:AppColors.primaryColor),
+                       onSelected: (FoodTime result) {
+                      setState(() {
+                       stateAddOrder.selectedMeal = result;
+                      });
+                                   },
+                                   itemBuilder: (BuildContext context) {
+                      return FoodTime.values.map((FoodTime meal) {
+                        return PopupMenuItem<FoodTime>(
+                          value: meal,
+                          child: Text(stateAddOrder.mealToString(meal)), // Show readable string
+                        );
+                      }).toList();
+                                   },
+                                 ),
+                   ],
+                 ),
+               ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 ButtonsTabBar(
@@ -286,17 +318,19 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 title: 'Total',
                 buttonText: 'Save',
                 onTap: () async {
+                   stateAddOrder.checkQty(tabIndex: tabController.index);
                   if (stateAddOrder.isValid) {
                   Loading.addShowDialog(context,message: "adding");
                   await stateAddOrder.addOrder(
                     onSuccess: (order) { 
                 
                       context.read<TodayOrderHistoryProvider>().addLocalTodayOrder(order);
+                      context.read<HomeProvider>().addLocalTodayOrder();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     Navigator.pop(navigatorKey.currentContext!);  
                    
-                      });
+                      },  );
 
                   } else {
                     Customtoast.showErrorToast(

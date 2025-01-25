@@ -6,6 +6,9 @@ abstract class IOrderHistoryFacade {
 Future<Either<MainFailures,List<OrderModel>>> fetchOrderList()async{
     throw UnimplementedError('fetchOrderList() is not fetching');
   }
+Future<Either<MainFailures,List<OrderModel>>> fetchOrderByRange({required DateTime startDate,required DateTime endDate})async{
+    throw UnimplementedError('fetchOrderList() is not fetching');
+  }
 
    void clearData(); 
 

@@ -49,8 +49,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   Future<void> fetchTodayOrderList() async {
-    //log("1");
-    clearData();
+    todayOrders=[];  
     if (isLoading || noMoreData) return;
     isLoading = true;
     notifyListeners();
@@ -69,10 +68,11 @@ class HomeProvider with ChangeNotifier {
 
     isLoading = false;
     calculateTodayTotal();
+    notifyListeners();
   }
 
   Future<void> fetchUsers() async {
-    clearData();
+    users=[];
     final result = await iHomeFacade.fetchUser();
     result.fold(
       (l) {
@@ -80,13 +80,18 @@ class HomeProvider with ChangeNotifier {
       },
       (userList) {
         users.addAll(userList);
-        for (var user in users) {
-          totalAmount += user.monthlyTotal;
-        }
-        notifyListeners();
+        
+        
         log("users${users.length.toString()}");
       },
-    );
+     );
+      totalAmount=0;
+      for (var user in users) {
+          totalAmount += user.monthlyTotal;
+        }
+        log("totalAmount ${totalAmount}");
+        notifyListeners();
+    
   }
 
   void calculateTodayTotal() {
@@ -97,22 +102,23 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  void clearData() {
-    todayOrders = [];
-    total = 0;
-  }
+  // void clearData() {
+    
+  //   totalAmount=0;
+  //   total = 0;
+  // }
 
   
-void addLocalTodayOrder(OrderModel order){
-  
-todayOrders.add(order);
-calculateTodayTotal();
+void addLocalTodayOrder(){
+init();
 notifyListeners();
 }
 
 void init(){
+  //clearData();
 fetchTodayOrderList();
 fetchUsers();
+
 
 }
 
