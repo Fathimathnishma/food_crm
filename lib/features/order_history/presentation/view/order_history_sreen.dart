@@ -14,18 +14,19 @@ class OrderHistoryScreen extends StatefulWidget {
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   final scrollController = ScrollController();
   @override
- void initState() {
+  void initState() {
     super.initState();
-    final orderHistory = Provider.of<OrderHistoryProvider>(context, listen: false);
+    final orderHistory =
+        Provider.of<OrderHistoryProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    orderHistory.fetchOrders();
-      
+      orderHistory.fetchOrders();
     });
 
-    scrollController.addListener((){
-      if(scrollController.position.pixels==scrollController.position.maxScrollExtent){
-        if(!orderHistory.isLoading&&!orderHistory.noMoreData){
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        if (!orderHistory.isLoading && !orderHistory.noMoreData) {
           orderHistory.fetchOrders();
         }
       }
@@ -52,7 +53,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       ),
       body: Consumer<OrderHistoryProvider>(
         builder: (context, stateFetchOrder, child) {
-         if (stateFetchOrder.isLoading) {
+          if (stateFetchOrder.isLoading) {
             return const Center(
               child: CircularProgressIndicator(
                 color: AppColors.primaryColor,

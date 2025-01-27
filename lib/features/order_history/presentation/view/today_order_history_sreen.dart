@@ -8,8 +8,11 @@ import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class TodayOrderHistoryScreen extends StatefulWidget {
-  final List<OrderModel>todayOrder;
-  const TodayOrderHistoryScreen({super.key, required this.todayOrder,});
+  final List<OrderModel> todayOrder;
+  const TodayOrderHistoryScreen({
+    super.key,
+    required this.todayOrder,
+  });
 
   @override
   State<TodayOrderHistoryScreen> createState() =>
@@ -96,7 +99,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         Column(
+                        Column(
                           children: [
                             const Text(
                               "23 March",

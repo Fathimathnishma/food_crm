@@ -20,9 +20,9 @@ class OrderSummeryScreen extends StatefulWidget {
 
 class _OrderSummeryScreenState extends State<OrderSummeryScreen>
     with TickerProviderStateMixin {
-   late TabController tabController;
+  late TabController tabController;
 
-    @override
+  @override
   void initState() {
     super.initState();
     // Initialize TabController with default length (1 or based on initial state)
@@ -30,10 +30,11 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
   }
 
   @override
-   void didChangeDependencies() {
+  void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final summeryProvider = Provider.of<OrderSummeryProvider>(context, listen: false);
+    final summeryProvider =
+        Provider.of<OrderSummeryProvider>(context, listen: false);
     summeryProvider.init(widget.itemList);
 
     if (summeryProvider.itemsList.isNotEmpty) {
@@ -68,7 +69,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
       return Scaffold(
           backgroundColor: AppColors.blackColor,
           appBar: AppBar(
-            leading:  InkWell(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
@@ -287,10 +288,10 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 buttonText: 'Save',
                 onTap: () async {
                   if (stateAddOrder.isValid) {
-                  Loading.addShowDialog(context,message: "adding");
-                  await stateAddOrder.addOrder(onSuccess: () {Navigator.pop(context);  });
-                  
-
+                    Loading.addShowDialog(context, message: "adding");
+                    await stateAddOrder.addOrder(onSuccess: () {
+                      Navigator.pop(context);
+                    });
                   } else {
                     Customtoast.showErrorToast(
                         "Please check the values you've given.");

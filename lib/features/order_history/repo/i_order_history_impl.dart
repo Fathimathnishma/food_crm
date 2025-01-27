@@ -23,17 +23,27 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
       log("Fetching orders...");
 
       // Fetching the Firestore collection
-      final orderCollection = firebaseFirestore
+      Query query = firebaseFirestore
           .collection(FirebaseCollection.order)
-          .orderBy("createdAt");
-      final querySnapshot = await orderCollection.limit(10).get();
+          .orderBy("createdAt",descending: true);
+      // final querySnapshot = await orderCollection.limit(10).get();
 
-      if (querySnapshot.docs.isEmpty) {
-        log("No orders found.");
-        return right([]);
+      if(lastDocument!=null){
+        query = query.startAfterDocument(lastDocument!);
+
       }
+
+      QuerySnapshot querySnapshot = await query.limit(10).get();
+
+      if(querySnapshot.docs.length<10){
+        noMoreData = true;
+      }else{
+        lastDocument = querySnapshot.docs.last;
+      }
+
+      
       final orders = querySnapshot.docs
-          .map((doc) => OrderModel.fromMap(doc.data()))
+          .map((doc) => OrderModel.fromMap(doc.data() as Map<String,dynamic>))
           .toList();
       return right(orders);
     } catch (e, stackTrace) {
