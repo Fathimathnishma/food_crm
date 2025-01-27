@@ -62,6 +62,16 @@ class AddItemProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
-
-
+void disposeControllers(ItemAddingModel item) {
+    item.name.dispose();
+    item.quantity.dispose();
+    item.price.dispose();
+  }
+ void clearItems() {
+    for (var item in itemList) {
+      disposeControllers(item);
+    }
+    itemList.clear();
+    notifyListeners();
+  }
 }

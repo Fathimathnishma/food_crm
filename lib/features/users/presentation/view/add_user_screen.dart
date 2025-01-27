@@ -122,12 +122,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                         onTap: () async {
                           if (formKey.currentState?.validate() == true) {
                             stateAdduser.addUser();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const UserScreen(),
-                              ),
-                            );
+                            Navigator.pop(context);
                           }
                         },
                         buttontext: "Save",

@@ -91,13 +91,8 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             style: TextStyle(color: AppColors.whiteColor),
           ),
         ),
-        body: ( stateFetchOrder.noMoreData&&stateFetchOrder.allOrders.isEmpty)
-            ? const Center(
-                child: Text(
-                "no data",
-                style: TextStyle(color: AppColors.whiteColor),
-              ))
-            : Padding(
+        body: 
+             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

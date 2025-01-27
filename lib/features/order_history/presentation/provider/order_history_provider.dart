@@ -19,10 +19,8 @@ class OrderHistoryProvider with ChangeNotifier {
 
   Future<void> fetchOrders() async {
     if (isLoading || noMoreData || isFiltered) return;
-
     isLoading = true;
     notifyListeners();
-
     final result = await iOrderHistoryFacade.fetchOrderList();
 
     result.fold(

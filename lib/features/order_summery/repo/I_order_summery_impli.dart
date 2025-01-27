@@ -6,7 +6,6 @@ import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/features/order_summery/data/model/user_dialy_order_model.dart';
 import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
-import 'package:food_crm/general/utils/dialy_enum.dart';
 import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';

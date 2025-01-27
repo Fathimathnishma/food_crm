@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
@@ -20,7 +19,6 @@ class OrderSummeryProvider extends ChangeNotifier {
   FoodTime selectedMeal = FoodTime.breakfast;
   void addItemToSummery(List<ItemAddingModel> items) {
     overallTotal = 0;
-
     for (var item in items) {
       final num price = num.parse(item.price.text);
       final num itemQty = num.parse(item.quantity.text);

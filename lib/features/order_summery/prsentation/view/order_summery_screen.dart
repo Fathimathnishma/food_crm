@@ -1,6 +1,7 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
+import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
 import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
@@ -325,6 +326,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 
                       context.read<TodayOrderProvider>().addLocalTodayOrder(order);
                       context.read<HomeProvider>().addLocalTodayOrder();
+                      context.read<AddItemProvider>().clearItems();
                       Navigator.pop(context);
                       Navigator.pop(context);
                     Navigator.pop(navigatorKey.currentContext!);  
