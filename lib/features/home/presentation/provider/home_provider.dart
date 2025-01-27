@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/data/i_home_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
@@ -17,10 +16,10 @@ class HomeProvider with ChangeNotifier {
 
   String get formattedDate => DateFormat('EEE d').format(_dateTime);
   String get formattedTime => DateFormat('h:mm a').format(_dateTime);
-  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? countListner;
+  //StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? countListner;
   String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
 
-  int usersCount = 0;
+  num usersCount = 0;
   List<OrderModel> todayOrders = [];
   num total = 0;
   num totalAmount = 0;
@@ -34,19 +33,9 @@ class HomeProvider with ChangeNotifier {
     _dateTime = newDateTime;
     notifyListeners();
   }
+ 
 
-  Future<void> getUsersCount() async {
-    countListner = FirebaseFirestore.instance
-        .collection('general')
-        .doc('general')
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.exists) {
-        usersCount = snapshot.data()?['count'] ?? 0;
-        notifyListeners();
-      }
-    });
-  }
+
 
   Future<void> fetchTodayOrderList() async {
     todayOrders=[];  
@@ -84,12 +73,7 @@ class HomeProvider with ChangeNotifier {
         
         log("users${users.length.toString()}");
       },
-     );
-      totalAmount=0;
-      for (var user in users) {
-          totalAmount += user.monthlyTotal;
-        }
-        log("totalAmount ${totalAmount}");
+     );  
         notifyListeners();
     
   }
@@ -122,7 +106,20 @@ fetchUsers();
 
 }
 
-
-
-
+Stream listenToUserCount() {
+    return iHomeFacade
+        .fetchUserCountTotal()
+        .asyncMap((result) => result.fold(
+              (failure) {
+                log(failure.errormsg);
+                return 0; // Return default value on failure
+              },
+              (success) {
+                usersCount = success["userCount"] as num;
+                totalAmount = success["totalAmount"] as num;
+                return success;
+              },
+            ))
+        .distinct(); // Only emit when value changes
+ }
 }

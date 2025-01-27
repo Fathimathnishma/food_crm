@@ -17,17 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final homeProvider = Provider.of<HomeProvider>(context);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      homeProvider.updateDateTime(DateTime.now());
-      homeProvider.getUsersCount();
-      
-     
-    });
-  }
+ 
 @override
   void initState() {
   final homeProvider = Provider.of<HomeProvider>(context,listen: false);
@@ -167,161 +157,170 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 42,
                 ),
-                
-                 Stack(
-                    children: [
-                      SizedBox(
-                        height: 153,
-                        width: 370,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            ViewButtonWidget(
-                                text: 'View',
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                             UsersPaymentScreen(users: homePro.users,),
-                                      ));
-                                }),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              height: 53.76,
-                              width: MediaQuery.sizeOf(context).width,
-                              decoration: BoxDecoration(
-                                  color: const Color(0XFFFFF200),
-                                  borderRadius: BorderRadius.circular(16)),
-                            )
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        left: 10,
-                        child: Container(
-                          height: 100.93,
-                          width: 234,
-                          decoration: BoxDecoration(
-                              color: const Color(0XFF131318),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: const Color(0XFFFFF200))),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Row(
+                StreamBuilder(
+                  stream: homePro.listenToUserCount(),
+                  builder: (context, snapshot) {
+                    return Column(
+                      children: [
+                           Stack(
+                        children: [
+                          SizedBox(
+                            height: 153,
+                            width: 370,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                CircleAvatar(
-                                  radius: 31,
-                                  backgroundColor: const Color(0XFFFFFFFF),
-                                  child: Image.asset('assets/images/money.png'),
-                                ),
+                                ViewButtonWidget(
+                                    text: 'View',
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                 UsersPaymentScreen(total: homePro.totalAmount,),
+                                          ));
+                                    }),
                                 const SizedBox(
-                                  width: 16,
+                                  height: 20,
                                 ),
-                                 Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Total Amount',
-                                      style: TextStyle(
-                                          fontSize: 14, color: Color(0XFFFFFFFF)),
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                    Text(
-                                     homePro.totalAmount.toStringAsFixed(1),
-                                      style: const TextStyle(
-                                          fontSize: 24, color: Color(0XFFFFFFFF)),
-                                    )
-                                  ],
+                                Container(
+                                  height: 53.76,
+                                  width: MediaQuery.sizeOf(context).width,
+                                  decoration: BoxDecoration(
+                                      color: const Color(0XFFFFF200),
+                                      borderRadius: BorderRadius.circular(16)),
                                 )
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                
-                Stack(
-                  children: [
-                    SizedBox(
-                      height: 153,
-                      width: 380,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ViewButtonWidget(
-                              text: 'View',
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const UserScreen(),
-                                    ));
-                              }),
-                          const SizedBox(
-                            height: 20,
+                          Positioned(
+                            left: 10,
+                            child: Container(
+                              height: 100.93,
+                              width: 234,
+                              decoration: BoxDecoration(
+                                  color: const Color(0XFF131318),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: const Color(0XFFFFF200))),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 31,
+                                      backgroundColor: const Color(0XFFFFFFFF),
+                                      child: Image.asset('assets/images/money.png'),
+                                    ),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                     Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          'Total Amount',
+                                          style: TextStyle(
+                                              fontSize: 14, color: Color(0XFFFFFFFF)),
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(
+                                        ("₹${ homePro.totalAmount.toStringAsFixed(1)}"),
+                                          style: const TextStyle(
+                                              fontSize: 24, color: Color(0XFFFFFFFF)),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                          Container(
-                            height: 53.76,
-                            width: MediaQuery.sizeOf(context).width,
-                            decoration: BoxDecoration(
-                                color: const Color(0XFFFFF200),
-                                borderRadius: BorderRadius.circular(16)),
-                          )
                         ],
                       ),
-                    ),
-                    Positioned(
-                      left: 10,
-                      child: Container(
-                        height: 100.93,
-                        width: 234.35,
-                        decoration: BoxDecoration(
-                            color: const Color(0XFF131318),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0XFFFFF200))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
+                    
+                    Stack(
+                      children: [
+                        SizedBox(
+                          height: 153,
+                          width: 380,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              CircleAvatar(
-                                radius: 31,
-                                backgroundColor: const Color(0XFFFFFFFF),
-                                child: Image.asset('assets/images/person.png'),
-                              ),
+                              ViewButtonWidget(
+                                  text: 'View',
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const UserScreen(),
+                                        ));
+                                  }),
                               const SizedBox(
-                                width: 16,
+                                height: 20,
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Total Members',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Color(0XFFFFFFFF)),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    homePro.usersCount.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 24, color: Color(0XFFFFFFFF)),
-                                  )
-                                ],
+                              Container(
+                                height: 53.76,
+                                width: MediaQuery.sizeOf(context).width,
+                                decoration: BoxDecoration(
+                                    color: const Color(0XFFFFF200),
+                                    borderRadius: BorderRadius.circular(16)),
                               )
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                )
+                        Positioned(
+                          left: 10,
+                          child: Container(
+                            height: 100.93,
+                            width: 234.35,
+                            decoration: BoxDecoration(
+                                color: const Color(0XFF131318),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: const Color(0XFFFFF200))),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 31,
+                                    backgroundColor: const Color(0XFFFFFFFF),
+                                    child: Image.asset('assets/images/person.png'),
+                                  ),
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        'Total Members',
+                                        style: TextStyle(
+                                            fontSize: 14, color: Color(0XFFFFFFFF)),
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        homePro.usersCount.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 24, color: Color(0XFFFFFFFF)),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                      ],
+                    );
+                  }
+                ),
+              
               ],
             ),
           );

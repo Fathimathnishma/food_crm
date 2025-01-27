@@ -20,8 +20,5 @@ abstract class IUserFacade {
     throw UnimplementedError("no implementation");
   }
 
-  Future<Either<MainFailures, OrderModel>> addDailyOrder(
-      {required String userId, required OrderModel orderModel}) async {
-    throw UnimplementedError('addDailyOrder( ) not implemented');
-  }
+ 
 }

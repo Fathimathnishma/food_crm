@@ -32,7 +32,7 @@ class IUserImpli implements IUserFacade {
       final batch = firestore.batch();
       batch.set(userRef, user.toMap());
       batch.update(generalRef, {"userCount": FieldValue.increment(1)});
-
+       
       await batch.commit();
 
       return right("User added");
@@ -50,13 +50,10 @@ class IUserImpli implements IUserFacade {
           .collection(FirebaseCollection.users)
           .orderBy("createdAt", descending: true);
 
-      Query query = userRef.limit(10);
-      if (lastDoc != null) {
-        query = query.startAfterDocument(lastDoc!);
-      }
-      final querySnapshot = await query.get();
+     
+      final querySnapshot = await userRef.get();
       final List<UserModel> users = querySnapshot.docs.map((e) {
-        return UserModel.fromMap(e.data() as Map<String, dynamic>);
+        return UserModel.fromMap(e.data());
       }).toList();
       return right(users);
     } catch (e) {
@@ -71,9 +68,15 @@ class IUserImpli implements IUserFacade {
     try {
       final userDoc =
           firestore.collection(FirebaseCollection.users).doc(userId);
-      await userDoc.delete();
-
+          final batch = firestore.batch();
+          final generalRef = firestore
+          .collection(FirebaseCollection.general)
+          .doc(FirebaseCollection.general);
+       batch.delete(userDoc);
+      batch.update(generalRef, {"userCount": FieldValue.increment(-1)});
+      await batch.commit();
       return right(unit);
+
     } catch (e) {
       log("Error while deleting user: $e");
       return left(MainFailures.serverFailures(errormsg: e.toString()));
@@ -84,7 +87,7 @@ class IUserImpli implements IUserFacade {
   Future<Either<MainFailures, num>> fetchGeneral() async {
     try {
       final generalSnapshot =
-          await firestore.collection("general").doc("general").get();
+          await firestore.collection(FirebaseCollection.general).doc(FirebaseCollection.general).get();
       final generalData = generalSnapshot.data();
       final count = generalData?["userCount"] ?? 0;
       return right(count);
@@ -95,41 +98,7 @@ class IUserImpli implements IUserFacade {
   }
 
   
-  @override
-  Future<Either<MainFailures, OrderModel>> addDailyOrder(
-      {required String userId, required OrderModel orderModel}) async {
-
-        final today = await NtpTimeSyncChecker.getNetworkTime() ?? DateTime.now();
-
-        final formattedDate = DateFormat('yyyy-MM-dd').format(today);
-    try {
-      final userDoc =
-          firestore.collection(FirebaseCollection.users).doc(userId);
-
-      final orderDoc =  userDoc.collection('dailyOrder').doc(formattedDate);
-
-      final orderDocSnapshot = await orderDoc.get();
-      if(orderDocSnapshot.exists){
-
-        orderDoc.update({
-          'totalAmount': FieldValue.increment(orderModel.totalAmount ),
-          'createdAt': FieldValue.serverTimestamp(),
-          'order': {
-
-          }
-
-        });
-      }else{
-        orderDoc.set({
-
-        });
-      }
-      return right(orderModel);
-      
-    } catch (e) {
-      return left(MainFailures.serverFailures(errormsg: e.toString()));
-    }
-  }
+ 
 
   
 }

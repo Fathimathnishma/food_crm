@@ -34,10 +34,7 @@ class UserPaymentProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addUsers({required List<UserModel> user}) async {
-    users.addAll(user);
-    notifyListeners();
-  }
+
 
  
 
@@ -49,13 +46,43 @@ class UserPaymentProvider with ChangeNotifier {
 
   num getTotalForOrder(OrderDailyReportModel order) {
   num total = 0;
-  // Check if the order has items and calculate the total
   if (order.items != null) {
     for (var item in order.items!) {
-      total += item.splitAmount;  // Add the splitAmount for each item
+      total += item.splitAmount; 
       log('Item: ${item.name}, Amount: ${item.splitAmount}');
     }
   }
   return total;
 }
+
+Future<void>markPayment() async {
+  final result = await iUserPaymentFacade.makePayment();
+  result.fold((l) {
+    l.toString();
+  }, (r) {
+    log("finally paid");
+  },);
+}
+
+ Future<void> fetchUsers() async {
+     if (isLoading || noMoreData) return;
+     isLoading = true;
+    notifyListeners();
+    final result = await iUserPaymentFacade.fetchUser();
+    result.fold(
+      (l) {
+        l.toString();
+      },
+      (userList) {
+        users.addAll(userList);
+        log("users${users.length.toString()}");
+      },
+     );   isLoading = false;
+    notifyListeners();
+
+    
+  }
+
+
+
 }

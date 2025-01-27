@@ -37,6 +37,13 @@ class UserProvider extends ChangeNotifier {
         Customtoast.showToast("Failed to add user");
       },
       (success) {
+       users.add( UserModel(
+      phoneNumber: formattedPhoneNumber,
+      name: nameController.text,
+      createdAt: Timestamp.now(),
+      monthlyTotal: 0,
+      
+    ));
         Customtoast.showToast("User added successfully");
         clearController();
         notifyListeners();
@@ -83,16 +90,7 @@ class UserProvider extends ChangeNotifier {
       (success) async {
         log('Delete User');
         users.removeWhere((user) => user.id == userId);
-        try {
-          await FirebaseFirestore.instance
-              .collection('general')
-              .doc('general')
-              .update({'count': FieldValue.increment(-1)});
-
-          log('Count decremented successfully');
-        } catch (e) {
-          log('Count decremented failed');
-        }
+        
         notifyListeners();
       },
     );
@@ -117,4 +115,7 @@ class UserProvider extends ChangeNotifier {
       (success) {},
     );
   }
+
+
+
 }

@@ -41,7 +41,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
 
     if (summeryProvider.itemsList.isNotEmpty) {
       tabController = TabController(
-        length: summeryProvider.itemsList.length + 1, // Add one for "Total" tab
+        length: summeryProvider.itemsList.length , // Add one for "Total" tab
         vsync: this,
       );
       tabController.addListener(() {
@@ -215,47 +215,42 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                   ],
                 ),
                 const SizedBox(height: 24),
-                ButtonsTabBar(
-                  controller: tabController,
-                  height: 58,
-                  width: 124,
-                  center: false,
-                  physics: const NeverScrollableScrollPhysics(),
-                  backgroundColor: AppColors.greyColor,
-                  unselectedBackgroundColor: AppColors.blackColor,
-                  unselectedBorderColor: AppColors.greyColor,
-                  unselectedLabelStyle:
-                      const TextStyle(color: AppColors.whiteColor),
-                  labelStyle: const TextStyle(
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  tabs: [
-                    for (var item in stateAddOrder.itemsList)
-                      Tab(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(item.name.text,
-                                style: const TextStyle(fontSize: 14)),
-                            const SizedBox(height: 5),
-                            Text(item.price.text,
-                                style: const TextStyle(fontSize: 12)),
-                          ],
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ButtonsTabBar(
+                      
+                      controller: tabController,
+                      height: 58,
+                      width: 124,
+                      center: false,
+                      physics: const NeverScrollableScrollPhysics(),
+                      backgroundColor: AppColors.greyColor,
+                      unselectedBackgroundColor: AppColors.blackColor,
+                      unselectedBorderColor: AppColors.greyColor,
+                      unselectedLabelStyle:
+                          const TextStyle(color: AppColors.whiteColor),
+                      labelStyle: const TextStyle(
+                        color: AppColors.blackColor,
+                        fontWeight: FontWeight.bold,
                       ),
-                    const Tab(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Total', style: TextStyle(fontSize: 14)),
-                          SizedBox(height: 5),
-                          // Text(stateAddItem.total.toString(),
-                          //     style: const TextStyle(fontSize: 12)),
-                        ],
-                      ),
+                      tabs: [
+                        for (var item in stateAddOrder.itemsList)
+                          Tab(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(item.name.text,
+                                    style: const TextStyle(fontSize: 14)),
+                                const SizedBox(height: 5),
+                                Text(item.price.text,
+                                    style: const TextStyle(fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                        
+                      ],
                     ),
                   ],
                 ),
@@ -293,21 +288,10 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                               ),
                             );
                     }),
-                    const Center(
-                      child: Text(
-                        'Total Amount',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    ),
+                    
                   ],
                 )),
-                // const Align(
-                //   alignment: Alignment.bottomRight,
-                //   child: Text(
-                //     '250',
-                //     style: TextStyle(fontSize: 15, color: Colors.white),
-                //   ),
-                // )
+                
               ],
             ),
           ),

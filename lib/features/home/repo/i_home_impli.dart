@@ -70,4 +70,29 @@ DocumentSnapshot? lastDoc;
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
+  
+  @override
+  Stream<Either<MainFailures, Map<String, num>>> fetchUserCountTotal()  {
+  try{
+    final generalDocRef =
+        firebaseFirestore.collection(FirebaseCollection.general).doc(FirebaseCollection.general);
+       return generalDocRef.snapshots().map((snapshot) {
+      if (snapshot.exists) {
+        final data = snapshot.data() ?? {};
+
+        final result = {
+          'totalAmount': data['totalAmount'] as num? ?? 0,
+          'userCount': data['userCount'] as num? ?? 0,
+        };
+
+        return right(result); 
+      } else {
+        return left(const MainFailures.serverFailures(errormsg: "Document does not exist"));
+      }
+       });
+  }catch (e) {
+      log("Error while fetching user: $e");
+       return Stream.value(left(MainFailures.serverFailures(errormsg: e.toString())));
+    }
 }
+  }

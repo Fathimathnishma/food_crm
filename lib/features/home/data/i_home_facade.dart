@@ -10,4 +10,7 @@ abstract class IHomeFacade {
     Future<Either<MainFailures, List<UserModel>>> fetchUser() {
     throw UnimplementedError("  fetchUser() no implementation");
   }
+    Stream<Either<MainFailures, Map<String,num>>> fetchUserCountTotal() {
+    throw UnimplementedError(" fetchUserCountTotal no implementation");
+  }
 }

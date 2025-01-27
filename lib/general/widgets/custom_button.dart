@@ -4,8 +4,10 @@ import 'package:food_crm/general/utils/app_colors.dart';
 class CustomButton extends StatelessWidget {
   final String buttontext;
   final VoidCallback onTap;
+  final Color color;
+  final Color textColor;
   const CustomButton(
-      {super.key, required this.onTap, required this.buttontext});
+      {super.key, required this.onTap, required this.buttontext, required this.color, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +18,11 @@ class CustomButton extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: AppColors.primaryColor),
+            color: color),
         child: Center(
           child: Text(
             buttontext,
-            style: const TextStyle(fontSize: 16, color: AppColors.blackColor),
+            style:  TextStyle(fontSize: 16, color: textColor),
           ),
         ),
       ),
