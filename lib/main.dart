@@ -5,6 +5,7 @@ import 'package:food_crm/features/home/data/i_home_facade.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
 import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
+import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/splash/presentation/view/splash_screen.dart';
@@ -14,6 +15,9 @@ import 'package:food_crm/features/users/data/i_auth_facade.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/general/di/injection.dart';
 import 'package:provider/provider.dart';
+
+  GlobalKey<NavigatorState> navigatorKey =  GlobalKey<NavigatorState>();
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,11 +45,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderHistoryProvider( sl<IOrderHistoryFacade>())),
         ChangeNotifierProvider(create: (context) => OrderSummeryProvider(sl<IOrderSummeryFacade>()),),
         ChangeNotifierProvider(create: (_)=> HomeProvider(sl<IHomeFacade>(),),),
+        ChangeNotifierProvider(create: (_)=>TodayOrderProvider(),),
         ChangeNotifierProvider(create: (_) => UserPaymentProvider(sl<IUserPaymentFacade>()),)
       ],
-      child: const MaterialApp(
+      child:  MaterialApp(
+        navigatorKey: navigatorKey,
+      //   initialRoute: '/', // Default route
+      // routes: {
+      //   '/home': (context) => const HomePage(),
+      // },
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

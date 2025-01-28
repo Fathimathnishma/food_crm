@@ -6,6 +6,7 @@ class ItemUploadingModel {
   String name;
   num price;
   num qty;
+  
   List<UserItemQtyAloccatedModel> users;
 
   ItemUploadingModel({

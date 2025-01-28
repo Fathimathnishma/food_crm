@@ -20,7 +20,12 @@ class HomeProvider with ChangeNotifier {
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? countListner;
   String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
 
-  int usersCount = 0;
+    final _dateTimeController = StreamController<DateTime>();
+
+    Stream<DateTime> get dateTimeStream => _dateTimeController.stream;
+
+
+  num usersCount = 0;
   List<OrderModel> todayOrders = [];
   num total = 0;
   num totalAmount = 0;
@@ -28,29 +33,22 @@ class HomeProvider with ChangeNotifier {
   bool noMoreData = false;
   List<UserModel> users = [];
 
-  
-
   void updateDateTime(DateTime newDateTime) {
     _dateTime = newDateTime;
     notifyListeners();
   }
 
-  Future<void> getUsersCount() async {
-    countListner = FirebaseFirestore.instance
-        .collection('general')
-        .doc('general')
-        .snapshots()
-        .listen((snapshot) {
-      if (snapshot.exists) {
-        usersCount = snapshot.data()?['count'] ?? 0;
-        notifyListeners();
-      }
+   void startDateTimeStream() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      _dateTime = DateTime.now();
+      _dateTimeController.add(_dateTime);
     });
   }
 
+  
+
   Future<void> fetchTodayOrderList() async {
-    //log("1");
-    clearData();
+    todayOrders = [];
     if (isLoading || noMoreData) return;
     isLoading = true;
     notifyListeners();
@@ -69,10 +67,11 @@ class HomeProvider with ChangeNotifier {
 
     isLoading = false;
     calculateTodayTotal();
+    notifyListeners();
   }
 
   Future<void> fetchUsers() async {
-    clearData();
+    users = [];
     final result = await iHomeFacade.fetchUser();
     result.fold(
       (l) {
@@ -80,14 +79,16 @@ class HomeProvider with ChangeNotifier {
       },
       (userList) {
         users.addAll(userList);
-        for (var user in users) {
-          totalAmount += user.monthlyTotal;
-        }
 
-        notifyListeners();
         log("users${users.length.toString()}");
       },
     );
+    totalAmount = 0;
+    for (var user in users) {
+      totalAmount += user.monthlyTotal;
+    }
+    log("totalAmount $totalAmount");
+    notifyListeners();
   }
 
   void calculateTodayTotal() {
@@ -98,8 +99,43 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  void clearData() {
-    todayOrders = [];
-    total = 0;
+  // void clearData() {
+
+  //   totalAmount=0;
+  //   total = 0;
+  // }
+
+  void addLocalTodayOrder() {
+    init();
+    notifyListeners();
+  }
+
+  void init() {
+    //clearData();
+    fetchTodayOrderList();
+    fetchUsers();
+  }
+
+  Stream<num> listenToUserCount() {
+    return iHomeFacade
+        .getUsersCountStream()
+        .asyncMap((result) => result.fold(
+              (failure) {
+                log(failure.errormsg);
+                return 0; // Return default value on failure
+              },
+              (success) {
+                usersCount = success;
+                return success;
+              },
+            ))
+        .distinct(); // Only emit when value changes
+  }
+
+   @override
+  void dispose() {
+    _dateTimeController.close();
+    super.dispose();
   }
 }
+

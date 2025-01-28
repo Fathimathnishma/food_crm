@@ -19,6 +19,7 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
 
   @override
   Future<Either<MainFailures, List<OrderModel>>> fetchOrderList() async {
+     if (noMoreData) return right([]);
     try {
       log("Fetching orders...");
 
@@ -26,19 +27,19 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
       Query query = firebaseFirestore
           .collection(FirebaseCollection.order)
           .orderBy("createdAt",descending: true);
-      // final querySnapshot = await orderCollection.limit(10).get();
 
       if(lastDocument!=null){
         query = query.startAfterDocument(lastDocument!);
 
       }
 
-      QuerySnapshot querySnapshot = await query.limit(10).get();
+      final querySnapshot = await query.limit(10).get();
 
+       if (querySnapshot.docs.isNotEmpty) {
+        lastDocument = querySnapshot.docs.last;
+      }
       if(querySnapshot.docs.length<10){
         noMoreData = true;
-      }else{
-        lastDocument = querySnapshot.docs.last;
       }
 
       
@@ -50,6 +51,46 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
       log("Error while fetching orders: $e");
       log("Stack trace: $stackTrace");
       return left(MainFailures.serverFailures(errormsg: e.toString()));
+   }
+   }
+   
+     @override
+     void clearData() {
+    lastDocument= null;
+    noMoreData=false;
+     }
+     
+       @override
+       Future<Either<MainFailures, List<OrderModel>>> fetchOrderByRange({required DateTime startDate, required DateTime endDate}) async {
+          try {
+  
+    final startOfDay = Timestamp.fromDate(DateTime(startDate.year, startDate.month, startDate.day));
+    final endOfDay = Timestamp.fromDate(DateTime(endDate.year, endDate.month, endDate.day, 23, 59, 59, 999));
+
+      log("Fetching orders...");
+      final todayOrder = await firebaseFirestore
+          .collection(FirebaseCollection.order)
+          .where("createdAt" ,isGreaterThanOrEqualTo: startOfDay)
+          .where("createdAt",isLessThanOrEqualTo: endOfDay)
+          .orderBy("createdAt",descending: true).get();
+    
+
+      if (todayOrder.docs.isEmpty) {
+        log("No orders found.");
+        
+      }
+     final orders = todayOrder.docs
+        .map((doc) => OrderModel.fromMap(doc.data()))
+        .toList();
+      return right(orders);
+
+    } catch (e) {
+      log("Error while fetching orders: $e");
+     
+      return left(MainFailures.serverFailures(errormsg: e.toString())) ;
     }
-  }
+       
+}
+
+
 }

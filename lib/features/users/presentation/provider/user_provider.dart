@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/users/data/i_auth_facade.dart';
 import 'package:food_crm/features/users/data/model/user_model.dart';
+import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -27,7 +28,6 @@ class UserProvider extends ChangeNotifier {
       name: nameController.text,
       createdAt: Timestamp.now(),
       monthlyTotal: 0,
-      
     );
 
     final result = await iUserFacade.addUser(usermodel: userModel);
@@ -85,9 +85,9 @@ class UserProvider extends ChangeNotifier {
         users.removeWhere((user) => user.id == userId);
         try {
           await FirebaseFirestore.instance
-              .collection('general')
+              .collection(FirebaseCollection.general)
               .doc('general')
-              .update({'count': FieldValue.increment(-1)});
+              .update({'userCount': FieldValue.increment(-1)});
 
           log('Count decremented successfully');
         } catch (e) {

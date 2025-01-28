@@ -31,7 +31,7 @@ class IUserImpli implements IUserFacade {
       final user = usermodel.copyWith(id: id);
       final batch = firestore.batch();
       batch.set(userRef, user.toMap());
-      batch.update(generalRef, {"count": FieldValue.increment(1)});
+      batch.update(generalRef, {"userCount": FieldValue.increment(1)});
 
       await batch.commit();
 
@@ -86,7 +86,7 @@ class IUserImpli implements IUserFacade {
       final generalSnapshot =
           await firestore.collection("general").doc("general").get();
       final generalData = generalSnapshot.data();
-      final count = generalData?["count"] ?? 0;
+      final count = generalData?["userCount"] ?? 0;
       return right(count);
     } catch (e) {
       log("Batch commit failed: $e");

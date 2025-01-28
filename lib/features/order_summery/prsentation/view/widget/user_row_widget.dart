@@ -5,7 +5,6 @@ import 'package:food_crm/features/order_summery/prsentation/provider/order_summe
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/general/widgets/alert_dialog.dart';
-import 'package:food_crm/general/widgets/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class UserRowWidget extends StatelessWidget {
@@ -81,16 +80,6 @@ class UserRowWidget extends StatelessWidget {
       ),
       trailing: Consumer<OrderSummeryProvider>(
         builder: (context, stateAddOrder, child) {
-          // if (controller.text.isEmpty) {
-          //   // Initialize quantity for the first time
-          //   stateAddOrder.initiolSplitQty(
-          //     tabIndex: tabIndex,
-          //     price: price,
-          //   );
-          //   controller.text = stateAddOrder
-          //       .itemsList[tabIndex].users[index].qty.text;
-          // }
-
           return SizedBox(
             width: MediaQuery.of(context).size.width * 0.3,
             child: Row(
@@ -99,18 +88,18 @@ class UserRowWidget extends StatelessWidget {
                 SizedBox(
                   width: 40,
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     controller: controller,
                     onChanged:(value) async {
                 final newQty = num.tryParse(value);
                 if (newQty == null || newQty <= 0) {
-                  Customtoast.showErrorToast("Please enter a valid number or delete unnecessary member");
+                 
                   return;
                 } else{
                  log("Valid quantity entered: $newQty");
                  final formattedQty = newQty == newQty.toInt() 
-                    ? newQty.toInt().toString() // Remove decimal part if the value is a whole number
-                    : newQty.toStringAsFixed(1); // One decimal place
+                    ? newQty.toInt().toString() 
+                    : newQty.toStringAsFixed(1);
 
                  controller.text = formattedQty.toString();
                  stateAddOrder.checkQty(tabIndex: tabIndex);

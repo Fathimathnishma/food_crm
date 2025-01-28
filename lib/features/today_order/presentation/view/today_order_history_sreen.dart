@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dart';
-import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
+import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class TodayOrderHistoryScreen extends StatefulWidget {
-  final List<OrderModel> todayOrder;
-  const TodayOrderHistoryScreen({
-    super.key,
-    required this.todayOrder,
-  });
+  final List<OrderModel>todayOrder;
+  const TodayOrderHistoryScreen.TodayOrdersScreen({super.key, required this.todayOrder,});
 
   @override
   State<TodayOrderHistoryScreen> createState() =>
@@ -24,7 +21,7 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
   void initState() {
     super.initState();
     final historyProvider =
-        Provider.of<OrderHistoryProvider>(context, listen: false);
+        Provider.of<TodayOrderProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       historyProvider.filterTodayOrders(widget.todayOrder);
     });
@@ -61,32 +58,15 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
             ),
           );
         },
-        tooltip: 'Add a new item',
+       
         backgroundColor: AppColors.primaryColor,
         child: const Icon(
           Icons.add,
           size: 40,
         ),
       ),
-      body: Consumer<OrderHistoryProvider>(
+      body: Consumer<TodayOrderProvider>(
         builder: (context, stateFetchOrder, child) {
-          if (stateFetchOrder.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryColor,
-                strokeWidth: 2,
-              ),
-            );
-          }
-
-          if (stateFetchOrder.todayOrders.isEmpty) {
-            return const Center(
-              child: Text(
-                "No orders available",
-                style: TextStyle(color: AppColors.whiteColor, fontSize: 16),
-              ),
-            );
-          }
 
           return Padding(
             padding: const EdgeInsets.all(8.0),
@@ -99,11 +79,11 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
+                         Column(
                           children: [
-                            const Text(
-                              "23 March",
-                              style: TextStyle(
+                             Text(
+                              stateFetchOrder.todayDate,
+                              style: const TextStyle(
                                 color: AppColors.whiteColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w300,
@@ -149,6 +129,14 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
                   child: ListView.separated(
                     itemCount: stateFetchOrder.todayOrders.length,
                     itemBuilder: (context, index) {
+                       if (stateFetchOrder.todayOrders.isEmpty) {
+            return const Center(
+              child: Text(
+                "No orders available",
+                style: TextStyle(color: AppColors.whiteColor, fontSize: 16),
+              ),
+            );
+          }
                       final order = stateFetchOrder.todayOrders[index];
                       return OrderCard(
                         items: order.order,

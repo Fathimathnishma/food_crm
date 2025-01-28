@@ -24,7 +24,7 @@ class _AlertDialogWidgetState extends State<AlertDialogWidget> {
       _isLoading = true;
     });
     try {
-      await Future.delayed(const Duration(seconds: 3));
+     
       await widget.onLabel2Tap();
     } finally {
       setState(() {

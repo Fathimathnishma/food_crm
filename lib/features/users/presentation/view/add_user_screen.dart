@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
-import 'package:food_crm/features/users/presentation/view/user_screen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/general/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
@@ -56,8 +55,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                               borderSide:
                                   BorderSide(color: AppColors.greyColor),
                             ),
-                            labelStyle:
-                                TextStyle(color: AppColors.whiteColor),
+                            labelStyle: TextStyle(color: AppColors.whiteColor),
                             border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
@@ -82,8 +80,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                             label: Text("Phone Numbers"),
                             hintText: "Phone Number",
                             focusColor: AppColors.whiteColor,
-                            labelStyle:
-                                TextStyle(color: AppColors.whiteColor),
+                            labelStyle: TextStyle(color: AppColors.whiteColor),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: AppColors.greyColor),
@@ -122,12 +119,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                         onTap: () async {
                           if (formKey.currentState?.validate() == true) {
                             stateAdduser.addUser();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const UserScreen(),
-                              ),
-                            );
+                            Navigator.pop(context);
                           }
                         },
                         buttontext: "Save",

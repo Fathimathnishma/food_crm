@@ -25,6 +25,7 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
     final userProvider = Provider.of<UserPaymentProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      userProvider.clearData();
       userProvider.addUsers(user: widget.users);
       log(widget.users.length.toString());
     });

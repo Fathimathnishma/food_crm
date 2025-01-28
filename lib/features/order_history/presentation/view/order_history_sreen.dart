@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
@@ -12,147 +14,172 @@ class OrderHistoryScreen extends StatefulWidget {
 }
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
-  final scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
-    super.initState();
     final orderHistory =
         Provider.of<OrderHistoryProvider>(context, listen: false);
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      orderHistory.fetchOrders();
+      orderHistory.initData(scrollController: _scrollController);
     });
+    super.initState();
+  }
 
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        if (!orderHistory.isLoading && !orderHistory.noMoreData) {
-          orderHistory.fetchOrders();
-        }
-      }
-    });
+  @override
+  void dispose() {
+    _scrollController.removeListener(() {});
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.blackColor,
-      appBar: AppBar(
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child:
-              const Icon(Icons.arrow_back_ios_new, color: AppColors.whiteColor),
-        ),
-        backgroundColor: AppColors.blackColor,
-        title: const Text(
-          "History",
-          style: TextStyle(color: AppColors.whiteColor),
-        ),
-      ),
-      body: Consumer<OrderHistoryProvider>(
+    return Consumer<OrderHistoryProvider>(
         builder: (context, stateFetchOrder, child) {
-          if (stateFetchOrder.isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryColor,
-                strokeWidth: 2,
-              ),
-            );
-          }
-
-          final dateKeys = stateFetchOrder.groupedOrders.keys.toList();
-
-          if (stateFetchOrder.allOrders.isEmpty) {
-            return const Center(
-              child: Text(
-                "No orders available",
-                style: TextStyle(color: AppColors.whiteColor, fontSize: 16),
-              ),
-            );
-          }
-
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      final dateKeys = stateFetchOrder.groupedOrders.keys.toList();
+      return Scaffold(
+        backgroundColor: AppColors.blackColor,
+        appBar: AppBar(
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+              stateFetchOrder.isFiltered=false;
+            },
+            child: const Icon(Icons.arrow_back_ios_new,
+                color: AppColors.whiteColor),
+          ),
+          actions: [
+            Row(
               children: [
-                const Text(
-                  "Showing Results: All",
-                  style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.separated(
-                    controller: scrollController,
-                    shrinkWrap: true,
-                    itemCount: dateKeys.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 16),
-                    itemBuilder: (context, index) {
-                      final date = dateKeys[index];
-                      final orders = stateFetchOrder.groupedOrders[date]!;
+                InkWell(
+                  onTap: () async {
+                    
+                    DateTime todayDate =
+                        DateTime.now(); // Get the current day number
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 70,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      date,
-                                      style: const TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    const Text(
-                                      "₹${4567}",
-                                      style: TextStyle(
-                                        color: AppColors.whiteColor,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: orders.length,
-                            itemBuilder: (context, index) {
-                              final data = orders[index];
-                              return OrderCard(
-                                items: data.order,
-                                total: '123',
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(height: 10);
-                            },
-                          ),
-                        ],
-                      );
-                    },
+                    final selectedRange = await showDateRangePicker(
+                      context: context,
+                      firstDate: DateTime(2025, 1, 21),
+                      lastDate: todayDate,
+                    );
+                    if (selectedRange != null) {
+                      DateTime startDate = selectedRange.start;
+                      DateTime endDate = selectedRange.end;
+                      log(selectedRange.start.toString());
+                      log(selectedRange.end.toString());
+                      stateFetchOrder.filterOrderBySpecificDateRange(
+                          startDate, endDate);
+                    }
+                  },
+                  child: const SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: Image(
+                        image: AssetImage(
+                            "assets/images/preference-horizontal.png")),
                   ),
                 ),
+                const SizedBox(
+                  width: 10,
+                )
               ],
             ),
-          );
-        },
-      ),
-    );
+          ],
+          backgroundColor: AppColors.blackColor,
+          title: const Text(
+            "History",
+            style: TextStyle(color: AppColors.whiteColor),
+          ),
+        ),
+        body: 
+             Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Showing Results: All",
+                      style:
+                          TextStyle(fontSize: 16, color: AppColors.whiteColor),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                        child: ListView.separated(
+                      controller: _scrollController,
+                      shrinkWrap: true,
+                      itemCount: dateKeys.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 16),
+                      itemBuilder: (context, index) {
+                        final date = dateKeys[index];
+                        final orders = stateFetchOrder.groupedOrders[date]!;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 70,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        date,
+                                        style: const TextStyle(
+                                          color: AppColors.whiteColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                      Text(
+                                        "₹${stateFetchOrder.calculateTotalForDate(date)}",
+                                        style: const TextStyle(
+                                          color: AppColors.whiteColor,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: orders.length,
+                              itemBuilder: (context, index) {
+                                final data = orders[index];
+                                return OrderCard(
+                                  items: data.order,
+                                  total: stateFetchOrder
+                                      .calculateTotal(data.order)
+                                      .toString(),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(height: 10);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    )),
+                    if (stateFetchOrder.isLoading &&
+                        stateFetchOrder.allOrders.isNotEmpty)
+                      const Center(
+                          child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ))
+                  ],
+                ),
+              ),
+      );
+    });
   }
 }
-

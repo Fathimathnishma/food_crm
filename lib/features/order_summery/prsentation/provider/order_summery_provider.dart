@@ -1,11 +1,11 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/item_uploading%20_model.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
+import 'package:food_crm/general/utils/dialy_enum.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 
 class OrderSummeryProvider extends ChangeNotifier {
@@ -16,10 +16,9 @@ class OrderSummeryProvider extends ChangeNotifier {
   bool isLoading = false;
   num overallTotal = 0;
   bool isValid = true;
-
+  FoodTime selectedMeal = FoodTime.breakfast;
   void addItemToSummery(List<ItemAddingModel> items) {
     overallTotal = 0;
-
     for (var item in items) {
       final num price = num.parse(item.price.text);
       final num itemQty = num.parse(item.quantity.text);
@@ -46,7 +45,7 @@ class OrderSummeryProvider extends ChangeNotifier {
       (userList) {
         if(itemsList.isNotEmpty){
         for (var item in itemsList) {
-          // Add users to the item first
+          item.users=[];
           item.users.addAll(
             userList.map(
               (user) {
@@ -71,6 +70,17 @@ class OrderSummeryProvider extends ChangeNotifier {
 
 
 
+String mealToString(FoodTime meal) {
+    switch (meal) {
+      case FoodTime.breakfast:
+        return 'Breakfast';
+      case FoodTime.lunch:
+        return 'Lunch';
+      case FoodTime.dinner:
+        return 'Dinner';
+    
+    }
+  }
 
 
 
@@ -147,27 +157,42 @@ void initiolSplitQty() {
   }) {
     isValid = true;
     final item = itemsList[tabIndex];
-    int totalUserQty = 0;
+    num totalUserQty = 0;
 
     for (var user in item.users) {
-      final qty = num.tryParse(user.qty.text) ?? 0;
-      totalUserQty += qty.toInt();
+      if (user.qty.text.isNotEmpty) {
+      final qty = num.tryParse(user.qty.text);
+      if (qty == null) {
+        Customtoast.showErrorToast(
+            "Invalid quantity entered for user: ${user.name}");
+        isValid=false;
+        return false; 
+      }
+      totalUserQty += qty;
+    } else {
+      Customtoast.showErrorToast(
+          "Quantity cannot be empty for user: ${user.name}");
+           isValid=false;
+           return false;
+    }
+     
     }
 
-    final itemQty = num.tryParse(item.quantity.text) ?? 0;
-    if (totalUserQty != itemQty.toInt()) {
+    final itemQty = num.tryParse(item.quantity.text) ;
+    if (totalUserQty != itemQty) {
       Customtoast.showErrorToast(
           "Total quantity of all users must match the item quantity.");
-      isValid = false;
+     return isValid = false;
+      
     } else {
-      isValid = true;
+       isValid = true;
     }
 
     notifyListeners();
     return isValid;
   }
 
- Future<void> addOrder({ required void Function() onSuccess,}) async {
+ Future<void> addOrder({ required void Function(OrderModel) onSuccess,}) async {
   final List<ItemUploadingModel> order = []; 
   for (var data in itemsList) {
     final num price = num.parse(data.price.text);
@@ -190,13 +215,20 @@ void initiolSplitQty() {
         orderModel: OrderModel(
             createdAt: Timestamp.now(),
             totalAmount: overallTotal,
-            order: order));
+            order: order), 
+            foodTime:mealToString(selectedMeal).toLowerCase());
 
     result.fold(
       (l) {
         log("Add error: ${l.toString()}");
       },
-      (unit) {},
+      (unit) {
+        onSuccess( OrderModel(
+            createdAt: Timestamp.now(),
+            totalAmount: overallTotal,
+            order: order));
+       
+      },
     );
   }
 }

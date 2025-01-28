@@ -23,7 +23,7 @@ class IUserPaymentRepo implements IUserPaymentFacade {
     try {
       final userRef =
           firebaseFirestore.collection(FirebaseCollection.users).doc(userId);
-      Query query = userRef.collection(FirebaseCollection.dailyOrders);
+      Query query = userRef.collection(FirebaseCollection.dailyOrders).orderBy("createdAt",descending: true);
 
       if (lastDocument != null) {
         query = query.startAfterDocument(lastDocument!);

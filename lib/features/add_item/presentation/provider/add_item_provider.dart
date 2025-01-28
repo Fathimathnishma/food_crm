@@ -41,7 +41,7 @@ class AddItemProvider extends ChangeNotifier {
       },
       (r) {
         log('suggestion added');
-        clearController();
+     
       },
     );
   }
@@ -62,13 +62,16 @@ class AddItemProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
-
-  void clearController() {
+void disposeControllers(ItemAddingModel item) {
+    item.name.dispose();
+    item.quantity.dispose();
+    item.price.dispose();
+  }
+ void clearItems() {
     for (var item in itemList) {
-      item.name.clear();
-      item.price.clear();
-      item.quantity.clear();
+      disposeControllers(item);
     }
+    itemList.clear();
     notifyListeners();
   }
 }
