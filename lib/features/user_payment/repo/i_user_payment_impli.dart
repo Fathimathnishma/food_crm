@@ -58,7 +58,7 @@ class IUserPaymentRepo implements IUserPaymentFacade {
   }
 
   @override
-  Future<Either<MainFailures, Unit>> makePayment() async {
+  Future<Either<MainFailures, Unit>> makePayment({required num paidAmount}) async {
     try {
       final generalRef = firebaseFirestore
           .collection(FirebaseCollection.general)
@@ -68,7 +68,7 @@ class IUserPaymentRepo implements IUserPaymentFacade {
       final batch = firebaseFirestore.batch();
       for (final userDoc in userSnapshot.docs) {
         final userRef = userDoc.reference;
-
+        batch.update(generalRef,{"depositAmount": FieldValue.increment(paidAmount)} );
         batch.update(userRef, {"monthlyTotal": 0});
       }
       batch.update(generalRef, {"totalAmount": 0});

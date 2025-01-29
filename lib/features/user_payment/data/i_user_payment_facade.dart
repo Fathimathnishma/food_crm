@@ -9,7 +9,7 @@ abstract class IUserPaymentFacade {
     throw UnimplementedError('fetchUserPayment() not implemented');
   }
  
-  Future<Either<MainFailures, Unit>> makePayment() async {
+  Future<Either<MainFailures, Unit>> makePayment({required num paidAmount}) async {
     throw UnimplementedError('fetchUserPayment() not implemented');
   }
     Future<Either<MainFailures, List<UserModel>>> fetchUser() {

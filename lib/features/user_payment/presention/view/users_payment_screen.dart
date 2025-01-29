@@ -121,7 +121,7 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
                       label1: "mark as paid",
                       label2: "yes",
                       onLabel2Tap: () async {
-                        await userPro.markPayment();
+                        await userPro.markPayment(paidAmount:widget.total);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },

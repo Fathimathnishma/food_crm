@@ -108,7 +108,7 @@ class OrderHistoryProvider with ChangeNotifier {
  void resetFilter() {
     isFiltered = false;
     notifyListeners();
-    fetchOrders(); // Optionally call fetchOrders to show all data again
+    fetchOrders(); 
   }
   Future<void> initData({required ScrollController scrollController}) async {
     clearData();

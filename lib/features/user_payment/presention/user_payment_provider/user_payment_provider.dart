@@ -49,14 +49,14 @@ class UserPaymentProvider with ChangeNotifier {
   if (order.items != null) {
     for (var item in order.items!) {
       total += item.splitAmount; 
-      log('Item: ${item.name}, Amount: ${item.splitAmount}');
+     
     }
   }
   return total;
 }
 
-Future<void>markPayment() async {
-  final result = await iUserPaymentFacade.makePayment();
+Future<void>markPayment({required num paidAmount}) async {
+  final result = await iUserPaymentFacade.makePayment(paidAmount: paidAmount);
   result.fold((l) {
     l.toString();
   }, (r) {
