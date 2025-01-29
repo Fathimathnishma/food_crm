@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
       //   '/home': (context) => const HomePage(),
       // },
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
+        home: const SplashScreen(),
       ),
     );
   }

@@ -24,19 +24,20 @@ class OrderSummeryScreen extends StatefulWidget {
 
 class _OrderSummeryScreenState extends State<OrderSummeryScreen>
     with TickerProviderStateMixin {
-   late TabController tabController;
+  late TabController tabController;
 
-    @override
+  @override
   void initState() {
     super.initState();
     tabController = TabController(length: 1, vsync: this);
   }
 
   @override
-   void didChangeDependencies() {
+  void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final summeryProvider = Provider.of<OrderSummeryProvider>(context, listen: false);
+    final summeryProvider =
+        Provider.of<OrderSummeryProvider>(context, listen: false);
     summeryProvider.init(widget.itemList);
 
     if (summeryProvider.itemsList.isNotEmpty) {
@@ -71,7 +72,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
       return Scaffold(
           backgroundColor: AppColors.blackColor,
           appBar: AppBar(
-            leading:  InkWell(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },

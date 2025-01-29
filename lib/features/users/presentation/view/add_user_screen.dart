@@ -55,8 +55,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                               borderSide:
                                   BorderSide(color: AppColors.greyColor),
                             ),
-                            labelStyle:
-                                TextStyle(color: AppColors.whiteColor),
+                            labelStyle: TextStyle(color: AppColors.whiteColor),
                             border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)),
@@ -81,8 +80,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                             label: Text("Phone Numbers"),
                             hintText: "Phone Number",
                             focusColor: AppColors.whiteColor,
-                            labelStyle:
-                                TextStyle(color: AppColors.whiteColor),
+                            labelStyle: TextStyle(color: AppColors.whiteColor),
                             focusedBorder: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: AppColors.greyColor),

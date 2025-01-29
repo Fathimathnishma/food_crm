@@ -97,10 +97,8 @@ class AmountShowDialog extends StatelessWidget {
          
           
         
-          // Day and Date Row
     );
   }
 
- // Utility function to calculate total
  
 }

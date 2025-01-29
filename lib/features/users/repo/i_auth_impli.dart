@@ -24,10 +24,15 @@ class IUserImpli implements IUserFacade {
       final generalRef = firestore
           .collection(FirebaseCollection.general)
           .doc(FirebaseCollection.general);
+
       final userRef = firestore.collection(FirebaseCollection.users).doc(id);
+
       final user = usermodel.copyWith(id: id);
+
       final batch = firestore.batch();
+
       batch.set(userRef, user.toMap());
+
       batch.update(generalRef, {"userCount": FieldValue.increment(1)});
        
       await batch.commit();
@@ -43,15 +48,17 @@ class IUserImpli implements IUserFacade {
   Future<Either<MainFailures, List<UserModel>>> fetchUser() async {
     log("fetching");
     try {
+
       final userRef = firestore
           .collection(FirebaseCollection.users)
           .orderBy("createdAt", descending: true);
 
-     
       final querySnapshot = await userRef.get();
+
       final List<UserModel> users = querySnapshot.docs.map((e) {
         return UserModel.fromMap(e.data());
       }).toList();
+      
       return right(users);
     } catch (e) {
       log("Error while fetching user: $e");
@@ -94,8 +101,4 @@ class IUserImpli implements IUserFacade {
     }
   }
 
-  
- 
-
-  
 }

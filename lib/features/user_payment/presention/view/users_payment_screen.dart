@@ -37,7 +37,7 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
             color: AppColors.primaryColor,
           ));
         }
-        if (userPro.isLoading&&userPro.users.isEmpty) {
+        if (userPro.isLoading && userPro.users.isEmpty) {
           return const Center(
             child: Text(
               "no users",

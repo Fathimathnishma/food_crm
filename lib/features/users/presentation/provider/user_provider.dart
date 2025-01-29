@@ -27,7 +27,6 @@ class UserProvider extends ChangeNotifier {
       name: nameController.text,
       createdAt: Timestamp.now(),
       monthlyTotal: 0,
-      
     );
 
     final result = await iUserFacade.addUser(usermodel: userModel);
