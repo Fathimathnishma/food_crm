@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
-import 'package:food_crm/features/users/presentation/view/user_screen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:food_crm/general/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
