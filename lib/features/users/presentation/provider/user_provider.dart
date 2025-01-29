@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/users/data/i_auth_facade.dart';
 import 'package:food_crm/features/users/data/model/user_model.dart';
-import 'package:food_crm/general/utils/firebase_collection.dart';
 import 'package:food_crm/general/widgets/fluttertoast.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -37,6 +36,13 @@ class UserProvider extends ChangeNotifier {
         Customtoast.showToast("Failed to add user");
       },
       (success) {
+       users.add( UserModel(
+      phoneNumber: formattedPhoneNumber,
+      name: nameController.text,
+      createdAt: Timestamp.now(),
+      monthlyTotal: 0,
+      
+    ));
         Customtoast.showToast("User added successfully");
         clearController();
         notifyListeners();
@@ -83,16 +89,7 @@ class UserProvider extends ChangeNotifier {
       (success) async {
         log('Delete User');
         users.removeWhere((user) => user.id == userId);
-        try {
-          await FirebaseFirestore.instance
-              .collection(FirebaseCollection.general)
-              .doc('general')
-              .update({'userCount': FieldValue.increment(-1)});
-
-          log('Count decremented successfully');
-        } catch (e) {
-          log('Count decremented failed');
-        }
+        
         notifyListeners();
       },
     );
@@ -117,4 +114,7 @@ class UserProvider extends ChangeNotifier {
       (success) {},
     );
   }
+
+
+
 }

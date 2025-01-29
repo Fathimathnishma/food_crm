@@ -100,6 +100,12 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
                 
               },
             );
+           batch.update(
+          FirebaseFirestore.instance
+                  .collection(FirebaseCollection.general)
+                  .doc(FirebaseCollection.general),
+          {"totalAmount":FieldValue.increment(user.splitAmount)}
+            );
             log('Updating user ${user.id} monthlyTotal by ${user.splitAmount}');
 
           }

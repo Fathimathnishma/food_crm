@@ -91,7 +91,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             style: TextStyle(color: AppColors.whiteColor),
           ),
         ),
-        body: 
+        body:   
              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -111,6 +111,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       separatorBuilder: (context, index) =>
                           const SizedBox(height: 16),
                       itemBuilder: (context, index) {
+                        if(stateFetchOrder.allOrders.isEmpty){
+                          const Center(child: Text("no data",style:TextStyle(color:  AppColors.whiteColor) ,));
+                        }
+                        if(stateFetchOrder.isLoading){
+                          const Center(
+                          child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ));
+                        }
                         final date = dateKeys[index];
                         final orders = stateFetchOrder.groupedOrders[date]!;
 

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:food_crm/features/user_payment/data/model/user_payment_model.dart';
+import 'package:food_crm/features/users/data/model/user_model.dart';
 import 'package:food_crm/general/failures/failures.dart';
 
 abstract class IUserPaymentFacade {
@@ -8,5 +9,11 @@ abstract class IUserPaymentFacade {
     throw UnimplementedError('fetchUserPayment() not implemented');
   }
  
+  Future<Either<MainFailures, Unit>> makePayment() async {
+    throw UnimplementedError('fetchUserPayment() not implemented');
+  }
+    Future<Either<MainFailures, List<UserModel>>> fetchUser() {
+    throw UnimplementedError("  fetchUser() no implementation");
+  }
 
 }

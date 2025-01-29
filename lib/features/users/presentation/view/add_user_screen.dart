@@ -122,7 +122,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
                             Navigator.pop(context);
                           }
                         },
-                        buttontext: "Save",
+                        buttontext: "Save", color: AppColors.primaryColor, textColor: AppColors.blackColor,
                       ),
                       const SizedBox(height: 40),
                     ],

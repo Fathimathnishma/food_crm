@@ -84,7 +84,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
               itemProvider.addSuggestions();
               Navigator.push(context, MaterialPageRoute(builder: (context) =>  OrderSummeryScreen(itemList:itemProvider.itemList),));
             },
-            buttontext: 'Generate',
+            buttontext: 'Generate', color: AppColors.primaryColor, textColor: AppColors.blackColor,
           ),
         ),
       );

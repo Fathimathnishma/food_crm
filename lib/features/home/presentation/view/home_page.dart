@@ -1,8 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
+import 'package:food_crm/features/home/presentation/view/widgets/admin_container_widget.dart';
 import 'package:food_crm/features/home/presentation/view/widgets/custom_elevated_button_widget.dart';
+import 'package:food_crm/features/home/presentation/view/widgets/date_time_container_widget.dart';
 import 'package:food_crm/features/home/presentation/view/widgets/view_button_widet.dart';
 import 'package:food_crm/features/today_order/presentation/view/today_order_history_sreen.dart';
 import 'package:food_crm/features/user_payment/presention/view/users_payment_screen.dart';
@@ -17,15 +17,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   final homeProvider = Provider.of<HomeProvider>(context);
-  //   SchedulerBinding.instance.addPostFrameCallback((_) {
-  //     homeProvider.updateDateTime(DateTime.now());
-  //   });
-  // }
-
   @override
   void initState() {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -56,80 +47,9 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 24,
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: 96,
-                      width: 144,
-                      decoration: BoxDecoration(
-                        color: const Color(0XFFE4E4E4),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 13,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Hello',
-                              style: TextStyle(
-                                  fontSize: 20, color: Color(0XFF000000)),
-                            ),
-                            Text(
-                              'Admin',
-                              style: TextStyle(
-                                  fontSize: 32, color: Color(0XFF000000)),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 96,
-                      width: 170,
-                      decoration: BoxDecoration(
-                        color: const Color(0XFFE4E4E4),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: StreamBuilder(
-                          stream: homePro.dateTimeStream,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Center(
-                                child: Text('no data available'),
-                              );
-                            } else {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    homePro.formattedDate,
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Color(0XFF000000)),
-                                  ),
-                                  Text(
-                                    homePro.formattedTime,
-                                    style: const TextStyle(
-                                        fontSize: 29, color: Color(0XFF000000)),
-                                  )
-                                ],
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                  children: [AdminContainerWidget(), DateTimeContainerWidget()],
                 ),
                 const SizedBox(
                   height: 38,
@@ -183,184 +103,186 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 42,
                 ),
-                Stack(
-                  children: [
-                    SizedBox(
-                      height: 153,
-                      width: 370,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                StreamBuilder(
+                    stream: homePro.listenToUserCount(),
+                    builder: (context, snapshot) {
+                      return Column(
                         children: [
-                          ViewButtonWidget(
-                              text: 'View',
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => UsersPaymentScreen(
-                                        users: homePro.users,
-                                      ),
-                                    ));
-                              }),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            height: 53.76,
-                            width: MediaQuery.sizeOf(context).width,
-                            decoration: BoxDecoration(
-                                color: const Color(0XFFFFF200),
-                                borderRadius: BorderRadius.circular(16)),
-                          )
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      left: 10,
-                      child: Container(
-                        height: 100.93,
-                        width: 234,
-                        decoration: BoxDecoration(
-                            color: const Color(0XFF131318),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0XFFFFF200))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
+                          Stack(
                             children: [
-                              CircleAvatar(
-                                radius: 31,
-                                backgroundColor: const Color(0XFFFFFFFF),
-                                child: Image.asset('assets/images/money.png'),
+                              SizedBox(
+                                height: 153,
+                                width: 370,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    ViewButtonWidget(
+                                        text: 'View',
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UsersPaymentScreen(
+                                                  total: homePro.totalAmount,
+                                                ),
+                                              ));
+                                        }),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      height: 53.76,
+                                      width: MediaQuery.sizeOf(context).width,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0XFFFFF200),
+                                          borderRadius:
+                                              BorderRadius.circular(16)),
+                                    )
+                                  ],
+                                ),
                               ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Total Amount',
-                                    style: TextStyle(
-                                        fontSize: 14, color: Color(0XFFFFFFFF)),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    homePro.totalAmount.toStringAsFixed(1),
-                                    style: const TextStyle(
-                                        fontSize: 24, color: Color(0XFFFFFFFF)),
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Stack(
-                  children: [
-                    SizedBox(
-                      height: 153,
-                      width: 380,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ViewButtonWidget(
-                              text: 'View',
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const UserScreen(),
-                                    ));
-                              }),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            height: 53.76,
-                            width: MediaQuery.sizeOf(context).width,
-                            decoration: BoxDecoration(
-                                color: const Color(0XFFFFF200),
-                                borderRadius: BorderRadius.circular(16)),
-                          )
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      left: 10,
-                      child: Container(
-                        height: 100.93,
-                        width: 234.35,
-                        decoration: BoxDecoration(
-                            color: const Color(0XFF131318),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0XFFFFF200))),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 31,
-                                backgroundColor: const Color(0XFFFFFFFF),
-                                child: Image.asset('assets/images/person.png'),
-                              ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              StreamBuilder(
-                                stream: homePro.listenToUserCount(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    log("Waiting for data...");
-                                    return const CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    log("Error in stream: ${snapshot.error}");
-                                    return const Text(
-                                        'No user count available');
-                                  } else if (snapshot.hasData) {
-                                    final usersCount = snapshot.data ?? 0;
-
-                                    log("User count received: $usersCount");
-
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                              Positioned(
+                                left: 10,
+                                child: Container(
+                                  height: 100.93,
+                                  width: 234,
+                                  decoration: BoxDecoration(
+                                      color: const Color(0XFF131318),
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: const Color(0XFFFFF200))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Row(
                                       children: [
-                                        const Text(
-                                          'Total Members',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Color(0XFFFFFFFF)),
+                                        CircleAvatar(
+                                          radius: 31,
+                                          backgroundColor:
+                                              const Color(0XFFFFFFFF),
+                                          child: Image.asset(
+                                              'assets/images/money.png'),
                                         ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          usersCount.toString(),
-                                          style: const TextStyle(
-                                              fontSize: 24,
-                                              color: Color(0XFFFFFFFF)),
+                                        const SizedBox(
+                                          width: 16,
                                         ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Text(
+                                              'Total Amount',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0XFFFFFFFF)),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              ("₹${homePro.totalAmount.toStringAsFixed(1)}"),
+                                              style: const TextStyle(
+                                                  fontSize: 24,
+                                                  color: Color(0XFFFFFFFF)),
+                                            )
+                                          ],
+                                        )
                                       ],
-                                    );
-                                  } else {
-                                    log("Snapshot has no data");
-                                    return const Text(
-                                        'No user count available');
-                                  }
-                                },
-                              )
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
+                          Stack(
+                            children: [
+                              SizedBox(
+                                height: 153,
+                                width: 380,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    ViewButtonWidget(
+                                        text: 'View',
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const UserScreen(),
+                                              ));
+                                        }),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Container(
+                                      height: 53.76,
+                                      width: MediaQuery.sizeOf(context).width,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0XFFFFF200),
+                                          borderRadius:
+                                              BorderRadius.circular(16)),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                left: 10,
+                                child: Container(
+                                  height: 100.93,
+                                  width: 234.35,
+                                  decoration: BoxDecoration(
+                                      color: const Color(0XFF131318),
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: const Color(0XFFFFF200))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Row(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 31,
+                                          backgroundColor:
+                                              const Color(0XFFFFFFFF),
+                                          child: Image.asset(
+                                              'assets/images/person.png'),
+                                        ),
+                                        const SizedBox(
+                                          width: 16,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Text(
+                                              'Total Members',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0XFFFFFFFF)),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              homePro.usersCount.toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 24,
+                                                  color: Color(0XFFFFFFFF)),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      );
+                    }),
               ],
             ),
           );

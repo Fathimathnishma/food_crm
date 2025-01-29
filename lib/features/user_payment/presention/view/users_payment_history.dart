@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/user_payment/presention/user_payment_provider/user_payment_provider.dart';
-import 'package:food_crm/features/user_payment/presention/view/widgets/amount_bottomsheet.dart';
+import 'package:food_crm/features/user_payment/presention/view/widgets/show_dialog.dart';
 import 'package:food_crm/features/user_payment/presention/view/widgets/total_card.dart';
 import 'package:food_crm/features/users/presentation/view/add_user_screen.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
@@ -119,10 +119,10 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                           },
                           child: InkWell(
                             onTap: () {
-                              showBottomSheet(
+                              showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return AmountBottomSheet(
+                                  return AmountShowDialog(
                                     order: userPayment.items!,
                                     day: day,
                                     date: formattedDate,
@@ -169,6 +169,7 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                 },
               ),
             ),
+           
           ],
         ),
       ),

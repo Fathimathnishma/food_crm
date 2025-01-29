@@ -69,30 +69,29 @@ class IHomeImpli implements IHomeFacade {
       return left(MainFailures.serverFailures(errormsg: e.toString()));
     }
   }
-
+  
   @override
-  Stream<Either<MainFailures, num>> getUsersCountStream() async* {
-    try {
-      final generalStream = firebaseFirestore
-          .collection(FirebaseCollection.general)
-          .doc(FirebaseCollection.general)
-          .snapshots();
+  Stream<Either<MainFailures, Map<String, num>>> fetchUserCountTotal()  {
+  try{
+    final generalDocRef =
+        firebaseFirestore.collection(FirebaseCollection.general).doc(FirebaseCollection.general);
+       return generalDocRef.snapshots().map((snapshot) {
+      if (snapshot.exists) {
+        final data = snapshot.data() ?? {};
 
-      yield* generalStream.map((snapshot) {
-        if (snapshot.exists) {
-          final generalData = snapshot.data();
-          log(generalData.toString());
-          final count = generalData?["userCount"] ?? 0;
-          log(count.toString()); 
-          return right(count);
-        } else {
-          return left(const MainFailures.serverFailures(
-            errormsg: "General document does not exist",
-          ));
-        }
-      });
-    } catch (e) {
-      yield left(MainFailures.serverFailures(errormsg: e.toString()));
+        final result = {
+          'totalAmount': data['totalAmount'] as num? ?? 0,
+          'userCount': data['userCount'] as num? ?? 0,
+        };
+
+        return right(result); 
+      } else {
+        return left(const MainFailures.serverFailures(errormsg: "Document does not exist"));
+      }
+       });
+  }catch (e) {
+      log("Error while fetching user: $e");
+       return Stream.value(left(MainFailures.serverFailures(errormsg: e.toString())));
     }
-  }
 }
+  }
