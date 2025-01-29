@@ -35,7 +35,7 @@ class UserWidget extends StatelessWidget {
                 backgroundColor: AppColors.whiteColor,
                 child: Text(
                   stateUserAdd
-                      .getInitials(name), // Display initials of the name
+                      .getInitials(name), 
                   style: const TextStyle(
                     fontSize: 20,
                     color: Colors.black,

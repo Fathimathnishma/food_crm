@@ -139,8 +139,8 @@ void initiolSplitQty() {
      final num totalQty = num.tryParse(item.quantity.text)??0;
      final num qtyPerUser = totalQty / item.users.length;
       String formattedQty;
-      if (qtyPerUser == qtyPerUser.toInt()) {
-        formattedQty = qtyPerUser.toInt().toString(); 
+      if (qtyPerUser == qtyPerUser) {
+        formattedQty = qtyPerUser.toString(); 
       } else {
         formattedQty = qtyPerUser.toStringAsFixed(1); 
       }
@@ -191,6 +191,7 @@ void initiolSplitQty() {
     notifyListeners();
     return isValid;
   }
+
 
  Future<void> addOrder({ required void Function(OrderModel) onSuccess,}) async {
   final List<ItemUploadingModel> order = []; 

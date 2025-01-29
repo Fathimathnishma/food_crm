@@ -19,26 +19,26 @@ class OrderDetailsScreen extends StatefulWidget {
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
-
   @override
   void initState() {
     final orderDetails =
         Provider.of<OrderDetailsProvider>(context, listen: false);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-            orderDetails.fetchOrderById(orderId: widget.orderId);
-        },);
-  
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        orderDetails.fetchOrderById(orderId: widget.orderId);
+      },
+    );
+
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Consumer<OrderDetailsProvider>(
         builder: (context, stateAddOrder, child) {
-          if(stateAddOrder.itemsList.isEmpty){
-            return const Center(child: CircularProgressIndicator());
-          }
+      if (stateAddOrder.itemsList.isEmpty) {
+        return const Center(child: CircularProgressIndicator());
+      }
       return Scaffold(
           backgroundColor: AppColors.blackColor,
           appBar: AppBar(
@@ -60,14 +60,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           body: Padding(
             padding: const EdgeInsets.all(16),
             child: DefaultTabController(
-              length:stateAddOrder.itemsList.length ,
+              length: stateAddOrder.itemsList.length,
               child: Column(
                 children: [
                   const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       'Order Summery',
-                      style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
+                      style:
+                          TextStyle(fontSize: 16, color: AppColors.whiteColor),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -113,13 +114,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             final itemList = stateAddOrder.itemsList;
                             final data = itemList[index];
-                          
+
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: SizedBox(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -165,8 +166,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         child: Row(
                           children: [
                             Text(
-                             stateAddOrder.foodTime,
-                              style: const TextStyle(color: AppColors.whiteColor),
+                              stateAddOrder.foodTime,
+                              style:
+                                  const TextStyle(color: AppColors.whiteColor),
                             ),
                             const Icon(Icons.timer_sharp,
                                 color: AppColors.primaryColor),
@@ -218,18 +220,47 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ...stateAddOrder.itemsList.map((item) {
                         log(item.users.length.toString());
                         return item.users.isNotEmpty
-                            ? ListView.builder(
-                                itemCount: item.users.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final user = item.users[index];
-                                  return UserWidget(
-                                    name: user.name,
-                                    price: item.price.toString(),
-                                    index: index,
-                                    tabIndex:
-                                        stateAddOrder.itemsList.indexOf(item),
-                                  );
-                                },
+                            ? Column(
+                                children: [
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: item.users.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        final user = item.users[index];
+                                        return UserWidget(
+                                          name: user.name,
+                                          price: item.price.toString(),
+                                          index: index,
+                                          tabIndex: stateAddOrder.itemsList
+                                              .indexOf(item),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      SizedBox(
+                                        
+                                        height: 30,
+                                        child: Row(
+                                          children: [
+                                            Text("Qty${item.qty.toString()}",
+                                                style: const TextStyle(
+                                                    color: Colors.white)),
+                                            const SizedBox(
+                                              width: 50,
+                                            ),
+                                            Text("₹${item.price.toString()}",
+                                                style: const TextStyle(
+                                                    color: Colors.white))
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
                               )
                             : const Center(
                                 child: Text(

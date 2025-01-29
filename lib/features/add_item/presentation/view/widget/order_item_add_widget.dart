@@ -71,6 +71,8 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                         fontSize: 16,
                       ),
                       decoration: InputDecoration(
+                      focusedBorder: UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
+
                         prefixIcon: Image.asset(
                           'assets/images/check-list.png',
                           height: 24,
@@ -138,6 +140,7 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       fontSize: 16,
                     ),
                     decoration: const InputDecoration(
+                      focusedBorder: UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
                       hintText: 'Qty',
                     ),
                     keyboardType: TextInputType.number,
@@ -154,6 +157,8 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       fontSize: 16,
                     ),
                     decoration: const InputDecoration(
+                   focusedBorder: UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
+
                       hintText: 'per rate',
                     ),
                     keyboardType: TextInputType.number,
