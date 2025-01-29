@@ -2,18 +2,21 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/order_summery/data/model/item_uploading%20_model.dart';
 
 class OrderModel {
   String? id;
   Timestamp createdAt;
   num totalAmount;
+   String foodTime;
   List<ItemUploadingModel> order;
 
   OrderModel({
     this.id,
     required this.createdAt,
     required this.totalAmount,
+    required this.foodTime,
     required this.order,
   });
 
@@ -23,6 +26,7 @@ class OrderModel {
       'id': id,
       'createdAt': createdAt,
       'totalAmount': totalAmount,
+      "foodTime":foodTime,
       'order': order.map((x) => x.toMap()).toList(),
     };
   }
@@ -31,15 +35,18 @@ factory OrderModel.fromMap(Map<String, dynamic> map) {
     id: map['id'] != null ? map['id'] as String : null,
     createdAt: map['createdAt'] as Timestamp,
     totalAmount: map['totalAmount'] as num,
-    order: (map['order'] is Map<String, dynamic>)
-        ? List<ItemUploadingModel>.from(
-            (map['order'] as Map<String, dynamic>).entries.map<ItemUploadingModel>(
-              (entry) => ItemUploadingModel.fromMap(entry.value as Map<String, dynamic>, includeUsers: false),
+    foodTime: map['foodTime'] as String? ?? '',
+    order: (map['order'] is Map<String, dynamic> && (map['order'] as Map).isNotEmpty)
+        ? (map['order'] as Map<String, dynamic>).entries.map<ItemUploadingModel>(
+            (entry) => ItemUploadingModel.fromMap(
+              entry.value as Map<String, dynamic>,
+              includeUsers: true, // Ensure users are included
             ),
-          )
+          ).toList()
         : [], 
   );
 }
+
 
 
   String toJson() => json.encode(toMap());

@@ -83,15 +83,19 @@ class UserItemQtyAloccatedModel {
     };
   }
 
-  factory UserItemQtyAloccatedModel.fromMap(Map<String, dynamic> map) {
-    return UserItemQtyAloccatedModel(
-      name: map['name'] as String,
-      phoneNumber: map['phoneNumber'] as String,
-      id: map['id'] as String,
-      splitAmount: map['splitAmount'] as num,
-      qty: TextEditingController(
-          text: (map['qtyController'] as num).toString()), 
-    );
-  }
+ factory UserItemQtyAloccatedModel.fromMap(Map<String, dynamic> map) {
+  return UserItemQtyAloccatedModel(
+    name: map['name'] as String,
+    phoneNumber: map['phoneNumber'] as String,
+    id: map['id'] as String,
+    splitAmount: map['splitAmount'] as num,
+    qty: TextEditingController(
+      text: (map['qtyController'] as num).toString(),
+    ),
+  );
+}
+num get qtyAsNum => num.tryParse(qty.text) ?? 0;
+
+
 }
 

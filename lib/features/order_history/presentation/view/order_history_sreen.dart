@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:food_crm/features/order_details/presentation/order_details_screen.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
@@ -164,11 +165,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                               itemCount: orders.length,
                               itemBuilder: (context, index) {
                                 final data = orders[index];
-                                return OrderCard(
-                                  items: data.order,
-                                  total: stateFetchOrder
-                                      .calculateTotal(data.order)
-                                      .toString(),
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsScreen(orderId: data.id!),));
+                                  },
+                                  child: OrderCard(
+                                    items: data.order,
+                                    total: data.totalAmount.toString()
+                                        
+                                  ),
                                 );
                               },
                               separatorBuilder: (context, index) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dart';
+import 'package:food_crm/features/order_details/presentation/order_details_screen.dart';
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
@@ -138,9 +139,14 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
             );
           }
                       final order = stateFetchOrder.todayOrders[index];
-                      return OrderCard(
-                        items: order.order,
-                        total: order.totalAmount.toString(),
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsScreen(orderId: order.id!),));
+                        },
+                        child: OrderCard(
+                          items: order.order,
+                          total: order.totalAmount.toString(),
+                        ),
                       );
                     },
                     separatorBuilder: (context, index) {

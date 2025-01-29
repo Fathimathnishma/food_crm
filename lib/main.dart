@@ -3,6 +3,8 @@ import 'package:food_crm/features/add_item/data/i_add_item_facade.dart';
 import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/home/data/i_home_facade.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
+import 'package:food_crm/features/order_details/data/i_order_details_facade.dart';
+import 'package:food_crm/features/order_details/presentation/provider/order_details_provider.dart';
 import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
@@ -46,7 +48,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => OrderSummeryProvider(sl<IOrderSummeryFacade>()),),
         ChangeNotifierProvider(create: (_)=> HomeProvider(sl<IHomeFacade>(),),),
         ChangeNotifierProvider(create: (_)=>TodayOrderProvider(),),
-        ChangeNotifierProvider(create: (_) => UserPaymentProvider(sl<IUserPaymentFacade>()),)
+        ChangeNotifierProvider(create: (_) => UserPaymentProvider(sl<IUserPaymentFacade>()),),
+        ChangeNotifierProvider(create: (_) =>OrderDetailsProvider(sl<IOrderDetailsFacade>()) ,)
       ],
       child:  MaterialApp(
         navigatorKey: navigatorKey,
