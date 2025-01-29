@@ -42,7 +42,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
 
     if (summeryProvider.itemsList.isNotEmpty) {
       tabController = TabController(
-        length: summeryProvider.itemsList.length , // Add one for "Total" tab
+        length: summeryProvider.itemsList.length, // Add one for "Total" tab
         vsync: this,
       );
       tabController.addListener(() {
@@ -178,41 +178,46 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 ),
                 const SizedBox(height: 24),
                 Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Align(
                       alignment: Alignment.topLeft,
                       child: Text(
                         'People',
-                        style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
+                        style: TextStyle(
+                            fontSize: 16, color: AppColors.whiteColor),
                       ),
                     ),
                     // SizedBox(width: 100,),
-               SizedBox(
-                 child: Row(
-                   children: [
-                     Text( stateAddOrder.mealToString(stateAddOrder.selectedMeal), style: const TextStyle(color: AppColors.whiteColor),),
-
-                     PopupMenuButton<FoodTime>(
-                      
-                       icon: const Icon(Icons.timer_sharp, color:AppColors.primaryColor),
-                       onSelected: (FoodTime result) {
-                      setState(() {
-                       stateAddOrder.selectedMeal = result;
-                      });
-                                   },
-                                   itemBuilder: (BuildContext context) {
-                      return FoodTime.values.map((FoodTime meal) {
-                        return PopupMenuItem<FoodTime>(
-                          value: meal,
-                          child: Text(stateAddOrder.mealToString(meal)), // Show readable string
-                        );
-                      }).toList();
-                                   },
-                                 ),
-                   ],
-                 ),
-               ),
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          Text(
+                            stateAddOrder
+                                .mealToString(stateAddOrder.selectedMeal),
+                            style: const TextStyle(color: AppColors.whiteColor),
+                          ),
+                          PopupMenuButton<FoodTime>(
+                            icon: const Icon(Icons.timer_sharp,
+                                color: AppColors.primaryColor),
+                            onSelected: (FoodTime result) {
+                              setState(() {
+                                stateAddOrder.selectedMeal = result;
+                              });
+                            },
+                            itemBuilder: (BuildContext context) {
+                              return FoodTime.values.map((FoodTime meal) {
+                                return PopupMenuItem<FoodTime>(
+                                  value: meal,
+                                  child: Text(stateAddOrder.mealToString(
+                                      meal)), // Show readable string
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -220,7 +225,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ButtonsTabBar(
-                      
                       controller: tabController,
                       height: 58,
                       width: 124,
@@ -229,30 +233,83 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                       backgroundColor: AppColors.greyColor,
                       unselectedBackgroundColor: AppColors.blackColor,
                       unselectedBorderColor: AppColors.greyColor,
-                      unselectedLabelStyle:
-                          const TextStyle(color: AppColors.whiteColor),
-                      labelStyle: const TextStyle(
-                        color: AppColors.blackColor,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      borderWidth: 1,
+                      borderColor: Colors.black,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                       tabs: [
-                        for (var item in stateAddOrder.itemsList)
+                        for (int index = 0;
+                            index < stateAddOrder.itemsList.length;
+                            index++)
                           Tab(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(item.name.text,
-                                    style: const TextStyle(fontSize: 14)),
+                                Text(
+                                  stateAddOrder.itemsList[index].name.text,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: tabController.index == index
+                                        ? AppColors.blackColor
+                                        : AppColors.greyColor,
+                                    fontWeight: tabController.index == index
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                ),
                                 const SizedBox(height: 5),
-                                Text(item.price.text,
-                                    style: const TextStyle(fontSize: 12)),
+                                Text(
+                                  stateAddOrder.itemsList[index].price.text,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: tabController.index == index
+                                        ? AppColors.blackColor
+                                        : AppColors.greyColor,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        
                       ],
                     ),
+
+                    // ButtonsTabBar(
+                    //   controller: tabController,
+                    //   height: 58,
+                    //   width: 124,
+                    //   center: false,
+                    //   physics: const NeverScrollableScrollPhysics(),
+                    //   backgroundColor: AppColors.greyColor,
+                    //   unselectedBackgroundColor: AppColors.blackColor,
+                    //   unselectedBorderColor: AppColors.greyColor,
+                    //   borderWidth: 1,
+                    //   borderColor: Colors.black,
+                    //   contentPadding:
+                    //       const EdgeInsets.symmetric(horizontal: 20),
+                    //   unselectedLabelStyle:
+                    //       const TextStyle(color: Colors.amber),
+                    //   labelStyle: const TextStyle(
+                    //     color: AppColors.blackColor,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
+                    //   tabs: [
+                    //     for (var item in stateAddOrder.itemsList)
+                    //       Tab(
+                    //         child: Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           children: [
+                    //             Text(item.name.text,
+                    //                 style: const TextStyle(fontSize: 14)),
+                    //             const SizedBox(height: 5),
+                    //             Text(item.price.text,
+                    //                 style: const TextStyle(fontSize: 12)),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //   ],
+                    // ),
                   ],
                 ),
                 Expanded(
@@ -289,10 +346,8 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                               ),
                             );
                     }),
-                    
                   ],
                 )),
-                
               ],
             ),
           ),
@@ -303,21 +358,21 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 title: 'Total',
                 buttonText: 'Save',
                 onTap: () async {
-                   stateAddOrder.checkQty(tabIndex: tabController.index);
+                  stateAddOrder.checkQty(tabIndex: tabController.index);
                   if (stateAddOrder.isValid) {
-                  Loading.addShowDialog(context,message: "adding");
-                  await stateAddOrder.addOrder(
-                    onSuccess: (order) { 
-                
-                      context.read<TodayOrderProvider>().addLocalTodayOrder(order);
-                      context.read<HomeProvider>().addLocalTodayOrder();
-                      context.read<AddItemProvider>().clearItems();
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    Navigator.pop(navigatorKey.currentContext!);  
-                   
-                      },  );
-
+                    Loading.addShowDialog(context, message: "adding");
+                    await stateAddOrder.addOrder(
+                      onSuccess: (order) {
+                        context
+                            .read<TodayOrderProvider>()
+                            .addLocalTodayOrder(order);
+                        context.read<HomeProvider>().addLocalTodayOrder();
+                        context.read<AddItemProvider>().clearItems();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.pop(navigatorKey.currentContext!);
+                      },
+                    );
                   } else {
                     Customtoast.showErrorToast(
                         "Please check the values you've given.");

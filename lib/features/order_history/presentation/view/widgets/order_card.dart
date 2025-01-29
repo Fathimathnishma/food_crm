@@ -63,12 +63,10 @@ class OrderCard extends StatelessWidget {
             String itemPrice = '';
             if (item is ItemUploadingModel) {
               // Use price if the item is of type ItemUploadingModel
-              itemPrice = 
-                  item.price.toString();
+              itemPrice = item.price.toString();
             } else if (item is UserDialyOrderModel) {
               // Use splitAmount if the item is of type UserDialyOrderModel
-              itemPrice = 
-                   item.splitAmount.toString();
+              itemPrice = item.splitAmount.toString();
             }
 
             return Padding(
@@ -91,16 +89,33 @@ class OrderCard extends StatelessWidget {
           // Total
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
               children: [
-                const Text("Total:"),
-                Text(
-                  "₹$total",
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                  ),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                      width: 60,
+                      child: Divider(
+                        height: 8,
+                        thickness: 1.5,
+                        color: AppColors.blackColor,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "₹$total",
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

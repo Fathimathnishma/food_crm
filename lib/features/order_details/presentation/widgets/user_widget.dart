@@ -35,7 +35,7 @@ class UserWidget extends StatelessWidget {
                 backgroundColor: AppColors.whiteColor,
                 child: Text(
                   stateUserAdd
-                      .getInitials(name), // Display initials of the name
+                      .getInitials(name), 
                   style: const TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -57,7 +57,7 @@ class UserWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(width: 40, child: Text('data')),
+                const SizedBox(width: 40, child: Text('data')),
                 Consumer<OrderSummeryProvider>(
                   builder: (context, stateAddOrder, child) {
                     final amount = stateAddOrder

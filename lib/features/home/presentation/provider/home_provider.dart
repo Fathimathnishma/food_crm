@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'dart:developer';
 
@@ -19,8 +17,7 @@ class HomeProvider with ChangeNotifier {
   String get formattedDate => DateFormat('EEE d').format(_dateTime);
   String get formattedTime => DateFormat('h:mm a').format(_dateTime);
 
-     String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
-
+  String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
 
   final _dateTimeController = StreamController<DateTime>.broadcast();
 
@@ -30,13 +27,12 @@ class HomeProvider with ChangeNotifier {
   List<OrderModel> todayOrders = [];
   num todayTotal = 0;
   num totalAmount = 0;
-  num balanceAmount=0;
-  num depositAmount=0;
+  num balanceAmount = 0;
+  num depositAmount = 0;
   bool isLoading = false;
   bool noMoreData = false;
   List<UserModel> users = [];
 
- 
   void startDateTimeStream() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       _dateTime = DateTime.now();
@@ -111,9 +107,8 @@ class HomeProvider with ChangeNotifier {
                 usersCount = success["userCount"] as num;
                 totalAmount = success["totalAmount"] as num;
                 depositAmount = success["depositAmount"] as num;
-                balanceAmount+=totalAmount-depositAmount;
+                balanceAmount = totalAmount - depositAmount;
                 return success;
-                
               },
             ))
         .distinct();
@@ -124,5 +119,4 @@ class HomeProvider with ChangeNotifier {
     _dateTimeController.close();
     super.dispose();
   }
-
 }
