@@ -6,13 +6,14 @@ class ItemUploadingModel {
   String name;
   num price;
   num qty;
-  
+  String foodTime;
   List<UserItemQtyAloccatedModel> users;
 
   ItemUploadingModel({
     required this.name,
     required this.price,
     required this.qty,
+    required this.foodTime,
     this.users = const [], // Default to an empty list
   });
 
@@ -24,6 +25,7 @@ class ItemUploadingModel {
       'name': name,
       'price': price,
       'qty': qty,
+      "foodTime":foodTime,
       // Only include users if they are populated
       if (users.isNotEmpty) 'users': users.map((x) => x.toMap()).toList(),
     };
@@ -39,9 +41,9 @@ class ItemUploadingModel {
               (map['users'] as List<dynamic>? ?? [])
                   .map((x) => UserItemQtyAloccatedModel.fromMap(x as Map<String, dynamic>)),
             )
-          : [],
+          : [], foodTime: map["foodTime"] as String,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  
 }

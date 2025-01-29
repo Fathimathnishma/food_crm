@@ -111,7 +111,7 @@ class HomeProvider with ChangeNotifier {
                 usersCount = success["userCount"] as num;
                 totalAmount = success["totalAmount"] as num;
                 depositAmount = success["depositAmount"] as num;
-                balanceAmount+=totalAmount-depositAmount;
+                balanceAmount =totalAmount-depositAmount;
                 return success;
                 
               },

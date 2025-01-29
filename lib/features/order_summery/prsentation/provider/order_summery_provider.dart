@@ -204,7 +204,7 @@ void initiolSplitQty() {
         name: data.name.text, 
         price: price, 
         qty: itemQty, 
-        users: data.users
+        users: data.users, foodTime: mealToString(selectedMeal).toLowerCase()
       )
     );
   }

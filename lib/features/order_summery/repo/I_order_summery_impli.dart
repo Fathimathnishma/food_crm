@@ -50,6 +50,7 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
           'name': item.name,
           'price': item.price,
           'qty': item.qty,
+          "foodTime": item.foodTime,
           'users': {
             for (var user in item.users) user.id: user.toMap(),
           },
