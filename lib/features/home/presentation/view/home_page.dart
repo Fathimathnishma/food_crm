@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                                   fontSize: 14, color: Color(0XFFFFFFFF)),
                             ),
                             Text(
-                              homePro.total.toString(),
+                              homePro.todayTotal.toString(),
                               style: const TextStyle(
                                   fontSize: 34, color: Color(0XFFFFFFFF)),
                             ),
@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     UsersPaymentScreen(
-                                                  total: homePro.totalAmount,
+                                                  total: homePro.balanceAmount,
                                                 ),
                                               ));
                                         }),
@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                                               height: 8,
                                             ),
                                             Text(
-                                              ("₹${homePro.totalAmount.toStringAsFixed(1)}"),
+                                              ("₹${homePro.balanceAmount.toStringAsFixed(1)}"),
                                               style: const TextStyle(
                                                   fontSize: 24,
                                                   color: Color(0XFFFFFFFF)),
