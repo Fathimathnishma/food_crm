@@ -82,7 +82,7 @@ class IHomeImpli implements IHomeFacade {
         final result = {
           'totalAmount': data['totalAmount'] as num? ?? 0,
           'userCount': data['userCount'] as num? ?? 0,
-          'depositAmount': data['depositAmount'] as num? ?? 0,
+          'generalRef': data['generalRef'] as num? ?? 0,
         };
 
         return right(result); 

@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/order_summery/data/model/item_uploading%20_model.dart';
 
 class OrderModel {
