@@ -50,6 +50,7 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
           'name': item.name,
           'price': item.price,
           'qty': item.qty,
+          
           'users': {
             for (var user in item.users) user.id: user.toMap(),
           },
@@ -59,6 +60,7 @@ class IOrderSummeryImpli implements IOrderSummeryFacade {
       final Map<String, dynamic> orderData = {
         'id': id,
         'createdAt': orderModel.createdAt,
+        "foodTime": orderModel.foodTime,
         'totalAmount': orderModel.totalAmount,
         'order': itemMap,
       };

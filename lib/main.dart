@@ -3,9 +3,12 @@ import 'package:food_crm/features/add_item/data/i_add_item_facade.dart';
 import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/home/data/i_home_facade.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
+import 'package:food_crm/features/order_details/data/i_order_details_facade.dart';
+import 'package:food_crm/features/order_details/presentation/provider/order_details_provider.dart';
 import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
-import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
+import 'package:food_crm/features/today_order/data/i_today_order_facade.dart';
+import 'package:food_crm/features/today_order/presentation/provider/today_order_provider.dart';
 import 'package:food_crm/features/order_summery/data/i_order_summery_facade.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/splash/presentation/view/splash_screen.dart';
@@ -45,8 +48,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OrderHistoryProvider( sl<IOrderHistoryFacade>())),
         ChangeNotifierProvider(create: (context) => OrderSummeryProvider(sl<IOrderSummeryFacade>()),),
         ChangeNotifierProvider(create: (_)=> HomeProvider(sl<IHomeFacade>(),),),
-        ChangeNotifierProvider(create: (_)=>TodayOrderProvider(),),
-        ChangeNotifierProvider(create: (_) => UserPaymentProvider(sl<IUserPaymentFacade>()),)
+        ChangeNotifierProvider(create: (_)=>TodayOrderProvider(sl<ITodayOrderFacade>()),),
+        ChangeNotifierProvider(create: (_) => UserPaymentProvider(sl<IUserPaymentFacade>()),),
+        ChangeNotifierProvider(create: (_) =>OrderDetailsProvider(sl<IOrderDetailsFacade>()) ,)
       ],
       child:  MaterialApp(
         navigatorKey: navigatorKey,

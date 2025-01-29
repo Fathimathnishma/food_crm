@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
-import 'package:food_crm/features/today_order/presentation/provider/today_order_history_provider.dart';
+import 'package:food_crm/features/today_order/presentation/provider/today_order_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/total_amot_widget.dart';
 import 'package:food_crm/features/order_summery/prsentation/view/widget/user_row_widget.dart';
@@ -274,42 +274,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                       ],
                     ),
 
-                    // ButtonsTabBar(
-                    //   controller: tabController,
-                    //   height: 58,
-                    //   width: 124,
-                    //   center: false,
-                    //   physics: const NeverScrollableScrollPhysics(),
-                    //   backgroundColor: AppColors.greyColor,
-                    //   unselectedBackgroundColor: AppColors.blackColor,
-                    //   unselectedBorderColor: AppColors.greyColor,
-                    //   borderWidth: 1,
-                    //   borderColor: Colors.black,
-                    //   contentPadding:
-                    //       const EdgeInsets.symmetric(horizontal: 20),
-                    //   unselectedLabelStyle:
-                    //       const TextStyle(color: Colors.amber),
-                    //   labelStyle: const TextStyle(
-                    //     color: AppColors.blackColor,
-                    //     fontWeight: FontWeight.bold,
-                    //   ),
-                    //   tabs: [
-                    //     for (var item in stateAddOrder.itemsList)
-                    //       Tab(
-                    //         child: Column(
-                    //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //           mainAxisAlignment: MainAxisAlignment.center,
-                    //           children: [
-                    //             Text(item.name.text,
-                    //                 style: const TextStyle(fontSize: 14)),
-                    //             const SizedBox(height: 5),
-                    //             Text(item.price.text,
-                    //                 style: const TextStyle(fontSize: 12)),
-                    //           ],
-                    //         ),
-                    //       ),
-                    //   ],
-                    // ),
+                    
                   ],
                 ),
                 Expanded(

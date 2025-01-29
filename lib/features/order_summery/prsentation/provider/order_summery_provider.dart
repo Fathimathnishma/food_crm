@@ -204,7 +204,7 @@ void initiolSplitQty() {
         name: data.name.text, 
         price: price, 
         qty: itemQty, 
-        users: data.users
+        users: data.users,
       )
     );
   }
@@ -215,7 +215,7 @@ void initiolSplitQty() {
         orderModel: OrderModel(
             createdAt: Timestamp.now(),
             totalAmount: overallTotal,
-            order: order), 
+            order: order, foodTime: mealToString(selectedMeal).toLowerCase()), 
             foodTime:mealToString(selectedMeal).toLowerCase());
 
     result.fold(
@@ -226,7 +226,7 @@ void initiolSplitQty() {
         onSuccess( OrderModel(
             createdAt: Timestamp.now(),
             totalAmount: overallTotal,
-            order: order));
+            order: order, foodTime: mealToString(selectedMeal).toLowerCase()));
        
       },
     );

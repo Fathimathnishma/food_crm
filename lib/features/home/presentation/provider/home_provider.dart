@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/data/i_home_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
@@ -32,6 +31,7 @@ class HomeProvider with ChangeNotifier {
   bool isLoading = false;
   bool noMoreData = false;
   List<UserModel> users = [];
+
 
   void startDateTimeStream() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -105,8 +105,14 @@ class HomeProvider with ChangeNotifier {
               },
               (success) {
                 usersCount = success["userCount"] as num;
+                log(usersCount.toString());
                 totalAmount = success["totalAmount"] as num;
-                depositAmount = success["depositAmount"] as num;
+                log(totalAmount.toString());
+                depositAmount = success["depositAmount"] as num? ?? 0;
+                if (depositAmount == 0) {
+                  log("Deposit amount is zero. Balance will be equal to total amount.");
+                  balanceAmount=todayTotal;
+                }
                 balanceAmount = totalAmount - depositAmount;
                 return success;
               },

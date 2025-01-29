@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         homeProvider.init();
-        homeProvider.listenToUserCount();
+       // homeProvider.listenToUserCount();
         homeProvider.startDateTimeStream();
       },
     );
@@ -90,9 +90,7 @@ class _HomePageState extends State<HomePage> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      TodayOrderHistoryScreen.TodayOrdersScreen(
-                                    todayOrder: homePro.todayOrders,
-                                  ),
+                                      const TodayOrderScreen.TodayOrdersScreen(),
                                 ));
                           },
                           backgroundColor: const Color(0XFFFFF200),

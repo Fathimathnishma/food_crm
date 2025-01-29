@@ -8,4 +8,6 @@ class MainFailures with _$MainFailures{
   const factory MainFailures.serverFailures({
     required String errormsg
   })=ServerFailure;
+
+ 
  }

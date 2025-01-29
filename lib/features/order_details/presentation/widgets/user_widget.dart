@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/order_summery/prsentation/provider/order_summery_provider.dart';
+import 'package:food_crm/features/order_details/presentation/provider/order_details_provider.dart';
 import 'package:food_crm/features/users/presentation/provider/user_provider.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,7 @@ class UserWidget extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: SizedBox(
-        width: 80,
+        width: 50,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -50,15 +50,17 @@ class UserWidget extends StatelessWidget {
         name,
         style: const TextStyle(fontSize: 17, color: AppColors.whiteColor),
       ),
-      trailing: Consumer<OrderSummeryProvider>(
+      trailing: Consumer<OrderDetailsProvider>(
         builder: (context, stateAddOrder, child) {
+          final qty = stateAddOrder
+                        .itemsList[tabIndex].users[index].qtyAsNum;
           return SizedBox(
             width: MediaQuery.of(context).size.width * 0.3,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(width: 40, child: Text('data')),
-                Consumer<OrderSummeryProvider>(
+                 SizedBox(width: 40, child: Text(qty.toString(), style: const TextStyle(color: Colors.white))),
+                Consumer<OrderDetailsProvider>(
                   builder: (context, stateAddOrder, child) {
                     final amount = stateAddOrder
                         .itemsList[tabIndex].users[index].splitAmount;

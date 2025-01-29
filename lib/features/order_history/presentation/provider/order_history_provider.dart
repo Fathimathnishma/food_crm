@@ -1,8 +1,6 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
-import 'package:food_crm/features/order_summery/data/model/item_uploading%20_model.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:intl/intl.dart';
 
@@ -48,13 +46,6 @@ class OrderHistoryProvider with ChangeNotifier {
     groupedOrders={};
   }
 
-  String calculateTotal(List<ItemUploadingModel> items) {
-    final total = items.fold<num>(
-      0,
-      (sum, item) => sum + (item.price),
-    );
-    return total.toString();
-  }
 
   String calculateTotalForDate(String dateKey) {
     final orders = groupedOrders[dateKey] ?? [];
@@ -65,7 +56,7 @@ class OrderHistoryProvider with ChangeNotifier {
           sum +
           order.order.fold<num>(
             0,
-            (itemSum, item) => itemSum + item.price,
+            (itemSum, item) => itemSum +(item.price*item.qty) ,
           ),
     );
     return total.toStringAsFixed(2);
