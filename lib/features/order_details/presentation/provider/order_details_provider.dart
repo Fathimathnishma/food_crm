@@ -22,9 +22,9 @@ String foodTime='';
       l.toString();
     }, (r) {
       order=r;
-       if (order != null && order!.order != null&& order!.totalAmount!=null) {
+       if (order != null) {
           itemsList.clear();
-          itemsList.addAll(order!.order); // Assuming `items` is a List<ItemUploadingModel>
+          itemsList.addAll(order!.order); 
         totalAmount=order!.totalAmount;
         foodTime= order!.foodTime;
       }

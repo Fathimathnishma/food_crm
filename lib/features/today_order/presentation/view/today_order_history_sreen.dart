@@ -4,20 +4,19 @@ import 'package:food_crm/features/order_details/presentation/order_details_scree
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/features/today_order/presentation/provider/today_order_provider.dart';
-import 'package:food_crm/features/order_summery/data/model/order_model.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
-class TodayOrderHistoryScreen extends StatefulWidget {
-  final List<OrderModel>todayOrder;
-  const TodayOrderHistoryScreen.TodayOrdersScreen({super.key, required this.todayOrder,});
+class TodayOrderScreen extends StatefulWidget {
+
+  const TodayOrderScreen.TodayOrdersScreen({super.key,});
 
   @override
-  State<TodayOrderHistoryScreen> createState() =>
-      _TodayOrderHistoryScreenState();
+  State<TodayOrderScreen> createState() =>
+      _TodayOrderScreenState();
 }
 
-class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
+class _TodayOrderScreenState extends State<TodayOrderScreen> {
   @override
   void initState() {
     super.initState();
@@ -68,6 +67,9 @@ class _TodayOrderHistoryScreenState extends State<TodayOrderHistoryScreen> {
       ),
       body: Consumer<TodayOrderProvider>(
         builder: (context, stateFetchOrder, child) {
+          if(stateFetchOrder.isLoading){
+            return const Center(child: CircularProgressIndicator(color: AppColors.primaryColor,),);
+          }
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

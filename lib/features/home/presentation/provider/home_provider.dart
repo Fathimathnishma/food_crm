@@ -1,8 +1,5 @@
-
-
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/data/i_home_facade.dart';
 import 'package:food_crm/features/order_summery/data/model/order_model.dart';
@@ -19,8 +16,7 @@ class HomeProvider with ChangeNotifier {
   String get formattedDate => DateFormat('EEE d').format(_dateTime);
   String get formattedTime => DateFormat('h:mm a').format(_dateTime);
 
-     String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
-
+  String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
 
   final _dateTimeController = StreamController<DateTime>.broadcast();
 
@@ -30,13 +26,13 @@ class HomeProvider with ChangeNotifier {
   List<OrderModel> todayOrders = [];
   num todayTotal = 0;
   num totalAmount = 0;
-  num balanceAmount=0;
-  num depositAmount=0;
+  num balanceAmount = 0;
+  num depositAmount = 0;
   bool isLoading = false;
   bool noMoreData = false;
   List<UserModel> users = [];
 
- 
+
   void startDateTimeStream() {
     Timer.periodic(const Duration(seconds: 1), (timer) {
       _dateTime = DateTime.now();
@@ -109,11 +105,16 @@ class HomeProvider with ChangeNotifier {
               },
               (success) {
                 usersCount = success["userCount"] as num;
+                log(usersCount.toString());
                 totalAmount = success["totalAmount"] as num;
-                depositAmount = success["depositAmount"] as num;
-                balanceAmount =totalAmount-depositAmount;
+                log(totalAmount.toString());
+                depositAmount = success["depositAmount"] as num? ?? 0;
+                if (depositAmount == 0) {
+                  log("Deposit amount is zero. Balance will be equal to total amount.");
+                  balanceAmount=todayTotal;
+                }
+                balanceAmount = totalAmount - depositAmount;
                 return success;
-                
               },
             ))
         .distinct();
@@ -124,5 +125,4 @@ class HomeProvider with ChangeNotifier {
     _dateTimeController.close();
     super.dispose();
   }
-
 }

@@ -78,7 +78,7 @@ class IHomeImpli implements IHomeFacade {
        return generalDocRef.snapshots().map((snapshot) {
       if (snapshot.exists) {
         final data = snapshot.data() ?? {};
-
+       log("vghhhh");
         final result = {
           'totalAmount': data['totalAmount'] as num? ?? 0,
           'userCount': data['userCount'] as num? ?? 0,

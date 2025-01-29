@@ -22,8 +22,7 @@ class OrderSummeryScreen extends StatefulWidget {
   State<OrderSummeryScreen> createState() => _OrderSummeryScreenState();
 }
 
-class _OrderSummeryScreenState extends State<OrderSummeryScreen>
-    with TickerProviderStateMixin {
+class _OrderSummeryScreenState extends State<OrderSummeryScreen> with TickerProviderStateMixin {
   late TabController tabController;
 
   @override
@@ -36,13 +35,12 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final summeryProvider =
-        Provider.of<OrderSummeryProvider>(context, listen: false);
+    final summeryProvider = Provider.of<OrderSummeryProvider>(context, listen: false);
     summeryProvider.init(widget.itemList);
 
     if (summeryProvider.itemsList.isNotEmpty) {
       tabController = TabController(
-        length: summeryProvider.itemsList.length , // Add one for "Total" tab
+        length: summeryProvider.itemsList.length, // Length for each item
         vsync: this,
       );
       tabController.addListener(() {
@@ -60,16 +58,16 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
   @override
   Widget build(BuildContext context) {
     return Consumer<OrderSummeryProvider>(
-        builder: (context, stateAddOrder, child) {
-      if (stateAddOrder.isLoading) {
-        return const Center(
-          child: CircularProgressIndicator(
-            color: AppColors.primaryColor,
-            strokeWidth: 2,
-          ),
-        );
-      }
-      return Scaffold(
+      builder: (context, stateAddOrder, child) {
+        if (stateAddOrder.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColors.primaryColor,
+              strokeWidth: 2,
+            ),
+          );
+        }
+        return Scaffold(
           backgroundColor: AppColors.blackColor,
           appBar: AppBar(
             leading: InkWell(
@@ -134,51 +132,49 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                           ),
                         ),
                       ),
-                      ListView.builder(
-                        itemCount: stateAddOrder.itemsList.length,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int index) {
-                          final itemList = stateAddOrder.itemsList;
-                          final data = itemList[index];
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(data.name.text),
-                                    SizedBox(
-                                      width: 70,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(data.quantity.text),
-                                          Text("₹${data.price.text}"),
-                                        ],
+                      // Expanded to handle unbounded height issue
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: stateAddOrder.itemsList.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            final itemList = stateAddOrder.itemsList;
+                            final data = itemList[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(data.name.text),
+                                      SizedBox(
+                                        width: 70,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(data.quantity.text),
+                                            Text("₹${data.price.text}"),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                      const SizedBox(
-                        height: 12,
-                      )
+                      const SizedBox(height: 12),
                     ],
                   ),
                 ),
                 const SizedBox(height: 24),
                 Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Align(
                       alignment: Alignment.topLeft,
@@ -187,143 +183,142 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                         style: TextStyle(fontSize: 16, color: AppColors.whiteColor),
                       ),
                     ),
-                    // SizedBox(width: 100,),
-               SizedBox(
-                 child: Row(
-                   children: [
-                     Text( stateAddOrder.mealToString(stateAddOrder.selectedMeal), style: const TextStyle(color: AppColors.whiteColor),),
-
-                     PopupMenuButton<FoodTime>(
-                      
-                       icon: const Icon(Icons.timer_sharp, color:AppColors.primaryColor),
-                       onSelected: (FoodTime result) {
-                      setState(() {
-                       stateAddOrder.selectedMeal = result;
-                      });
-                                   },
-                                   itemBuilder: (BuildContext context) {
-                      return FoodTime.values.map((FoodTime meal) {
-                        return PopupMenuItem<FoodTime>(
-                          value: meal,
-                          child: Text(stateAddOrder.mealToString(meal)), // Show readable string
-                        );
-                      }).toList();
-                                   },
-                                 ),
-                   ],
-                 ),
-               ),
+                    SizedBox(
+                      child: Row(
+                        children: [
+                          Text(stateAddOrder.mealToString(stateAddOrder.selectedMeal),
+                              style: const TextStyle(color: AppColors.whiteColor)),
+                          PopupMenuButton<FoodTime>(
+                            icon: const Icon(Icons.timer_sharp, color: AppColors.primaryColor),
+                            onSelected: (FoodTime result) {
+                              setState(() {
+                                stateAddOrder.selectedMeal = result;
+                              });
+                            },
+                            itemBuilder: (BuildContext context) {
+                              return FoodTime.values.map((FoodTime meal) {
+                                return PopupMenuItem<FoodTime>(
+                                  value: meal,
+                                  child: Text(stateAddOrder.mealToString(meal)), // Show readable string
+                                );
+                              }).toList();
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    ButtonsTabBar(
-                      
-                      controller: tabController,
-                      height: 58,
-                      width: 124,
-                      center: false,
-                      physics: const NeverScrollableScrollPhysics(),
-                      backgroundColor: AppColors.greyColor,
-                      unselectedBackgroundColor: AppColors.blackColor,
-                      unselectedBorderColor: AppColors.greyColor,
-                      unselectedLabelStyle:
-                          const TextStyle(color: AppColors.whiteColor),
-                      labelStyle: const TextStyle(
-                        color: AppColors.blackColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      tabs: [
-                        for (var item in stateAddOrder.itemsList)
-                          Tab(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(item.name.text,
-                                    style: const TextStyle(fontSize: 14)),
-                                const SizedBox(height: 5),
-                                Text(item.price.text,
-                                    style: const TextStyle(fontSize: 12)),
-                              ],
-                            ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ButtonsTabBar(
+                          borderColor: Colors.black,
+                          borderWidth: 1,
+                          controller: tabController,
+                          height: 58,
+                          width: 124,
+                          center: false,
+                          physics: const NeverScrollableScrollPhysics(),
+                          backgroundColor: AppColors.greyColor,
+                          unselectedBackgroundColor: AppColors.blackColor,
+                          unselectedBorderColor: AppColors.greyColor,
+                          unselectedLabelStyle:
+                              const TextStyle(color: AppColors.primaryColor),
+                          labelStyle: const TextStyle(
+                            color: AppColors.blackColor,
+                            fontWeight: FontWeight.bold,
                           ),
-                        
+                          tabs: [
+                            for (var item in stateAddOrder.itemsList)
+                              Tab(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(item.name.text, style: const TextStyle(fontSize: 14)),
+                                    const SizedBox(height: 5),
+                                    Text(item.price.text, style: const TextStyle(fontSize: 12)),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
                       ],
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: tabController,
+                        children: [
+                          ...stateAddOrder.itemsList.map((item) {
+                            return item.users.isNotEmpty
+                                ? ListView.builder(
+                                    itemCount: item.users.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      final user = item.users[index];
+                                      return UserRowWidget(
+                                        name: user.name,
+                                        price: item.price.text,
+                                        index: index,
+                                        tabIndex: stateAddOrder.itemsList.indexOf(item),
+                                        onDelete: (int tabIndex, int userIndex) {
+                                          stateAddOrder.removeUserFromSummery(
+                                            tabIndex: tabIndex,
+                                            userIndex: userIndex,
+                                            price: item.price.text,
+                                          );
+                                        },
+                                        controller: item.users[index].qty,
+                                      );
+                                    },
+                                  )
+                                : const Center(
+                                    child: Text(
+                                      'No Users',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  );
+                          }),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                Expanded(
-                    child: TabBarView(
-                  controller: tabController,
-                  children: [
-                    ...stateAddOrder.itemsList.map((item) {
-                      return item.users.isNotEmpty
-                          ? ListView.builder(
-                              itemCount: item.users.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final user = item.users[index];
-                                return UserRowWidget(
-                                  name: user.name,
-                                  price: item.price.text,
-                                  index: index,
-                                  tabIndex:
-                                      stateAddOrder.itemsList.indexOf(item),
-                                  onDelete: (int tabIndex, int userIndex) {
-                                    stateAddOrder.removeUserFromSummery(
-                                      tabIndex: tabIndex,
-                                      userIndex: userIndex,
-                                      price: item.price.text,
-                                    );
-                                  },
-                                  controller: item.users[index].qty,
-                                );
-                              },
-                            )
-                          : const Center(
-                              child: Text(
-                                'No Users',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            );
-                    }),
-                    
-                  ],
-                )),
-                
               ],
             ),
           ),
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TotalAmountContainer(
-                amount: stateAddOrder.overallTotal.toString(),
-                title: 'Total',
-                buttonText: 'Save',
-                onTap: () async {
-                   stateAddOrder.checkQty(tabIndex: tabController.index);
-                  if (stateAddOrder.isValid) {
-                  Loading.addShowDialog(context,message: "adding");
+              amount: stateAddOrder.overallTotal.toString(),
+              title: 'Total',
+              buttonText: 'Save',
+              onTap: () async {
+                stateAddOrder.checkQty(tabIndex: tabController.index);
+                if (stateAddOrder.isValid) {
+                  Loading.addShowDialog(context, message: "adding");
                   await stateAddOrder.addOrder(
-                    onSuccess: (order) { 
-                
+                    onSuccess: (order) {
                       context.read<TodayOrderProvider>().addLocalTodayOrder(order);
                       context.read<HomeProvider>().addLocalTodayOrder();
                       context.read<AddItemProvider>().clearItems();
                       Navigator.pop(context);
                       Navigator.pop(context);
-                    Navigator.pop(navigatorKey.currentContext!);  
-                   
-                      },  );
-
-                  } else {
-                    Customtoast.showErrorToast(
-                        "Please check the values you've given.");
-                  }
-                }),
-          ));
-    });
+                      Navigator.pop(navigatorKey.currentContext!);
+                    },
+                  );
+                } else {
+                  Customtoast.showErrorToast("Please check the values you've given.");
+                }
+              },
+            ),)
+          );
+      }
+    );
   }
-}
+  }
+  
