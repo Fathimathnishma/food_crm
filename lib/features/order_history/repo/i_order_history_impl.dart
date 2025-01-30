@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:food_crm/features/order_history/data/i_order_history_facade.dart';
@@ -22,8 +21,6 @@ class IOrderHistoryImpl implements IOrderHistoryFacade {
      if (noMoreData) return right([]);
     try {
       log("Fetching orders...");
-
-      // Fetching the Firestore collection
       Query query = firebaseFirestore
           .collection(FirebaseCollection.order)
           .orderBy("createdAt",descending: true);

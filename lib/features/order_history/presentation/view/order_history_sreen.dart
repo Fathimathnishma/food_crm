@@ -52,6 +52,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           ),
           actions: [
            stateFetchOrder.isFiltered? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 // InkWell(
                 //   onTap: () async {
@@ -86,12 +87,12 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                     stateFetchOrder.clearFilter();
                     Navigator.pop(context);
                   },
-                  child: const SizedBox(
-                    width: 70,
+                  child:  SizedBox(
+                    width: 176,
                      child:Text(
-                        "cancel",
+                        ("(${stateFetchOrder.selectedStartDate})to(${stateFetchOrder.selectedEndDate})"),
                         style:
-                            TextStyle(fontSize: 16, color: AppColors.whiteColor),
+                             TextStyle(fontSize: 12, color: AppColors.whiteColor,),
                       ), ),
                 ),
                 const SizedBox(

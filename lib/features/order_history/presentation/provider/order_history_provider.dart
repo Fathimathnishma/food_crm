@@ -11,6 +11,8 @@ class OrderHistoryProvider with ChangeNotifier {
   bool isLoading = false;
   bool noMoreData = false;
   bool isFiltered = false;
+  String selectedStartDate ="";
+  String selectedEndDate ="";
   List<OrderModel> allOrders = [];
   int todayDate = DateTime.now().day;
   Map<String, List<OrderModel>> groupedOrders = {};
@@ -70,6 +72,10 @@ void clearFilter(){
 
   Future<void> filterOrderBySpecificDateRange(
       DateTime startDate, DateTime endDate) async {
+      selectedStartDate = DateFormat('d-M-yyyy').format(startDate);
+      selectedEndDate = DateFormat('d-M-yyyy').format(endDate);
+
+       notifyListeners();
     groupedOrders = {};
    isFiltered = true;
     final result = await iOrderHistoryFacade.fetchOrderByRange(
@@ -85,11 +91,7 @@ void clearFilter(){
 
     notifyListeners();
   }
-Future<void>filterOrderBySpecificDate(DateTime selectedDate)async{
 
-  log("one dae selected");
-
-}
   Map<String, List<OrderModel>> groupOrdersByDate(List<OrderModel> allOrders) {
     Map<String, List<OrderModel>> groupedOrders = {};
 
