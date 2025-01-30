@@ -145,7 +145,12 @@ class _TodayOrderScreenState extends State<TodayOrderScreen> {
                       final order = stateFetchOrder.todayOrders[index];
                       return InkWell(
                         onTap: () {
+                          if(order.id!=null){
                           Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsScreen(orderId: order.id!),));
+
+                          }else{
+                            CircularProgressIndicator();
+                          }
                         },
                         child: OrderCard(
                           items: order.order,

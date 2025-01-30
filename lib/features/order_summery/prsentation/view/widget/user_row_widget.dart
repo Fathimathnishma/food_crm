@@ -97,11 +97,11 @@ class UserRowWidget extends StatelessWidget {
                   return;
                 } else{
                  log("Valid quantity entered: $newQty");
-                 final formattedQty = newQty == newQty.toInt() 
-                    ? newQty.toInt().toString() 
-                    : newQty.toStringAsFixed(1);
+                 final formattedQty = newQty == newQty 
+                    ? newQty.toStringAsFixed(0) 
+                    : newQty.toStringAsFixed(0);
 
-                 controller.text = formattedQty.toString();
+                 controller.text = formattedQty;
                  stateAddOrder.checkQty(tabIndex: tabIndex);
                 }
                   stateAddOrder.updateSplitAmount(tabIndex: tabIndex, price: price);

@@ -20,8 +20,12 @@ class OrderSummeryProvider extends ChangeNotifier {
   void addItemToSummery(List<ItemAddingModel> items) {
     overallTotal = 0;
     for (var item in items) {
-      final num price = num.parse(item.price.text);
-      final num itemQty = num.parse(item.quantity.text);
+      if(item.price.text.isEmpty&&item.quantity.text.isEmpty ){
+        Customtoast.showErrorToast("please enter a valid value");
+        return;
+      }
+      final num price = num.tryParse(item.price.text)??0;
+      final num itemQty = num.tryParse(item.quantity.text)??0;
       final num itemTotal = price * itemQty;
       overallTotal += itemTotal;
     }
@@ -134,6 +138,10 @@ void removeUserFromSummery({
 
 void initiolSplitQty() {
  for(var item in itemsList){
+  if(item.price.text.isEmpty&& item.quantity.text.isEmpty){
+  Customtoast.showErrorToast("please check your price & quantity.");
+  return;
+}
   for(var user in item.users){
     final num totalPrice = num.tryParse(item.price.text)??0;
      final num totalQty = num.tryParse(item.quantity.text)??0;
@@ -142,7 +150,7 @@ void initiolSplitQty() {
       if (qtyPerUser == qtyPerUser) {
         formattedQty = qtyPerUser.toString(); 
       } else {
-        formattedQty = qtyPerUser.toStringAsFixed(1); 
+        formattedQty = qtyPerUser.toString(); 
       }
      user.qty.text = formattedQty;
      num userQty = num.tryParse(formattedQty) ?? 0;
@@ -158,7 +166,10 @@ void initiolSplitQty() {
     isValid = true;
     final item = itemsList[tabIndex];
     num totalUserQty = 0;
-
+if(item.price.text.isEmpty&& item.quantity.text.isEmpty){
+  Customtoast.showErrorToast("please check your price & quantity.");
+  isValid=false;
+}
     for (var user in item.users) {
       if (user.qty.text.isNotEmpty) {
       final qty = num.tryParse(user.qty.text);
@@ -186,6 +197,8 @@ void initiolSplitQty() {
       
     } else {
        isValid = true;
+
+
     }
 
     notifyListeners();

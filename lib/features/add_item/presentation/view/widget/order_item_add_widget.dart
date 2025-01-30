@@ -1,6 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
 import 'package:food_crm/features/add_item/presentation/provider/add_item_provider.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
@@ -25,8 +23,6 @@ class OrderItemAddWidget extends StatefulWidget {
 }
 
 class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     return Consumer<AddItemProvider>(builder: (context, addItemProvider, _) {
@@ -37,98 +33,94 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
             Row(
               children: [
                 Expanded(
-                    child: Autocomplete<ItemAddingModel>(
-                      initialValue: TextEditingValue(text: widget.itemModel.name.text),
-                  optionsBuilder: (TextEditingValue textEditingValue) {
-                    if (textEditingValue.text.isEmpty) {
-                      return const Iterable<ItemAddingModel>.empty();
-                    } else {
-                      return addItemProvider.itemsuggestionList.where(
-                        (element) => element.name.text.toLowerCase().contains(
-                              textEditingValue.text.toLowerCase(),
-                            ),
-                      );
-                    }
-                  },
-                  displayStringForOption: (ItemAddingModel option) =>
-                      option.name.text,
-                  fieldViewBuilder: (BuildContext context,
-                      TextEditingController controller,
-                      FocusNode focusNode,
-                      VoidCallback onFieldSubmitted) {
-                    return TextField(
-                      controller: controller, 
-
-                      onChanged: (value) {
-                        widget.itemModel.name.text = value;
-                        setState(() {
-                          
-                        });
-                      },
-                      focusNode: focusNode,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                      decoration: InputDecoration(
-                      focusedBorder: const UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
-
-                        prefixIcon: Image.asset(
-                          'assets/images/check-list.png',
-                          height: 24,
-                          width: 24,
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 12.0),
-                        hintText: 'Item Name',
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
+                  child: Autocomplete<ItemAddingModel>(
+                    initialValue: TextEditingValue(text: widget.itemModel.name.text),
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<ItemAddingModel>.empty();
+                      } else {
+                        return addItemProvider.itemsuggestionList.where(
+                          (element) => element.name.text.toLowerCase().contains(
+                                textEditingValue.text.toLowerCase(),
+                              ),
+                        );
+                      }
+                    },
+                    displayStringForOption: (ItemAddingModel option) => option.name.text,
+                    fieldViewBuilder: (BuildContext context,
+                        TextEditingController controller,
+                        FocusNode focusNode,
+                        VoidCallback onFieldSubmitted) {
+                      // Ensure the controller has the current value
+                      if (controller.text != widget.itemModel.name.text) {
+                        controller.text = widget.itemModel.name.text;
+                      }
+                      
+                      return TextField(
+                        controller: controller,
+                        onChanged: (value) {
+                          widget.itemModel.name.text = value;
+                          setState(() {});
+                        },
+                        focusNode: focusNode,
+                        style: const TextStyle(
+                          color: Colors.white,
                           fontSize: 16,
                         ),
-                      ),
-                      onEditingComplete: onFieldSubmitted,
-                    );
-                  },
-                  optionsViewBuilder: (BuildContext context,
-                      AutocompleteOnSelected<ItemAddingModel> onSelected,
-                      Iterable<ItemAddingModel> options) {
-                    return Align(
-                      alignment: Alignment.topLeft,
-                      child: Material(
-                        elevation: 4,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10)),
-                          height: 200, 
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: options.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final option = options.elementAt(index);
-                              return ListTile(
-                                title: Text(
-                                  option.name.text,
-                                  style: const TextStyle(color: Colors.black),
-                                ),
-                                onTap: () => onSelected(option),
-                              );
-                            },
+                        decoration: InputDecoration(
+                          prefixIcon: Image.asset(
+                            'assets/images/check-list.png',
+                            height: 24,
+                            width: 24,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
+                          hintText: 'Item Name',
+                          hintStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16,
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  onSelected: (ItemAddingModel selectedOption) {
-                    // Update the TextField value and perform any actions on selection
-                    widget.itemModel.name.text = selectedOption.name.text;
-                    widget.itemModel.quantity.text =
-                        selectedOption.quantity.text;
-                    widget.itemModel.price.text = selectedOption.price.text;
-                    setState(() {
-                      
-                    });
-                  },
-                )),
+                        onEditingComplete: onFieldSubmitted,
+                      );
+                    },
+                    optionsViewBuilder: (BuildContext context,
+                        AutocompleteOnSelected<ItemAddingModel> onSelected,
+                        Iterable<ItemAddingModel> options) {
+                      return Align(
+                        alignment: Alignment.topLeft,
+                        child: Material(
+                          elevation: 4,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            height: 200,
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: options.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final option = options.elementAt(index);
+                                return ListTile(
+                                  title: Text(
+                                    option.name.text,
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                  onTap: () => onSelected(option),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    onSelected: (ItemAddingModel selectedOption) {
+                      widget.itemModel.name.text = selectedOption.name.text;
+                      widget.itemModel.quantity.text = selectedOption.quantity.text;
+                      widget.itemModel.price.text = selectedOption.price.text;
+                      setState(() {});
+                    },
+                  ),
+                ),
                 const SizedBox(width: 8),
                 SizedBox(
                   width: 50,
@@ -140,7 +132,6 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       fontSize: 16,
                     ),
                     decoration: const InputDecoration(
-                      focusedBorder: UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
                       hintText: 'Qty',
                     ),
                     keyboardType: TextInputType.number,
@@ -157,8 +148,6 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       fontSize: 16,
                     ),
                     decoration: const InputDecoration(
-                   focusedBorder: UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
-
                       hintText: 'per rate',
                     ),
                     keyboardType: TextInputType.number,
@@ -198,6 +187,6 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
           ],
         ),
       );
-    });
-  }
+ });
+}
 }

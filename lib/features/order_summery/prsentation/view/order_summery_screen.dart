@@ -323,7 +323,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                 title: 'Total',
                 buttonText: 'Save',
                 onTap: () async {
-
+                   
                   stateAddOrder.checkQty(tabIndex: tabController.index);
                   if (stateAddOrder.isValid) {
                     Loading.addShowDialog(context, message: "adding");
@@ -340,6 +340,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                       },
                     );
                   } else {
+                    Navigator.pop(context);
                     Customtoast.showErrorToast(
                         "Please check the values you've given.");
                   }

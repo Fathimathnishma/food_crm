@@ -246,7 +246,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         height: 30,
                                         child: Row(
                                           children: [
-                                            Text("Qty${item.qty.toString()}",
+                                            Text("Qty: ${item.qty.toString()}",
                                                 style: const TextStyle(
                                                     color: Colors.white)),
                                             const SizedBox(

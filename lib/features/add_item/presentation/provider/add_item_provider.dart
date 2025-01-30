@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/i_add_item_facade.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
@@ -9,31 +10,71 @@ class AddItemProvider extends ChangeNotifier {
   AddItemProvider(this.iItemFacade);
 
   List<ItemAddingModel> itemList = [];
-
   List<ItemAddingModel> itemsuggestionList = [];
-
   bool isLoading = true;
 
   void addItem() {
-    itemList.add(
-      ItemAddingModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        name: TextEditingController(),
-        quantity: TextEditingController(),
-        price: TextEditingController(),
-        users: [],
-      ),
+    ItemAddingModel newItem = ItemAddingModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      name: TextEditingController(),
+      quantity: TextEditingController(),
+      price: TextEditingController(),
+      users: [],
     );
+    itemList.add(newItem);
     notifyListeners();
   }
 
-  
   void removeItem(int index) {
-    itemList.removeAt(index);
-    notifyListeners();
+    if (index >= 0 && index < itemList.length) {
+      // Create a new list excluding the item to be removed
+      List<ItemAddingModel> updatedList = [];
+      
+      for (int i = 0; i < itemList.length; i++) {
+        if (i != index) {
+          // Keep the item's existing controllers and values
+          ItemAddingModel existingItem = itemList[i];
+          updatedList.add(ItemAddingModel(
+            id: existingItem.id,
+            name: existingItem.name,
+            quantity: existingItem.quantity,
+            price: existingItem.price,
+            users: existingItem.users,
+          ));
+        } else {
+          // Dispose controllers of the removed item
+          itemList[i].name.dispose();
+          itemList[i].quantity.dispose();
+          itemList[i].price.dispose();
+        }
+      }
+      
+      // Update the list with the remaining items
+      itemList = updatedList;
+      
+      // If list is empty, add a new item
+      if (itemList.isEmpty) {
+        addItem();
+      }
+      
+      notifyListeners();
+    }
   }
 
-  Future<void> addSuggestions() async {
+  Future<void> addSuggestions({ required void Function() onSuccess,}) async {
+    for(var data in itemList){
+    if(  data.name.text.isEmpty&& data.quantity.text.isEmpty&& data.price.text.isEmpty){
+      Customtoast.showErrorToast("please enter a value ");
+      return;
+    }
+    final num? price = num.tryParse(data.price.text);
+final num? quantity = num.tryParse(data.quantity.text);
+if (price == null || price <= 0 || quantity == null || quantity <= 0) {
+    Customtoast.showErrorToast("Please enter a valid value.");
+    return;
+}
+    
+    }
     final result = await iItemFacade.addSuggestions(itemList: itemList);
     result.fold(
       (l) {
@@ -41,17 +82,17 @@ class AddItemProvider extends ChangeNotifier {
       },
       (r) {
         log('suggestion added');
-     
+        onSuccess();
       },
-    );
+    );   
   }
 
   Future<void> fetchSugetion() async {
     isLoading = true;
     notifyListeners();
-    final resut = await iItemFacade.fetchSuggestions();
-
-    resut.fold(
+    
+    final result = await iItemFacade.fetchSuggestions();
+    result.fold(
       (l) {
         Customtoast.showErrorToast(l.errormsg);
       },
@@ -59,19 +100,28 @@ class AddItemProvider extends ChangeNotifier {
         itemsuggestionList = r;
       },
     );
+    
     isLoading = false;
     notifyListeners();
   }
-void disposeControllers(ItemAddingModel item) {
+
+  void disposeControllers(ItemAddingModel item) {
     item.name.dispose();
     item.quantity.dispose();
     item.price.dispose();
   }
- void clearItems() {
+
+  void clearItems() {
     for (var item in itemList) {
       disposeControllers(item);
     }
     itemList.clear();
     notifyListeners();
   }
+
+  @override
+  void dispose() {
+    clearItems();
+    super.dispose();
+ }
 }

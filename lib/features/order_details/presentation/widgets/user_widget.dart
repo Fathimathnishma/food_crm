@@ -59,7 +59,7 @@ class UserWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 SizedBox(width: 40, child: Text(qty.toString(), style: const TextStyle(color: Colors.white))),
+                 SizedBox(width: 40, child: Text(qty.toStringAsFixed(1), style: const TextStyle(color: Colors.white))),
                 Consumer<OrderDetailsProvider>(
                   builder: (context, stateAddOrder, child) {
                     final amount = stateAddOrder

@@ -80,14 +80,22 @@ class _AddItemScreenState extends State<AddItemScreen> {
           ),
           child: CustomButton(
             onTap: () async {
+              itemProvider.addSuggestions(onSuccess: () { 
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        OrderSummeryScreen(itemList: itemProvider.itemList),
+                  ));
+               });
               
-              itemProvider.addSuggestions();
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>  OrderSummeryScreen(itemList:itemProvider.itemList),));
             },
-            buttontext: 'Generate', color: AppColors.primaryColor, textColor: AppColors.blackColor,
+            buttontext: 'Generate',
+            color: AppColors.primaryColor,
+            textColor: AppColors.blackColor,
           ),
         ),
       );
-    });
-  }
+      });
+ }
 }
