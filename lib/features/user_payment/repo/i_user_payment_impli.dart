@@ -68,9 +68,9 @@ class IUserPaymentRepo implements IUserPaymentFacade {
       final batch = firebaseFirestore.batch();
       for (final userDoc in userSnapshot.docs) {
         final userRef = userDoc.reference;
-        batch.update(generalRef,{"depositAmount": FieldValue.increment(paidAmount)} );
         batch.update(userRef, {"monthlyTotal": 0});
       }
+       batch.update(generalRef,{"depositAmount": FieldValue.increment(paidAmount)} );
       batch.update(generalRef, {"totalAmount": 0});
       await batch.commit();
       return right(unit);

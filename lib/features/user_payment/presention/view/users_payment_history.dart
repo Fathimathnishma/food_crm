@@ -128,7 +128,7 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                                     date: formattedDate,
                                     total: userPaymentPro
                                         .getTotalForOrder(userPayment)
-                                        .toString(),
+                                        .toStringAsFixed(1),
                                   );
                                 },
                               );
@@ -137,7 +137,7 @@ class _UserpaymentHistoryState extends State<UserpaymentHistory> {
                               trailing: Text(
                                   userPaymentPro
                                       .getTotalForOrder(userPayment)
-                                      .toString(),
+                                      .toStringAsFixed(1),
                                   style: const TextStyle(
                                       fontSize: 16,
                                       color: AppColors.whiteColor,

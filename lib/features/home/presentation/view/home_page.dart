@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
 import 'package:food_crm/features/home/presentation/view/widgets/admin_container_widget.dart';
@@ -118,6 +120,7 @@ class _HomePageState extends State<HomePage> {
                                     ViewButtonWidget(
                                         text: 'View',
                                         onPressed: () {
+                                          log(homePro.balanceAmount.toString());
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(

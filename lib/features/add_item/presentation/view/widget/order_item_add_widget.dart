@@ -57,7 +57,7 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                       FocusNode focusNode,
                       VoidCallback onFieldSubmitted) {
                     return TextField(
-                      controller: controller, // Use the Autocomplete controller
+                      controller: controller, 
 
                       onChanged: (value) {
                         widget.itemModel.name.text = value;
@@ -71,7 +71,7 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                         fontSize: 16,
                       ),
                       decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
+                      focusedBorder: const UnderlineInputBorder(borderSide:BorderSide(color:AppColors.greyColor ) ),
 
                         prefixIcon: Image.asset(
                           'assets/images/check-list.png',
@@ -99,7 +99,7 @@ class _OrderItemAddWidgetState extends State<OrderItemAddWidget> {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10)),
-                          height: 200, // Customize height as needed
+                          height: 200, 
                           child: ListView.builder(
                             padding: EdgeInsets.zero,
                             itemCount: options.length,

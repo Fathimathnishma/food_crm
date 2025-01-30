@@ -26,7 +26,7 @@ class AmountShowDialog extends StatelessWidget {
       0,
       ( sum, item) => sum + (item.splitAmount ),
     );
-    return total.toString();
+    return total.toStringAsFixed(1);
   }
 
     return Dialog(
