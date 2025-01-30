@@ -42,10 +42,16 @@ class OrderHistoryProvider with ChangeNotifier {
   void clearData() {
     iOrderHistoryFacade.clearData();
     isLoading = false;
+    isFiltered=false;
     allOrders = [];
     groupedOrders={};
+    
   }
-
+void clearFilter(){
+  isLoading = false;
+   groupedOrders={};
+    notifyListeners();
+}
 
   String calculateTotalForDate(String dateKey) {
     final orders = groupedOrders[dateKey] ?? [];
@@ -79,7 +85,11 @@ class OrderHistoryProvider with ChangeNotifier {
 
     notifyListeners();
   }
+Future<void>filterOrderBySpecificDate(DateTime selectedDate)async{
 
+  log("one dae selected");
+
+}
   Map<String, List<OrderModel>> groupOrdersByDate(List<OrderModel> allOrders) {
     Map<String, List<OrderModel>> groupedOrders = {};
 
@@ -105,12 +115,13 @@ class OrderHistoryProvider with ChangeNotifier {
     clearData();
     await fetchOrders();
     scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 70) {
-        if (!isLoading && !noMoreData) {
-          await fetchOrders();
-        }
-      }
-    });
+  if (scrollController.position.pixels >=
+      scrollController.position.maxScrollExtent - 70) {
+    if (!isLoading && !noMoreData) {
+      log("Fetching more orders...");
+      await fetchOrders();
+    }
+  }}
+);
   }
 }

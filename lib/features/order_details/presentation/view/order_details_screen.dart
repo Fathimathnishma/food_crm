@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/order_details/presentation/provider/order_details_provider.dart';
-import 'package:food_crm/features/order_details/presentation/widgets/total_amount_widget.dart';
-import 'package:food_crm/features/order_details/presentation/widgets/user_widget.dart';
+import 'package:food_crm/features/order_details/presentation/view/widgets/total_amount_widget.dart';
+import 'package:food_crm/features/order_details/presentation/view/widgets/user_widget.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
 
 import 'package:food_crm/main.dart';

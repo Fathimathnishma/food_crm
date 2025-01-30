@@ -63,7 +63,7 @@ class UserRowWidget extends StatelessWidget {
                 backgroundColor: AppColors.whiteColor,
                 child: Text(
                   stateUserAdd
-                      .getInitials(name), // Display initials of the name
+                      .getInitials(name), 
                   style: const TextStyle(
                     fontSize: 20,
                     color: Colors.black,
@@ -81,12 +81,12 @@ class UserRowWidget extends StatelessWidget {
       trailing: Consumer<OrderSummeryProvider>(
         builder: (context, stateAddOrder, child) {
           return SizedBox(
-            width: MediaQuery.of(context).size.width * 0.3,
+            width: MediaQuery.of(context).size.width * 0.34,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 40,
+                  width: 50,
                   child: TextFormField(
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     controller: controller,
@@ -119,7 +119,7 @@ class UserRowWidget extends StatelessWidget {
                         .itemsList[tabIndex].users[index].splitAmount;
                     return Text(
                       '₹${amount.toStringAsFixed(1)}',
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white,fontSize: 14),
                     );
                   },
                 ),

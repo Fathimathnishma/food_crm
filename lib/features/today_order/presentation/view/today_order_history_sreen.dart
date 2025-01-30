@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/presentation/view/add_item_screen.dart';
-import 'package:food_crm/features/order_details/presentation/order_details_screen.dart';
+import 'package:food_crm/features/order_details/presentation/view/order_details_screen.dart';
 import 'package:food_crm/features/order_history/presentation/view/order_history_sreen.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/features/today_order/presentation/provider/today_order_provider.dart';
@@ -82,9 +82,10 @@ class _TodayOrderScreenState extends State<TodayOrderScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                          Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                              Text(
-                              stateFetchOrder.todayDate,
+                              stateFetchOrder.todayDates,
                               style: const TextStyle(
                                 color: AppColors.whiteColor,
                                 fontSize: 14,
@@ -149,7 +150,7 @@ class _TodayOrderScreenState extends State<TodayOrderScreen> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => OrderDetailsScreen(orderId: order.id!),));
 
                           }else{
-                            CircularProgressIndicator();
+                            const CircularProgressIndicator();
                           }
                         },
                         child: OrderCard(

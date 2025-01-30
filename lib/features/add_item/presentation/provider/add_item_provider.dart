@@ -27,12 +27,10 @@ class AddItemProvider extends ChangeNotifier {
 
   void removeItem(int index) {
     if (index >= 0 && index < itemList.length) {
-      // Create a new list excluding the item to be removed
       List<ItemAddingModel> updatedList = [];
       
       for (int i = 0; i < itemList.length; i++) {
         if (i != index) {
-          // Keep the item's existing controllers and values
           ItemAddingModel existingItem = itemList[i];
           updatedList.add(ItemAddingModel(
             id: existingItem.id,
@@ -42,18 +40,14 @@ class AddItemProvider extends ChangeNotifier {
             users: existingItem.users,
           ));
         } else {
-          // Dispose controllers of the removed item
           itemList[i].name.dispose();
           itemList[i].quantity.dispose();
           itemList[i].price.dispose();
         }
       }
       
-      // Update the list with the remaining items
       itemList = updatedList;
-      
-      // If list is empty, add a new item
-      if (itemList.isEmpty) {
+            if (itemList.isEmpty) {
         addItem();
       }
       
