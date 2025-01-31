@@ -25,17 +25,16 @@ class OrderSummeryProvider extends ChangeNotifier {
       final num itemTotal = price * itemQty;
       overallTotal += itemTotal;
     }
-    itemsList=items;
+    itemsList = items;
   }
 
-  void init(List<ItemAddingModel> items){
-     addItemToSummery(items);
+  void init(List<ItemAddingModel> items) {
+    addItemToSummery(items);
     fetchUser();
     initiolSplitQty();
   }
 
   Future<void> fetchUser() async {
-
     log("message");
     final result = await iOrderSummeryFacade.fetchUsers();
     result.fold(
@@ -43,34 +42,31 @@ class OrderSummeryProvider extends ChangeNotifier {
         log("Error fetching users: ${l.toString()}");
       },
       (userList) {
-        if(itemsList.isNotEmpty){
-        for (var item in itemsList) {
-          item.users=[];
-          item.users.addAll(
-            userList.map(
-              (user) {
-                return UserItemQtyAloccatedModel(
-                  name: user.name,
-                  phoneNumber: user.phoneNumber,
-                  qty: TextEditingController(),
-                  id: user.id!,
-                  splitAmount: 0,
-                );
-              },
-            ).toList(),
-          );
-          initiolSplitQty();
-        }
+        if (itemsList.isNotEmpty) {
+          for (var item in itemsList) {
+            item.users = [];
+            item.users.addAll(
+              userList.map(
+                (user) {
+                  return UserItemQtyAloccatedModel(
+                    name: user.name,
+                    phoneNumber: user.phoneNumber,
+                    qty: TextEditingController(),
+                    id: user.id!,
+                    splitAmount: 0,
+                  );
+                },
+              ).toList(),
+            );
+            initiolSplitQty();
+          }
         }
         notifyListeners();
       },
     );
-
   }
 
-
-
-String mealToString(FoodTime meal) {
+  String mealToString(FoodTime meal) {
     switch (meal) {
       case FoodTime.breakfast:
         return 'Breakfast';
@@ -78,38 +74,26 @@ String mealToString(FoodTime meal) {
         return 'Lunch';
       case FoodTime.dinner:
         return 'Dinner';
-    
     }
   }
 
+  void removeUserFromSummery({
+    required int tabIndex,
+    required int userIndex,
+    required String price,
+  }) {
+    if (userIndex >= 0 && userIndex < itemsList[tabIndex].users.length) {
+      itemsList[tabIndex].users.removeAt(userIndex);
 
-
-
-
-
-
-void removeUserFromSummery({
-  required int tabIndex,
-  required int userIndex,
-  required String price,
-}) {
-  if (userIndex >= 0 && userIndex < itemsList[tabIndex].users.length) {
-    itemsList[tabIndex].users.removeAt(userIndex);
-
-    if (itemsList[tabIndex].users.isNotEmpty) {
-      initiolSplitQty();  
-      updateSplitAmount(tabIndex: tabIndex, price: price); 
+      if (itemsList[tabIndex].users.isNotEmpty) {
+        initiolSplitQty();
+        updateSplitAmount(tabIndex: tabIndex, price: price);
+      } else {
+        log("No users left in the list after removal for tabIndex: $tabIndex.");
+      }
     }
-    else {
-      log("No users left in the list after removal for tabIndex: $tabIndex.");
-    }
+    notifyListeners();
   }
-  notifyListeners();
-}
-
-
-
-
 
   void updateSplitAmount({
     required int tabIndex,
@@ -121,36 +105,29 @@ void removeUserFromSummery({
       final user = itemsList[tabIndex].users[userIndex];
       final num qty = num.tryParse(user.qty.text) ?? 0;
 
-    final double itemPrice = double.tryParse(price) ?? 0.0;
-    user.splitAmount = itemPrice * qty;
+      final double itemPrice = double.tryParse(price) ?? 0.0;
+      user.splitAmount = itemPrice * qty;
+    }
   }
-}
 
-
-
-
-
-
-
-void initiolSplitQty() {
- for(var item in itemsList){
-  for(var user in item.users){
-    final num totalPrice = num.tryParse(item.price.text)??0;
-     final num totalQty = num.tryParse(item.quantity.text)??0;
-     final num qtyPerUser = totalQty / item.users.length;
-      String formattedQty;
-      if (qtyPerUser == qtyPerUser.toInt()) {
-        formattedQty = qtyPerUser.toInt().toString(); 
-      } else {
-        formattedQty = qtyPerUser.toStringAsFixed(1); 
+  void initiolSplitQty() {
+    for (var item in itemsList) {
+      for (var user in item.users) {
+        final num totalPrice = num.tryParse(item.price.text) ?? 0;
+        final num totalQty = num.tryParse(item.quantity.text) ?? 0;
+        final num qtyPerUser = totalQty / item.users.length;
+        String formattedQty;
+        if (qtyPerUser == qtyPerUser.toInt()) {
+          formattedQty = qtyPerUser.toInt().toString();
+        } else {
+          formattedQty = qtyPerUser.toStringAsFixed(1);
+        }
+        user.qty.text = formattedQty;
+        num userQty = num.tryParse(formattedQty) ?? 0;
+        user.splitAmount = totalPrice * userQty;
       }
-     user.qty.text = formattedQty;
-     num userQty = num.tryParse(formattedQty) ?? 0;
-      user.splitAmount = totalPrice * userQty;
+    }
   }
- }
-
-}
 
   bool checkQty({
     required int tabIndex,
@@ -161,53 +138,50 @@ void initiolSplitQty() {
 
     for (var user in item.users) {
       if (user.qty.text.isNotEmpty) {
-      final qty = num.tryParse(user.qty.text);
-      if (qty == null) {
+        final qty = num.tryParse(user.qty.text);
+        if (qty == null) {
+          Customtoast.showErrorToast(
+              "Invalid quantity entered for user: ${user.name}");
+          isValid = false;
+          return false;
+        }
+        totalUserQty += qty;
+      } else {
         Customtoast.showErrorToast(
-            "Invalid quantity entered for user: ${user.name}");
-        isValid=false;
-        return false; 
+            "Quantity cannot be empty for user: ${user.name}");
+        isValid = false;
+        return false;
       }
-      totalUserQty += qty;
-    } else {
-      Customtoast.showErrorToast(
-          "Quantity cannot be empty for user: ${user.name}");
-           isValid=false;
-           return false;
-    }
-     
     }
 
-    final itemQty = num.tryParse(item.quantity.text) ;
+    final itemQty = num.tryParse(item.quantity.text);
     if (totalUserQty != itemQty) {
       Customtoast.showErrorToast(
           "Total quantity of all users must match the item quantity.");
-     return isValid = false;
-      
+      return isValid = false;
     } else {
-       isValid = true;
+      isValid = true;
     }
 
     notifyListeners();
     return isValid;
   }
 
- Future<void> addOrder({ required void Function(OrderModel) onSuccess,}) async {
-  final List<ItemUploadingModel> order = []; 
-  for (var data in itemsList) {
-    final num price = num.parse(data.price.text);
-    final num itemQty = num.parse(data.quantity.text);
-    
-    order.add(
-      ItemUploadingModel(
-      
-        name: data.name.text, 
-        price: price, 
-        qty: itemQty, 
+  Future<void> addOrder({
+    required void Function(OrderModel) onSuccess,
+  }) async {
+    final List<ItemUploadingModel> order = [];
+    for (var data in itemsList) {
+      final num price = num.parse(data.price.text);
+      final num itemQty = num.parse(data.quantity.text);
+
+      order.add(ItemUploadingModel(
+        name: data.name.text,
+        price: price,
+        qty: itemQty,
         users: data.users,
-      )
-    );
-  }
+      ));
+    }
 
     log("Total order length: ${order.length}");
 
@@ -215,19 +189,20 @@ void initiolSplitQty() {
         orderModel: OrderModel(
             createdAt: Timestamp.now(),
             totalAmount: overallTotal,
-            order: order, foodTime: mealToString(selectedMeal).toLowerCase()), 
-            foodTime:mealToString(selectedMeal).toLowerCase());
+            order: order,
+            foodTime: mealToString(selectedMeal).toLowerCase()),
+        foodTime: mealToString(selectedMeal).toLowerCase());
 
     result.fold(
       (l) {
         log("Add error: ${l.toString()}");
       },
       (unit) {
-        onSuccess( OrderModel(
+        onSuccess(OrderModel(
             createdAt: Timestamp.now(),
             totalAmount: overallTotal,
-            order: order, foodTime: mealToString(selectedMeal).toLowerCase()));
-       
+            order: order,
+            foodTime: mealToString(selectedMeal).toLowerCase()));
       },
     );
   }
