@@ -45,14 +45,15 @@ class OrderHistoryProvider with ChangeNotifier {
     iOrderHistoryFacade.clearData();
     isLoading = false;
     isFiltered=false;
+    noMoreData=false;
     allOrders = [];
     groupedOrders={};
-    
-  }
-void clearFilter(){
-  isLoading = false;
-   groupedOrders={};
     notifyListeners();
+  }
+void clearFilter() {
+ clearData();
+  notifyListeners(); 
+  fetchOrders(); 
 }
 
   String calculateTotalForDate(String dateKey) {
@@ -108,11 +109,7 @@ void clearFilter(){
 
     return groupedOrders;
   }
- void resetFilter() {
-    isFiltered = false;
-    notifyListeners();
-    fetchOrders(); 
-  }
+
   Future<void> initData({required ScrollController scrollController}) async {
     clearData();
     await fetchOrders();
