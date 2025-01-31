@@ -82,6 +82,16 @@ Future<void>markPayment({required num paidAmount}) async {
 
     
   }
+ String getInitials(String name) {
+    List<String> nameParts = name.split(' ');
+
+    String firstLetter =
+        nameParts.isNotEmpty ? nameParts[0][0].toUpperCase() : '';
+    String lastLetter =
+        nameParts.length > 1 ? nameParts[1][0].toUpperCase() : '';
+
+    return firstLetter + lastLetter;
+  }
 
 
 

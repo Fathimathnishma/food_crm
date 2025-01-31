@@ -54,19 +54,22 @@ class OrderCard extends StatelessWidget {
             // Extract values whether they are strings or from a TextEditingController
             final itemName = item.name is TextEditingController
                 ? item.name.text
-                : item.name.toString();
-            final itemQuantity = item.qty is TextEditingController
-                ? item.qty.text
-                : item.qty.toString();
+                : item.name;
+             final itemQuantity = item.qty is num // Check if it's a number
+      ? item.qty.toStringAsFixed(1) // Convert number to string with 1 decimal
+      : (item.qty is TextEditingController 
+          ? item.qty.text 
+          : item.qty.toString()); // Convert other types to string
+
 
             // Conditional check for item type
             String itemPrice = '';
             if (item is ItemUploadingModel) {
               // Use price if the item is of type ItemUploadingModel
-              itemPrice = item.price.toString();
+              itemPrice = item.price.toStringAsFixed(1);
             } else if (item is UserDialyOrderModel) {
               // Use splitAmount if the item is of type UserDialyOrderModel
-              itemPrice = item.splitAmount.toString();
+              itemPrice = item.splitAmount.toStringAsFixed(0);
             }
 
             return Padding(

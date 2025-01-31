@@ -110,7 +110,6 @@ class HomeProvider with ChangeNotifier {
                 log(totalAmount.toString());
                 depositAmount = success["depositAmount"] as num? ?? 0;
                 if (depositAmount == 0) {
-                  log("Deposit amount is zero. Balance will be equal to total amount.");
                   balanceAmount=todayTotal;
                 }
                 balanceAmount = totalAmount - depositAmount;

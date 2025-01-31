@@ -20,8 +20,12 @@ class OrderSummeryProvider extends ChangeNotifier {
   void addItemToSummery(List<ItemAddingModel> items) {
     overallTotal = 0;
     for (var item in items) {
-      final num price = num.parse(item.price.text);
-      final num itemQty = num.parse(item.quantity.text);
+      if(item.price.text.isEmpty&&item.quantity.text.isEmpty ){
+        Customtoast.showErrorToast("please enter a valid value");
+        return;
+      }
+      final num price = num.tryParse(item.price.text)??0;
+      final num itemQty = num.tryParse(item.quantity.text)??0;
       final num itemTotal = price * itemQty;
       overallTotal += itemTotal;
     }
@@ -105,29 +109,40 @@ class OrderSummeryProvider extends ChangeNotifier {
       final user = itemsList[tabIndex].users[userIndex];
       final num qty = num.tryParse(user.qty.text) ?? 0;
 
-      final double itemPrice = double.tryParse(price) ?? 0.0;
-      user.splitAmount = itemPrice * qty;
-    }
+    final double itemPrice = double.tryParse(price) ?? 0.0;
+    user.splitAmount = itemPrice * qty;
   }
+}
 
-  void initiolSplitQty() {
-    for (var item in itemsList) {
-      for (var user in item.users) {
-        final num totalPrice = num.tryParse(item.price.text) ?? 0;
-        final num totalQty = num.tryParse(item.quantity.text) ?? 0;
-        final num qtyPerUser = totalQty / item.users.length;
-        String formattedQty;
-        if (qtyPerUser == qtyPerUser.toInt()) {
-          formattedQty = qtyPerUser.toInt().toString();
-        } else {
-          formattedQty = qtyPerUser.toStringAsFixed(1);
-        }
-        user.qty.text = formattedQty;
-        num userQty = num.tryParse(formattedQty) ?? 0;
-        user.splitAmount = totalPrice * userQty;
+
+
+
+
+
+
+void initiolSplitQty() {
+ for(var item in itemsList){
+  if(item.price.text.isEmpty&& item.quantity.text.isEmpty){
+  Customtoast.showErrorToast("please check your price & quantity.");
+  return;
+}
+  for(var user in item.users){
+    final num totalPrice = num.tryParse(item.price.text)??0;
+     final num totalQty = num.tryParse(item.quantity.text)??0;
+     final num qtyPerUser = totalQty / item.users.length;
+      String formattedQty;
+      if (qtyPerUser == qtyPerUser) {
+        formattedQty = qtyPerUser.toString(); 
+      } else {
+        formattedQty = qtyPerUser.toString(); 
       }
-    }
+     user.qty.text = formattedQty;
+     num userQty = num.tryParse(formattedQty) ?? 0;
+      user.splitAmount = totalPrice * userQty;
   }
+ }
+
+}
 
   bool checkQty({
     required int tabIndex,
@@ -135,7 +150,10 @@ class OrderSummeryProvider extends ChangeNotifier {
     isValid = true;
     final item = itemsList[tabIndex];
     num totalUserQty = 0;
-
+if(item.price.text.isEmpty&& item.quantity.text.isEmpty){
+  Customtoast.showErrorToast("please check your price & quantity.");
+  isValid=false;
+}
     for (var user in item.users) {
       if (user.qty.text.isNotEmpty) {
         final qty = num.tryParse(user.qty.text);
@@ -160,25 +178,28 @@ class OrderSummeryProvider extends ChangeNotifier {
           "Total quantity of all users must match the item quantity.");
       return isValid = false;
     } else {
-      isValid = true;
+       isValid = true;
+
+
     }
 
     notifyListeners();
     return isValid;
   }
 
-  Future<void> addOrder({
-    required void Function(OrderModel) onSuccess,
-  }) async {
-    final List<ItemUploadingModel> order = [];
-    for (var data in itemsList) {
-      final num price = num.parse(data.price.text);
-      final num itemQty = num.parse(data.quantity.text);
 
-      order.add(ItemUploadingModel(
-        name: data.name.text,
-        price: price,
-        qty: itemQty,
+ Future<void> addOrder({ required void Function(OrderModel) onSuccess,}) async {
+  final List<ItemUploadingModel> order = []; 
+  for (var data in itemsList) {
+    final num price = num.parse(data.price.text);
+    final num itemQty = num.parse(data.quantity.text);
+    
+    order.add(
+      ItemUploadingModel(
+      
+        name: data.name.text, 
+        price: price, 
+        qty: itemQty, 
         users: data.users,
       ));
     }

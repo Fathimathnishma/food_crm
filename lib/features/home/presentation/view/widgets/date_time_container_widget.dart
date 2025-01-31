@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/home/presentation/provider/home_provider.dart';
-import 'package:food_crm/general/utils/app_colors.dart';
 import 'package:provider/provider.dart';
 
 class DateTimeContainerWidget extends StatelessWidget {
@@ -23,13 +22,8 @@ class DateTimeContainerWidget extends StatelessWidget {
         child: StreamBuilder(
           stream: homeProvider.dateTimeStream,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
-                ),
-              );
-            } else if (snapshot.hasError) {
+            
+             if (snapshot.hasError) {
               return const Center(
                 child: Text(
                     'Error: Unable to fetch or update the date and time. Please try again later.'),

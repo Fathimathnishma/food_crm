@@ -42,7 +42,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
 
     if (summeryProvider.itemsList.isNotEmpty) {
       tabController = TabController(
-        length: summeryProvider.itemsList.length, // Add one for "Total" tab
+        length: summeryProvider.itemsList.length,
         vsync: this,
       );
       tabController.addListener(() {
@@ -235,8 +235,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                       unselectedBorderColor: AppColors.greyColor,
                       borderWidth: 1,
                       borderColor: Colors.black,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10),
                       tabs: [
                         for (int index = 0;
                             index < stateAddOrder.itemsList.length;
@@ -273,8 +271,6 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                           ),
                       ],
                     ),
-
-                    
                   ],
                 ),
                 Expanded(
@@ -339,6 +335,7 @@ class _OrderSummeryScreenState extends State<OrderSummeryScreen>
                       },
                     );
                   } else {
+                    Navigator.pop(context);
                     Customtoast.showErrorToast(
                         "Please check the values you've given.");
                   }

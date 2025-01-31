@@ -11,6 +11,8 @@ class OrderHistoryProvider with ChangeNotifier {
   bool isLoading = false;
   bool noMoreData = false;
   bool isFiltered = false;
+  String selectedStartDate ="";
+  String selectedEndDate ="";
   List<OrderModel> allOrders = [];
   int todayDate = DateTime.now().day;
   Map<String, List<OrderModel>> groupedOrders = {};
@@ -42,10 +44,16 @@ class OrderHistoryProvider with ChangeNotifier {
   void clearData() {
     iOrderHistoryFacade.clearData();
     isLoading = false;
+    isFiltered=false;
     allOrders = [];
     groupedOrders={};
+    
   }
-
+void clearFilter(){
+  isLoading = false;
+   groupedOrders={};
+    notifyListeners();
+}
 
   String calculateTotalForDate(String dateKey) {
     final orders = groupedOrders[dateKey] ?? [];
@@ -64,6 +72,10 @@ class OrderHistoryProvider with ChangeNotifier {
 
   Future<void> filterOrderBySpecificDateRange(
       DateTime startDate, DateTime endDate) async {
+      selectedStartDate = DateFormat('d-M-yyyy').format(startDate);
+      selectedEndDate = DateFormat('d-M-yyyy').format(endDate);
+
+       notifyListeners();
     groupedOrders = {};
    isFiltered = true;
     final result = await iOrderHistoryFacade.fetchOrderByRange(
@@ -105,12 +117,13 @@ class OrderHistoryProvider with ChangeNotifier {
     clearData();
     await fetchOrders();
     scrollController.addListener(() async {
-      if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 70) {
-        if (!isLoading && !noMoreData) {
-          await fetchOrders();
-        }
-      }
-    });
+  if (scrollController.position.pixels >=
+      scrollController.position.maxScrollExtent - 70) {
+    if (!isLoading && !noMoreData) {
+      log("Fetching more orders...");
+      await fetchOrders();
+    }
+  }}
+);
   }
 }

@@ -174,7 +174,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
           ),
           child: CustomButton(
             onTap: () async {
-              itemProvider.addSuggestions();
+              itemProvider.addSuggestions(onSuccess: () {
+                
+              },);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -185,9 +187,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
             buttontext: 'Generate',
             color: AppColors.primaryColor,
             textColor: AppColors.blackColor,
+           
           ),
         ),
       );
-    });
-  }
+      });
+ }
 }

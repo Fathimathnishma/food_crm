@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:food_crm/features/order_details/presentation/order_details_screen.dart';
+import 'package:food_crm/features/order_details/presentation/view/order_details_screen.dart';
 import 'package:food_crm/features/order_history/presentation/provider/order_history_provider.dart';
 import 'package:food_crm/features/order_history/presentation/view/widgets/order_card.dart';
 import 'package:food_crm/general/utils/app_colors.dart';
@@ -37,6 +37,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget build(BuildContext context) {
     return Consumer<OrderHistoryProvider>(
         builder: (context, stateFetchOrder, child) {
+          
       final dateKeys = stateFetchOrder.groupedOrders.keys.toList();
       return Scaffold(
         backgroundColor: AppColors.blackColor,
@@ -50,7 +51,55 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 color: AppColors.whiteColor),
           ),
           actions: [
-            Row(
+           stateFetchOrder.isFiltered? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                // InkWell(
+                //   onTap: () async {
+                    
+                //     DateTime todayDate =
+                //         DateTime.now(); // Get the current day number
+
+                //     final selectedRange = await showDateRangePicker(
+                //       context: context,
+                //       firstDate: DateTime(2025, 1, 21),
+                //       lastDate: todayDate,
+                //     );
+                //     if (selectedRange != null) {
+                //       DateTime startDate = selectedRange.start;
+                //       DateTime endDate = selectedRange.end;
+                //       log(selectedRange.start.toString());
+                //       log(selectedRange.end.toString());
+                //       stateFetchOrder.filterOrderBySpecificDateRange(
+                //           startDate, endDate);
+                //     }
+                //   },
+                //   child: const SizedBox(
+                //     height: 25,
+                //     width: 25,
+                //     child: Image(
+                //         image: AssetImage(
+                //        "assets/images/preference-horizontal.png")),
+                //   ),
+                // ),
+                InkWell(
+                  onTap:  () async {
+                    stateFetchOrder.clearFilter();
+                    Navigator.pop(context);
+                  },
+                  child:  SizedBox(
+                    width: 176,
+                     child:Text(
+                        ("(${stateFetchOrder.selectedStartDate})to(${stateFetchOrder.selectedEndDate})"),
+                        style:
+                             TextStyle(fontSize: 12, color: AppColors.whiteColor,),
+                      ), ),
+                ),
+                const SizedBox(
+                  width: 10,
+                )
+              ],
+            ):Row(
               children: [
                 InkWell(
                   onTap: () async {
@@ -77,7 +126,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                     width: 25,
                     child: Image(
                         image: AssetImage(
-                            "assets/images/preference-horizontal.png")),
+                       "assets/images/preference-horizontal.png")),
                   ),
                 ),
                 const SizedBox(

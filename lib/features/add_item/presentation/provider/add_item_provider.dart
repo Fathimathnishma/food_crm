@@ -79,6 +79,7 @@
 
 import 'dart:developer';
 
+
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/add_item/data/i_add_item_facade.dart';
 import 'package:food_crm/features/add_item/data/model/item_model.dart';
@@ -99,10 +100,12 @@ class AddItemProvider extends ChangeNotifier {
       quantity: TextEditingController(),
       price: TextEditingController(),
       users: [],
+   
     );
     itemList.add(newItem);
     notifyListeners();
   }
+
 
   void removeItem(int index) {
     if (index >= 0 && index < itemList.length) {
@@ -140,7 +143,20 @@ class AddItemProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> addSuggestions() async {
+  Future<void> addSuggestions({ required void Function() onSuccess,}) async {
+    for(var data in itemList){
+    if(  data.name.text.isEmpty&& data.quantity.text.isEmpty&& data.price.text.isEmpty){
+      Customtoast.showErrorToast("please enter a value ");
+      return;
+    }
+    final num? price = num.tryParse(data.price.text);
+final num? quantity = num.tryParse(data.quantity.text);
+if (price == null || price <= 0 || quantity == null || quantity <= 0) {
+    Customtoast.showErrorToast("Please enter a valid value.");
+    return;
+}
+    
+    }
     final result = await iItemFacade.addSuggestions(itemList: itemList);
     result.fold(
       (l) {
@@ -150,11 +166,14 @@ class AddItemProvider extends ChangeNotifier {
         log('suggestion added');
       },
     );   
+       
   }
 
   Future<void> fetchSugetion() async {
     isLoading = true;
     notifyListeners();
+    
+    
     
     final result = await iItemFacade.fetchSuggestions();
     result.fold(
@@ -166,15 +185,18 @@ class AddItemProvider extends ChangeNotifier {
       },
     );
     
+    
     isLoading = false;
     notifyListeners();
   }
+
 
   void disposeControllers(ItemAddingModel item) {
     item.name.dispose();
     item.quantity.dispose();
     item.price.dispose();
   }
+
 
   void clearItems() {
     for (var item in itemList) {
@@ -189,4 +211,4 @@ class AddItemProvider extends ChangeNotifier {
     clearItems();
     super.dispose();
   }
-}
+  }

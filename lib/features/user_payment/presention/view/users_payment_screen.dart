@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:food_crm/features/user_payment/presention/user_payment_provider/user_payment_provider.dart';
 import 'package:food_crm/features/user_payment/presention/view/users_payment_history.dart';
@@ -31,6 +33,7 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
   Widget build(BuildContext context) {
     return Consumer<UserPaymentProvider>(
       builder: (context, userPro, child) {
+        log(widget.total.toString());
         if (userPro.isLoading ) {
          return const Center(
               child: CircularProgressIndicator(
@@ -87,10 +90,10 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
                               fontSize: 16, color: AppColors.whiteColor)),
                     ],
                   ),
-                  leading: const CircleAvatar(
+                  leading:  CircleAvatar(
                     radius: 23,
                     backgroundColor: AppColors.whiteColor,
-                    // child: Text(userPro.getInitials(user.name)),
+                     child: Text(userPro.getInitials(user.name),style:const TextStyle(color :AppColors.blackColor,fontSize: 20) ,),
                   ),
                   title: Text(
                     user.name,
@@ -113,24 +116,26 @@ class _UsersPaymentScreenState extends State<UsersPaymentScreen> {
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
             child: CustomButton(
-              onTap: () async {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialogWidget(
-                      label1: "mark as paid",
-                      label2: "yes",
-                      onLabel2Tap: () async {
-                        await userPro.markPayment(paidAmount:widget.total);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                    );
-                  },
-                );
-              },
+              onTap:  widget.total > 0
+                  ? () async {
+                      log("Total: ${widget.total.toString()}");
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialogWidget(
+                            label1: "Mark as Paid",
+                            label2: "Yes",
+                            onLabel2Tap: () async {
+                              await userPro.markPayment(paidAmount: widget.total);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                      );
+              }:null,
               buttontext: "Mark As Paid",
-              color: Colors.blueAccent,
+              color: widget.total > 0 ? Colors.blueAccent : AppColors.greyColor,
               textColor: AppColors.whiteColor,
             ),
           ),

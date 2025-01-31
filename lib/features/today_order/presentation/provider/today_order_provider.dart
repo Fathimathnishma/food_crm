@@ -10,18 +10,19 @@ class TodayOrderProvider extends ChangeNotifier {
   TodayOrderProvider(this.iTodayOrderFacade);
 
   List<OrderModel> todayOrders = [];
-  num total = 0;
+  num total =0;
   bool isLoading = false;
   bool noMoreData = false;
 
-  String todayDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
+  String todayDateForFiltering = DateFormat('dd MMMM yyyy').format(DateTime.now());
+  String todayDates = DateFormat('dd MMMM ').format(DateTime.now());
 
   Future<void> fetchTodayOrderList() async {
     todayOrders = [];
     isLoading = true;
     notifyListeners();
     final result =
-        await iTodayOrderFacade.fetchTodayOrderList(todayDate: todayDate);
+        await iTodayOrderFacade.fetchTodayOrderList(todayDate: todayDateForFiltering);
     result.fold(
       (l) {
         l.toString();
